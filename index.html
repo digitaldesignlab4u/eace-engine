@@ -1,0 +1,1377 @@
+<!DOCTYPE html>
+<!-- EACE-v8 -->
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>EACE — EU AI Compliance Engine | From Crisis to Authority™</title>
+  <meta property="og:title" content="EACE — EU AI Compliance Engine | From Crisis to Authority™">
+  <meta property="og:description" content="Complete EU AI Act compliance infrastructure. Four structured engines, 70+ governance documents, deterministic outputs.">
+  <meta property="og:url" content="https://eace.ai/">
+  <meta property="og:image" content="https://eace.ai/og_image.jpg">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:type" content="image/jpeg">
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="EACE — EU AI Compliance Engine">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="EACE — EU AI Compliance Engine | From Crisis to Authority™">
+  <meta name="twitter:description" content="Complete EU AI Act compliance infrastructure. Four structured engines, 70+ governance documents, deterministic outputs.">
+  <meta name="twitter:image" content="https://eace.ai/og_image.jpg">
+<meta name="description" content="Complete EU AI Act compliance infrastructure. Four structured engines, 70+ governance documents, deterministic outputs. From Crisis to Authority™">
+<meta name="keywords" content="EU AI Act compliance, AI governance infrastructure, EACE.ai, AI Act audit-ready evidence, deterministic AI compliance, EU AI Act infrastructure">
+<link rel="canonical" href="https://eace.ai/">
+<meta name="keywords" content="EU AI Act compliance, ISO 42001, AI governance, GDPR, high-risk AI, compliance engine, audit-ready, technical documentation, FRIA, DPIA, transparency notice, AI Act provider, AI Act deployer, notified body, market surveillance">
+<meta name="robots" content="index, follow">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;1,400&family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="eace-style.css">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --serif:'Playfair Display',Georgia,serif;
+  --sans:'IBM Plex Sans',-apple-system,sans-serif;
+  --mono:'IBM Plex Mono',monospace;
+  --bg:#0c0c0a;
+  --bg2:#141410;
+  --bg3:#1a1a16;
+  --line:#272720;
+  --line2:#3a3a30;
+  --ink:#ede8df;
+  --muted:#8c8778;
+  --faint:#4a4840;
+  --gold:#b8995a;
+  --green:#6b8f71;
+  --r:3px;
+}
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--ink);font-family:var(--sans);font-weight:300;-webkit-font-smoothing:antialiased;line-height:1.6;overflow-x:hidden}
+.wrap{max-width:960px;margin:0 auto;padding:0 2rem}
+img{max-width:100%;display:block}
+
+/* ── NAV ── */
+nav{position:fixed;top:0;left:0;right:0;z-index:100;background:rgba(12,12,10,0);transition:background 0.3s,border-color 0.3s;border-bottom:0.5px solid transparent}
+nav.scrolled{background:rgba(12,12,10,0.97);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);border-bottom-color:var(--line)}
+.nav-inner{display:flex;align-items:center;justify-content:space-between;padding:0.9rem 2rem;max-width:960px;margin:0 auto;gap:0.5rem;flex-wrap:nowrap}
+.nav-logo{font-family:var(--mono);font-size:11px;font-weight:500;letter-spacing:0.08em;color:var(--gold);text-decoration:none;white-space:nowrap}
+.nav-logo span{color:rgba(255,255,255,0.45);font-weight:400}
+.nav-links{display:flex;list-style:none;flex-wrap:wrap;gap:2px}
+.nav-links a{font-family:var(--mono);font-size:10.5px;letter-spacing:0.03em;color:rgba(255,255,255,0.5);text-decoration:none;padding:5px 11px;border-radius:var(--r);transition:color 0.15s;white-space:nowrap}
+.nav-links a:hover{color:#fff}
+.nav-links a.active{color:var(--gold)}
+.nav-contact{font-family:var(--mono);font-size:10px;letter-spacing:0.07em;text-transform:uppercase;color:var(--gold);border:0.5px solid rgba(184,153,90,0.45);padding:6px 15px;border-radius:var(--r);text-decoration:none;transition:background 0.15s,border-color 0.15s}
+.nav-contact:hover{background:rgba(184,153,90,0.1);border-color:var(--gold)}
+
+/* ── HERO ── */
+.hero{position:relative;width:100%;
+  min-height:100vh;
+  min-height:100svh;
+  display:flex;flex-direction:column;
+  justify-content:flex-end;
+  overflow:hidden}
+.hero-bg{position:absolute;inset:0;z-index:0}
+.hero-bg img{width:110%;height:110%;object-fit:cover;object-position:center 28%;display:block;transform-origin:55% 45%;animation:kenburns 25s ease-in-out infinite alternate;animation-delay:2s;margin:-5%}
+.hero-bg::after{content:'';position:absolute;inset:0;background:linear-gradient(160deg,rgba(12,12,10,0.05) 0%,rgba(12,12,10,0.28) 40%,rgba(12,12,10,0.82) 75%,rgba(12,12,10,0.97) 100%)}
+.hero-content{position:relative;z-index:2;padding:5rem 2rem 4rem;max-width:960px;margin:0 auto;width:100%}
+/* EYEBROW — From Crisis to Authority™ */
+.hero-eyebrow{font-family:var(--mono);font-size:10.5px;letter-spacing:0.2em;color:rgba(184,153,90,0.75);text-transform:uppercase;margin-bottom:0.6rem;display:flex;align-items:center;gap:10px}
+.hero-eyebrow::after{content:'';display:inline-block;width:24px;height:0.5px;background:rgba(184,153,90,0.35)}
+.hero-eyebrow sup{font-size:7px;letter-spacing:0;vertical-align:super;margin-left:1px}
+/* TAGLINE — EACE descriptor */
+.hero-tagline{font-family:var(--mono);font-size:11.5px;letter-spacing:0.08em;color:rgba(201,168,76,0.9);text-transform:uppercase;margin-bottom:1.4rem;font-weight:500}
+.hero-tagline span{color:rgba(184,153,90,0.45);margin:0 6px}
+/* H1 */
+h1{font-family:var(--serif);font-size:clamp(2rem,3.4vw,3.4rem);color:var(--ink);font-weight:400;line-height:1.1;max-width:720px;margin-bottom:0.6rem}
+h1 em{font-style:italic;color:var(--gold)}
+/* SUBHEADLINE */
+.hero-sub{font-family:var(--serif);font-size:clamp(1rem,1.6vw,1.2rem);color:rgba(237,232,223,0.62);font-weight:400;font-style:italic;max-width:600px;margin-bottom:1.5rem;line-height:1.42}
+.hero-desc{font-size:14px;line-height:1.8;color:rgba(140,135,120,0.85);max-width:540px;margin-bottom:1.75rem}
+.cta-row{display:flex;gap:0.85rem;align-items:center;flex-wrap:wrap;margin-bottom:2.75rem}
+.btn{font-family:var(--mono);font-size:10.5px;font-weight:500;letter-spacing:0.07em;text-transform:uppercase;text-decoration:none;border:none;cursor:pointer;border-radius:var(--r);display:inline-block;transition:opacity 0.15s,background 0.15s,border-color 0.15s}
+.btn-primary{background:var(--gold);color:var(--bg);padding:11px 22px}
+.btn-primary:hover{opacity:0.87}
+.btn-ghost{font-family:var(--mono);font-size:10px;letter-spacing:0.04em;color:rgba(237,232,223,0.55);text-decoration:none;transition:color 0.15s}
+.btn-ghost:hover{color:var(--ink)}
+.pilot-live{display:inline-flex;align-items:center;gap:8px;font-family:var(--mono);font-size:10px;letter-spacing:0.05em;color:var(--green);border:0.5px solid rgba(107,143,113,0.4);padding:8px 14px;border-radius:var(--r);text-decoration:none;transition:background 0.15s}
+.pilot-live:hover{background:rgba(107,143,113,0.07)}
+.dot{width:6px;height:6px;border-radius:50%;background:var(--green);display:inline-block;flex-shrink:0;animation:blink 2.2s infinite}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:0.2}}
+.atags{display:flex;flex-wrap:wrap;gap:5px}
+.atag{font-family:var(--mono);font-size:9px;color:rgba(74,72,64,0.85);background:rgba(20,20,16,0.65);border:0.5px solid rgba(39,39,32,0.75);padding:3px 8px;border-radius:1px;letter-spacing:0.04em;white-space:nowrap}
+
+/* ── CHEF SPLIT ── */
+.chef-wrap{display:grid;grid-template-columns:1fr 1fr;border-top:0.5px solid var(--line);border-bottom:0.5px solid var(--line)}
+@media(max-width:640px){.chef-wrap{grid-template-columns:1fr}}
+.chef-img{position:relative;overflow:hidden;min-height:420px}
+.chef-img img{width:100%;height:100%;object-fit:cover;object-position:center top;display:block;opacity:0.88}
+.chef-img::after{content:'';position:absolute;inset:0;background:linear-gradient(to right,transparent 50%,var(--bg) 100%)}
+.chef-text{padding:3.5rem 2.5rem;display:flex;flex-direction:column;justify-content:center;border-left:0.5px solid var(--line);background:var(--bg)}
+@media(max-width:640px){.chef-text{border-left:none;border-top:0.5px solid var(--line);padding:2.5rem 2rem}}
+.chef-text h2{font-family:var(--serif);font-size:clamp(1.55rem,3vw,2.1rem);line-height:1.18;color:var(--ink);margin-bottom:1.1rem;font-weight:400}
+.chef-text h2 em{font-style:italic;color:var(--gold)}
+.chef-text p{font-size:13.5px;color:var(--muted);line-height:1.85;margin-bottom:0.85rem}
+.metric-row{display:flex;gap:1.5rem;margin-top:1.5rem;flex-wrap:wrap}
+.metric{border-left:2px solid var(--gold);padding-left:1rem}
+.metric-val{font-family:var(--serif);font-size:1.6rem;color:var(--gold);line-height:1;margin-bottom:0.2rem}
+.metric-label{font-family:var(--mono);font-size:9px;color:var(--faint);letter-spacing:0.08em;text-transform:uppercase}
+
+/* ── SECTIONS ── */
+.sec{padding:3.5rem 0;border-bottom:0.5px solid var(--line)}
+.sec-label{font-family:var(--mono);font-size:9px;letter-spacing:0.18em;color:var(--faint);text-transform:uppercase;margin-bottom:1.75rem;display:flex;align-items:center;gap:12px}
+.sec-label::after{content:'';display:inline-block;width:18px;height:0.5px;background:var(--line2)}
+h2{font-family:var(--serif);font-size:clamp(1.55rem,3.5vw,2.3rem);line-height:1.18;color:var(--ink);margin-bottom:0.75rem;font-weight:400}
+h2 em{font-style:italic;color:var(--gold)}
+.sec-intro{font-size:14.5px;color:var(--muted);line-height:1.85;max-width:620px;margin-bottom:2rem}
+.eyebrow{font-family:var(--mono);font-size:9px;letter-spacing:0.2em;color:var(--faint);text-transform:uppercase;margin-bottom:1.5rem;display:flex;align-items:center;gap:12px}
+.eyebrow::after{content:'';display:inline-block;width:24px;height:0.5px;background:var(--line2)}
+
+/* VIDEO */
+.video-container{position:relative;width:100%;padding-bottom:56.25%;background:var(--bg2);border:0.5px solid var(--line);border-radius:var(--r);overflow:hidden}
+.video-container iframe{position:absolute;top:0;left:0;width:100%;height:100%;border:none}
+
+/* WHO */
+.who-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+@media(max-width:640px){.who-grid{grid-template-columns:1fr 1fr}}
+.who-card{background:var(--bg2);border:0.5px solid var(--line);border-radius:var(--r);padding:1rem 1.1rem;transition:border-color 0.15s}
+.who-card:hover{border-color:var(--line2)}
+.who-title{font-size:12.5px;font-weight:500;color:var(--ink);margin-bottom:0.3rem}
+.who-desc{font-size:11.5px;color:var(--faint);line-height:1.55}
+
+/* ENGINE */
+.two-col{display:grid;grid-template-columns:1fr 1fr;gap:3rem;margin-bottom:2.5rem}
+@media(max-width:600px){.two-col{grid-template-columns:1fr;gap:1.5rem}}
+.tc h3{font-family:var(--mono);font-size:9.5px;letter-spacing:0.12em;text-transform:uppercase;color:var(--muted);margin-bottom:0.75rem}
+.tc p{font-size:13.5px;color:var(--muted);line-height:1.8}
+.engines{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:2.5rem}
+@media(max-width:640px){.engines{grid-template-columns:1fr 1fr}}
+.ec{background:var(--bg2);border:0.5px solid var(--line);border-radius:var(--r);padding:1.1rem 1.15rem;transition:border-color 0.15s}
+.ec:hover{border-color:var(--line2)}
+.ec-id{font-family:var(--mono);font-size:12px;font-weight:500;color:var(--gold);margin-bottom:0.5rem}
+.ec-title{font-size:12.5px;font-weight:500;color:var(--ink);line-height:1.35;margin-bottom:0.4rem}
+.ec-art{font-family:var(--mono);font-size:10px;color:var(--faint);line-height:1.55}
+
+/* OUTPUTS */
+.output-groups{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:2rem}
+@media(max-width:600px){.output-groups{grid-template-columns:1fr}}
+.og{background:var(--bg2);border:0.5px solid var(--line);border-radius:var(--r);padding:1.1rem 1.2rem}
+.og-engine{font-family:var(--mono);font-size:9px;letter-spacing:0.12em;text-transform:uppercase;color:var(--gold);margin-bottom:0.3rem}
+.og-title{font-size:13px;font-weight:500;color:var(--ink);margin-bottom:0.85rem;padding-bottom:0.55rem;border-bottom:0.5px solid var(--line)}
+.og-cat{font-size:12px;color:var(--muted);padding:5px 0;border-bottom:0.5px solid var(--line);display:flex;justify-content:space-between;align-items:baseline;gap:0.5rem;line-height:1.4}
+.og-cat:last-child{border-bottom:none;padding-bottom:0}
+.og-sub{font-family:var(--mono);font-size:9.5px;color:var(--faint);white-space:nowrap;flex-shrink:0}
+
+/* FAMILIES — updated with all real families */
+.families{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:2rem}
+@media(max-width:600px){.families{grid-template-columns:1fr 1fr}}
+.fam{background:var(--bg2);border:0.5px solid var(--line);border-radius:var(--r);padding:0.85rem 1rem;transition:border-color 0.15s}
+.fam:hover{border-color:var(--line2)}
+.fam-id{font-family:var(--mono);font-size:9px;letter-spacing:0.1em;color:var(--faint);margin-bottom:0.3rem}
+.fam-name{font-size:12px;color:var(--muted);line-height:1.45}
+.fam-docs{font-family:var(--mono);font-size:9.5px;color:var(--faint);margin-top:0.25rem}
+
+/* ALIGN */
+.align-grid{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:2rem}
+.align-tag{font-family:var(--mono);font-size:10px;color:var(--muted);background:var(--bg2);border:0.5px solid var(--line);padding:4px 10px;border-radius:1px;letter-spacing:0.03em}
+
+/* IMPACT */
+.impact-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:2rem}
+@media(max-width:600px){.impact-grid{grid-template-columns:1fr}}
+.impact-card{border-radius:var(--r);padding:1.5rem 1.6rem}
+.impact-before{background:var(--bg2);border:0.5px solid var(--line)}
+.impact-after{background:rgba(184,153,90,0.04);border:0.5px solid rgba(184,153,90,0.22)}
+.impact-label{font-family:var(--mono);font-size:9px;letter-spacing:0.15em;text-transform:uppercase;margin-bottom:1.1rem}
+.impact-before .impact-label{color:var(--faint)}
+.impact-after .impact-label{color:var(--gold)}
+.impact-item{font-size:13px;color:var(--muted);padding:6px 0;border-bottom:0.5px solid var(--line);line-height:1.45}
+.impact-item:last-child{border-bottom:none;padding-bottom:0}
+.impact-after .impact-item{color:var(--ink)}
+
+/* PILOT */
+.pilot-box{border:0.5px solid var(--line2);border-radius:var(--r);padding:2.25rem 2.5rem;position:relative;background:var(--bg2)}
+.pilot-box::before{content:'OPEN CALL';font-family:var(--mono);font-size:8.5px;letter-spacing:0.2em;color:var(--green);position:absolute;top:1.5rem;right:1.75rem}
+.pilot-terms{display:flex;flex-wrap:wrap;gap:7px;margin:1.5rem 0 2rem}
+.pt{font-family:var(--mono);font-size:10px;color:var(--muted);background:var(--bg3);border:0.5px solid var(--line);padding:4px 11px;border-radius:var(--r);letter-spacing:0.03em}
+
+/* MODULES */
+.modules{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+@media(max-width:600px){.modules{grid-template-columns:1fr}}
+.mod{background:var(--bg2);border:0.5px solid var(--line);border-radius:var(--r);padding:1.5rem 1.55rem;transition:border-color 0.15s}
+.mod:hover{border-color:var(--line2)}
+.mod-num{font-family:var(--mono);font-size:9px;letter-spacing:0.12em;text-transform:uppercase;color:var(--faint);margin-bottom:0.65rem}
+.mod h3{font-size:14.5px;font-weight:500;color:var(--ink);margin-bottom:0.5rem;line-height:1.3}
+.mod p{font-size:13px;color:var(--muted);line-height:1.75;margin-bottom:1rem}
+.mod-files{display:flex;flex-wrap:wrap;gap:5px;margin-bottom:0.9rem}
+.mf{font-family:var(--mono);font-size:9.5px;color:var(--faint);background:var(--bg3);border:0.5px solid var(--line);padding:3px 8px;border-radius:1px}
+.mod-align{font-family:var(--mono);font-size:9.5px;color:var(--faint);line-height:1.7;margin-bottom:1rem}
+.mod-cta{font-family:var(--mono);font-size:10.5px;letter-spacing:0.06em;text-transform:uppercase;color:var(--gold);text-decoration:none}
+.mod-cta:hover{opacity:0.7}
+
+/* SCREENSHOTS */
+.scr-wrap{position:relative;border:0.5px solid var(--line);border-radius:var(--r);overflow:hidden;background:var(--bg2);margin-bottom:2rem}
+.scr-wrap img{width:100%;display:block;opacity:0.9}
+.scr-mask-bottom{position:absolute;bottom:0;left:0;right:0;height:45%;background:linear-gradient(to bottom,transparent,var(--bg2))}
+.scr-mask-left{position:absolute;top:0;left:0;bottom:0;width:22%;background:linear-gradient(to right,var(--bg2),transparent)}
+.scr-caption{font-family:var(--mono);font-size:9.5px;color:var(--faint);padding:8px 12px;border-top:0.5px solid var(--line);letter-spacing:0.04em;background:var(--bg2)}
+.chef-visual-pair{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:2.5rem 0}
+@media(max-width:600px){.chef-visual-pair{grid-template-columns:1fr}}
+.chef-visual-pair img{width:100%;border-radius:var(--r);border:0.5px solid var(--line);opacity:0.88;display:block}
+/* CONTACT */
+.contact-grid{display:grid;grid-template-columns:1fr 1.35fr;gap:3.5rem}
+@media(max-width:640px){.contact-grid{grid-template-columns:1fr;gap:2rem}}
+.contact-info p{font-size:13.5px;color:var(--muted);line-height:1.85;margin-bottom:1.25rem}
+.contact-detail{font-family:var(--mono);font-size:10.5px;color:var(--faint);line-height:2.1;margin-bottom:1rem}
+.contact-detail a{color:var(--muted);text-decoration:none}
+.contact-detail a:hover{color:var(--gold)}
+.contact-tags{display:flex;flex-wrap:wrap;gap:6px;margin-top:1.1rem}
+.ctag{font-family:var(--mono);font-size:9.5px;color:var(--green);background:rgba(107,143,113,0.06);border:0.5px solid rgba(107,143,113,0.25);padding:3px 9px;border-radius:1px;letter-spacing:0.04em}
+.form-group{margin-bottom:1rem}
+.form-group label{font-family:var(--mono);font-size:9.5px;letter-spacing:0.1em;text-transform:uppercase;color:var(--faint);display:block;margin-bottom:0.45rem}
+.form-group input,.form-group textarea,.form-group select{width:100%;background:var(--bg2);border:0.5px solid var(--line2);border-radius:var(--r);padding:10px 14px;font-family:var(--sans);font-size:13.5px;color:var(--ink);transition:border-color 0.15s;outline:none;-webkit-appearance:none;appearance:none}
+.form-group input:focus,.form-group textarea:focus,.form-group select:focus{border-color:var(--gold)}
+.form-group textarea{min-height:120px;resize:vertical;line-height:1.65}
+.hp-field{display:none!important;visibility:hidden}
+.form-note{font-family:var(--mono);font-size:9.5px;color:var(--faint);line-height:1.75;margin-top:0.75rem}
+.form-note a{color:var(--faint);text-decoration:underline;text-underline-offset:2px}
+
+/* FOOTER */
+footer{border-top:0.5px solid var(--line);padding:3rem 0 2rem}
+.foot-legal{font-size:11px;color:var(--faint);line-height:1.85;max-width:720px;margin-bottom:2.5rem}
+.foot-main{display:grid;grid-template-columns:1.2fr 1fr 1fr;gap:2rem;margin-bottom:2rem}
+@media(max-width:640px){.foot-main{grid-template-columns:1fr 1fr}}
+.foot-col-title{font-family:var(--mono);font-size:9px;letter-spacing:0.15em;text-transform:uppercase;color:var(--faint);margin-bottom:0.9rem}
+.foot-col a{font-family:var(--mono);font-size:10.5px;color:var(--muted);text-decoration:none;line-height:2.1;display:block;transition:color 0.15s}
+.foot-col a:hover{color:var(--gold)}
+.foot-col p{font-family:var(--mono);font-size:10.5px;color:var(--faint);line-height:1.9}
+
+/* social icon bar */
+.foot-social-bar{display:flex;align-items:center;gap:6px;flex-wrap:wrap;padding:1.25rem 0;border-top:0.5px solid var(--line);border-bottom:0.5px solid var(--line);margin-bottom:1.5rem}
+.sico{display:inline-flex;align-items:center;justify-content:center;width:34px;height:34px;border-radius:var(--r);border:0.5px solid var(--line);background:var(--bg2);color:var(--muted);transition:border-color 0.15s,color 0.15s,background 0.15s;text-decoration:none;flex-shrink:0}
+.sico:hover{border-color:var(--gold);color:var(--gold);background:rgba(184,153,90,0.06)}
+.sico svg{width:15px;height:15px;fill:currentColor}
+.sico-text{font-family:var(--mono);font-size:9.5px;letter-spacing:0.04em;padding:0 10px;height:34px;display:inline-flex;align-items:center;border-radius:var(--r);border:0.5px solid var(--line);background:var(--bg2);color:var(--muted);text-decoration:none;transition:border-color 0.15s,color 0.15s}
+.sico-text:hover{border-color:var(--gold);color:var(--gold)}
+.sdiv{width:0.5px;height:20px;background:var(--line);margin:0 3px;flex-shrink:0}
+
+.foot-bottom{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:0.75rem}
+.foot-brand{font-family:var(--mono);font-size:10px;color:var(--faint);letter-spacing:0.04em;line-height:1.9}
+.foot-brand strong{color:var(--gold);font-weight:500;display:block}
+.foot-links-bottom{display:flex;gap:1.5rem;flex-wrap:wrap;align-items:center}
+.foot-links-bottom a{font-family:var(--mono);font-size:10px;color:var(--faint);text-decoration:none;transition:color 0.15s}
+.foot-links-bottom a:hover{color:var(--muted)}
+
+/* ── LICENSING ── */
+.lic-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+@media(max-width:640px){.lic-grid{grid-template-columns:1fr}}
+.lic-card{background:var(--bg2);border:0.5px solid var(--line);border-radius:var(--r);padding:1.25rem 1.4rem;transition:border-color 0.2s}
+.lic-card:hover{border-color:var(--line2)}
+.lic-card.featured{border-color:rgba(201,168,76,0.35)}
+.lic-tag{font-family:var(--mono);font-size:8px;letter-spacing:0.14em;text-transform:uppercase;color:var(--gold);border:0.5px solid rgba(201,168,76,0.4);padding:2px 7px;border-radius:2px;display:inline-block;margin-bottom:0.85rem}
+.lic-title{font-size:13.5px;font-weight:500;color:var(--ink);margin-bottom:0.4rem}
+.lic-desc{font-size:12px;color:var(--muted);line-height:1.7;margin-bottom:1rem}
+.lic-list{list-style:none}
+.lic-list li{font-family:var(--mono);font-size:9.5px;color:var(--faint);padding:5px 0;border-bottom:0.5px solid var(--line);display:flex;align-items:flex-start;gap:6px}
+.lic-list li:last-child{border-bottom:none}
+.lic-list li::before{content:'→';color:var(--gold);flex-shrink:0}
+.lic-divider{display:flex;align-items:center;gap:1rem;margin:2.5rem 0 2rem}
+.lic-divider-line{flex:1;height:0.5px;background:var(--line2)}
+.lic-divider-label{font-family:var(--mono);font-size:8.5px;letter-spacing:0.18em;text-transform:uppercase;color:var(--faint);white-space:nowrap}
+@keyframes kenburns{0%{transform:scale(1) translate(0,0)}100%{transform:scale(1.07) translate(-2%,-1.5%)}}
+/* Hero fade-in */
+.hero-content{animation:heroin 1.2s ease both}
+@keyframes heroin{from{opacity:0;transform:translateY(18px)}to{opacity:1;transform:translateY(0)}}
+
+/* ── FADE-IN SECTIONS ── */
+.sec{opacity:1;transform:none;transition:opacity 0.6s ease,transform 0.6s ease}
+.sec.fade-hidden{opacity:0;transform:translateY(20px)}
+
+/* ── FOCUS VISIBLE — Keyboard accessibility ── */
+:focus-visible{outline:2px solid var(--gold);outline-offset:3px;border-radius:2px}
+button:focus-visible,a:focus-visible,[role="button"]:focus-visible{outline:2px solid var(--gold);outline-offset:3px}
+
+
+/* ── NAV MOBILE — self-contained ── */
+
+@media(min-width:601px) and (max-width:900px){
+  .nav-links a{font-size:9.5px;padding:3px 7px}
+  .nav-logo span{display:none}
+  .nav-contact{font-size:9px;padding:5px 10px}
+}
+
+/* ── NAV MOBILE PADDING FIX ── */
+
+  .nav-logo span{display:none !important}
+  .nav-inner{height:52px;align-items:center;padding:0 1.25rem !important}
+  
+}
+@media(min-width:601px) and (max-width:900px){
+  .nav-links a{font-size:9.5px !important;padding:3px 6px !important}
+  .nav-contact{font-size:9px;padding:4px 10px}
+}
+
+/* ── DOC PREVIEW MOBILE FIX ── */
+.doc-preview-inner{aspect-ratio:3/4;overflow:hidden;position:relative}
+.doc-blur-overlay{position:absolute;bottom:0;left:0;right:0;height:55%;
+  background:linear-gradient(to bottom,transparent,var(--bg2) 70%);
+  display:flex;flex-direction:column;align-items:center;justify-content:flex-end;padding-bottom:1rem;gap:6px}
+
+/* ── COOKIE BANNER SHOW/HIDE ── */
+#cookie-banner{display:block;transform:translateY(100%);transition:transform 0.4s cubic-bezier(0.16,1,0.3,1)}
+#cookie-banner.show{transform:translateY(0)}
+#cookie-panel{opacity:0;pointer-events:none;transition:opacity 0.25s}
+#cookie-panel.show{opacity:1;pointer-events:auto}
+#cookie-panel.show .cookie-panel-inner{transform:translateY(0)}
+
+
+
+
+/* ── HERO RESPONSIVE ── */
+@media(max-width:1024px){
+  .hero-content{padding-top:5rem}
+}
+@media(min-width:768px) and (max-width:1024px){
+  .hero{min-height:100svh !important;height:auto !important;justify-content:flex-start !important}
+  .hero-content{padding-top:100px !important;padding-bottom:4rem !important}
+}
+@media(max-width:767px){
+  .hero{min-height:100svh !important;justify-content:flex-start !important}
+  .hero-content{padding-top:80px !important;padding-left:1.25rem !important;padding-right:1.25rem !important;padding-bottom:2.5rem !important}
+  .hero-eyebrow{font-size:8px !important}
+  .hero-tagline{font-size:8.5px !important;margin-bottom:0.65rem !important}
+  .hero-sub{font-size:13px !important;margin-bottom:0.65rem !important}
+  .hero-desc{font-size:13px !important;margin-bottom:1rem !important}
+  .cta-row{flex-direction:column !important;align-items:stretch !important;gap:0.5rem !important}
+  .btn-primary,.btn-ghost,.pilot-live{width:100% !important;justify-content:center !important;text-align:center !important;display:flex !important}
+}
+@media(max-width:390px){
+  .hero-eyebrow{display:none !important}
+  .hero-content{padding-top:70px !important}
+}
+</style>
+<!-- Plausible Analytics — GDPR compliant, no cookies, no consent banner required -->
+<!-- Replace YOUR-DOMAIN.com with your actual Vercel domain once deployed -->
+<!-- <script defer data-domain="YOUR-DOMAIN.com" src="https://plausible.io/js/script.js"></script> -->
+
+
+
+
+
+
+
+
+
+
+
+<script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "SoftwareApplication",
+    "name": "EACE — EU AI Compliance Engine",
+    "url": "https://eace.ai",
+    "description": "Complete EU AI Act compliance infrastructure. Four structured engines, 70+ governance documents.",
+    "applicationCategory": "BusinessApplication",
+    "operatingSystem": "Web",
+    "offers": {"@type": "Offer", "price": "0", "priceCurrency": "EUR"},
+    "publisher": {"@type": "Organization", "name": "EACE", "url": "https://eace.ai"}
+  }
+</script>
+
+</head>
+<body>
+<a href="#main-content" class="skip-nav" style="position:absolute;top:-100px;left:1rem;background:var(--gold);color:var(--bg);padding:8px 16px;border-radius:4px;font-family:var(--mono);font-size:11px;text-decoration:none;z-index:9999;transition:top 0.2s" onfocus="this.style.top='1rem'" onblur="this.style.top='-100px'">Skip to main content</a>
+<a href="#main-content" class="skip-link" style="position:absolute;left:-9999px;top:0;font-family:var(--mono);font-size:11px;background:var(--gold);color:var(--bg);padding:8px 16px;border-radius:var(--r);z-index:9999;text-decoration:none" onfocus="this.style.left='1rem'" onblur="this.style.left='-9999px'">Skip to main content</a>
+
+<!-- NAV -->
+<nav id="main-nav" aria-label="Main navigation">
+  <div class="nav-inner">
+    <a href="/" class="nav-logo">EACE <span>— EU AI Compliance Engine</span></a>
+    <ul class="nav-links" role="list">
+      <li><a href="/" class="active" aria-current="page">EU AI Compliance Engine</a></li>
+      <li><a href="/transparency">Transparency Notice</a></li>
+      <li><a href="/risk-governance">Risk & Governance</a></li>
+    </ul>
+    <a href="#contact" class="nav-contact">Contact</a>
+    <button class="hamburger" id="hamburger" aria-label="Open navigation menu" aria-expanded="false" aria-controls="mobile-menu">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+</nav>
+<!-- MOBILE MENU -->
+<div class="mobile-menu" id="mobile-menu" role="navigation" aria-label="Mobile navigation">
+  <a href="/" class="active">EU AI Compliance Engine</a>
+  <a href="/transparency">Transparency Notice</a>
+  <a href="/risk-governance">Risk &amp; Governance</a>
+  <a href="#contact" class="mm-contact" onclick="closeMobileMenu()">Contact →</a>
+</div>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-bg">
+    <img src="b2.png" alt="EU AI Compliance Engine — professional compliance infrastructure" loading="eager">
+  </div>
+  <div class="hero-content">
+    <p class="hero-eyebrow">From Crisis to Authority<sup>™</sup></p>
+    <p class="hero-tagline">EACE<span>·</span>Fast to Deploy<span>·</span>Enterprise-Grade<span>·</span>Audit-Ready</p>
+    <h1>Complete EU AI Act<br>compliance <em>infrastructure.</em></h1>
+    <p class="hero-sub">Replace €300k–€2M consulting projects with a deterministic engine.</p>
+    <p class="hero-desc">Four structured engines. 70+ governance documents. Sector and country overlays for all 27 EU member states. From classification to audit-ready evidence — in weeks, not months.</p>
+    <div class="cta-row">
+      <a href="mailto:digitaldesignlab4u@gmail.com" class="btn btn-primary" aria-label="Contact digitaldesignlab4u by email">Let's talk →</a>
+      <a href="#pilot" class="pilot-live" aria-label="Pilot programme — open now, jump to section"><span class="dot" aria-hidden="true"></span> Pilot programme — open now</a>
+      <a href="#engine" class="btn-ghost" aria-label="Explore the engine — scroll to engine section">Explore the engine ↓</a>
+    </div>
+    <div class="atags">
+      <span class="atag">Reg. (EU) 2024/1689</span>
+      <span class="atag">ISO/IEC 42001</span>
+      <span class="atag">ISO/IEC 27001</span>
+      <span class="atag">GDPR</span>
+      <span class="atag">NIS2</span>
+      <span class="atag">ePrivacy</span>
+      <span class="atag">NIST AI RMF 1.0</span>
+      <span class="atag">ENISA</span>
+      <span class="atag">EC AI Office 2025</span>
+      <span class="atag">DSA</span>
+      <span class="atag">C2PA · IPTC · XMP</span>
+      <span class="atag">Notified body ready</span>
+      <span class="atag">Market surveillance ready</span>
+    </div>
+  </div>
+</section>
+
+<!-- CHEF SPLIT -->
+<div class="chef-wrap">
+  <div class="chef-img">
+    <img src="s.jpg" alt="EU AI Compliance — Prompt Kitchen Lab methodology" loading="lazy">
+  </div>
+  <div class="chef-text">
+    <p class="eyebrow">The methodology</p>
+    <h2>Engineered for execution.<br><em>Not theory.</em></h2>
+    <p>Most organisations face the EU AI Act without infrastructure — no classification methodology, no standardized documentation, no audit trail. The EACE Engine solves this with a repeatable, deterministic system that eliminates regulatory uncertainty at every stage.</p>
+    <p>This is not a summary, not a checklist, and not a template pack. It is a compliance operating system — designed for teams that cannot afford mistakes.</p>
+    <div class="metric-row">
+      <div class="metric"><div class="metric-val" data-count="70" data-suffix="+">70+</div><div class="metric-label">Governance documents</div></div>
+      <div class="metric"><div class="metric-val" data-count="27" data-suffix="">27</div><div class="metric-label">EU member states</div></div>
+      <div class="metric"><div class="metric-val" data-count="50" data-suffix="+">50+</div><div class="metric-label">Structured outputs</div></div>
+    </div>
+  </div>
+</div>
+
+<div class="wrap" id="main-content">
+<section class="sec" aria-labelledby="video-heading">
+  <p class="sec-label">Overview</p>
+  <h2 id="video-heading" style="margin-bottom:1.5rem">See the engine in action.</h2>
+  <a href="https://www.youtube.com/watch?v=q5RhzCvAupc" target="_blank" rel="noopener" id="yt-cta-card" aria-label="Watch EU AI Compliance Engine overview on YouTube" style="display:block;text-decoration:none;position:relative;width:100%;padding-bottom:56.25%;background:var(--bg2);border:0.5px solid var(--line);border-radius:var(--r);overflow:hidden;transition:border-color 0.2s,box-shadow 0.2s;cursor:pointer;" onmouseover="this.style.borderColor='var(--gold)';this.style.boxShadow='0 8px 32px rgba(0,0,0,0.4)'" onmouseout="this.style.borderColor='var(--line)';this.style.boxShadow='none'">
+    <img
+      src="https://i.ytimg.com/vi/q5RhzCvAupc/maxresdefault.jpg"
+      onerror="this.src='https://i.ytimg.com/vi/q5RhzCvAupc/hqdefault.jpg'"
+      alt="EU AI Compliance Engine — From Crisis to Authority™ overview video"
+      style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:0.55;">
+    <div style="position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:1rem;">
+      <div id="yt-play-btn" style="width:72px;height:72px;border-radius:50%;background:rgba(201,168,76,0.12);border:1.5px solid var(--gold);display:flex;align-items:center;justify-content:center;transition:background 0.2s,transform 0.2s;">
+        <svg width="26" height="26" viewBox="0 0 26 26" fill="none" aria-hidden="true"><polygon points="9,5 22,13 9,21" fill="#c9a84c"/></svg>
+      </div>
+      <div style="text-align:center;">
+        <p style="font-family:var(--mono);font-size:10px;letter-spacing:0.12em;text-transform:uppercase;color:var(--gold);margin:0 0 4px 0;">Watch on YouTube</p>
+        <p style="font-family:var(--mono);font-size:9px;color:var(--faint);margin:0;letter-spacing:0.06em;">EU AI Compliance Engine — From Crisis to Authority™</p>
+      </div>
+    </div>
+  </a>
+</section>
+
+<!-- WHO IT'S FOR -->
+<section class="sec">
+  <p class="sec-label">Who it's for</p>
+  <h2>Built for organisations<br>that <em>cannot afford to fail audit.</em></h2>
+  <p class="sec-intro">Designed for high-risk AI providers, deployers, and their advisors — across every sector subject to EU AI Act obligations.</p>
+  <div class="who-grid">
+    <div class="who-card"><div class="who-title">Banks & Financial Institutions</div><div class="who-desc">Credit scoring, fraud detection, AML — full high-risk compliance stack</div></div>
+    <div class="who-card"><div class="who-title">Healthcare & MedTech</div><div class="who-desc">Diagnostic AI, clinical decision support — FRIA, DPIA, technical documentation</div></div>
+    <div class="who-card"><div class="who-title">Government & Public Sector</div><div class="who-desc">Critical infrastructure, public services — notified body ready evidence packages</div></div>
+    <div class="who-card"><div class="who-title">AI Providers & SaaS Platforms</div><div class="who-desc">Annex IV tech docs, conformity assessment, CE marking, EU database registration</div></div>
+    <div class="who-card"><div class="who-title">HR & Recruitment Tech</div><div class="who-desc">Candidate screening, workforce management — Art. 26(11) worker transparency</div></div>
+    <div class="who-card"><div class="who-title">Telecom & Critical Infrastructure</div><div class="who-desc">NIS2 + EU AI Act intersection — operational cybersecurity and oversight</div></div>
+    <div class="who-card"><div class="who-title">Consulting & Audit Firms</div><div class="who-desc">White-label delivery accelerator — reduce project time by 70–90%</div></div>
+    <div class="who-card"><div class="who-title">Legal & Compliance Teams</div><div class="who-desc">Audit-ready evidence layer with full cross-reference and version control</div></div>
+    <div class="who-card"><div class="who-title">Enterprise AI Programmes</div><div class="who-desc">Standardize governance across all AI systems and business units at scale</div></div>
+  </div>
+</section>
+
+<!-- ECONOMIC IMPACT -->
+<section class="sec">
+  <p class="sec-label">Economic impact</p>
+  <h2>The compliance cost<br>of <em>doing it the old way.</em></h2>
+  <p class="sec-intro">EU AI Act compliance for a single high-risk system typically requires months of consulting engagement. The EACE Engine changes that equation.</p>
+  <div class="impact-grid">
+    <div class="impact-card impact-before">
+      <div class="impact-label">Traditional consulting approach</div>
+      <div class="impact-item">€300k–€2M per compliance project</div>
+      <div class="impact-item">3–9 months delivery timeline</div>
+      <div class="impact-item">Inconsistent, non-reproducible outputs</div>
+      <div class="impact-item">Manual re-work for each new system</div>
+      <div class="impact-item">No standardized evidence architecture</div>
+      <div class="impact-item">Dependency on individual consultants</div>
+    </div>
+    <div class="impact-card impact-after">
+      <div class="impact-label">With EACE Engine</div>
+      <div class="impact-item">Standardized outputs — weeks not months</div>
+      <div class="impact-item">Deterministic, reproducible across all systems</div>
+      <div class="impact-item">Built-in evidence layer — audit-ready by design</div>
+      <div class="impact-item">Scalable across business units and markets</div>
+      <div class="impact-item">27 EU member state overlays included</div>
+      <div class="impact-item">Notified body & market surveillance ready</div>
+    </div>
+  </div>
+</section>
+
+<!-- CORE ENGINE -->
+<section class="sec" id="engine">
+  <p class="sec-label">01 — Core Engine</p>
+  <h2>EU AI Compliance Engine <em>(EACE)</em></h2>
+  <p class="sec-intro">A complete, version-controlled compliance operating system for the EU AI Act. Covers every risk tier, every deployment context, and every relevant EU regulation — generating a cross-referenced evidence package structured for notified bodies and market surveillance authorities.</p>
+
+  <!-- ENTERPRISE SIGNALS -->
+  <div class="enterprise-bar">
+    <div class="es-item"><span class="es-dot"></span>Used by compliance teams, law firms, and AI governance officers</div>
+    <div class="es-item"><span class="es-dot"></span>Enterprise licensing available on request</div>
+    <div class="es-item"><span class="es-dot"></span>Full regulatory scoping included</div>
+    <div class="es-item"><span class="es-dot"></span>Audit-ready documentation</div>
+    <div class="es-item"><span class="es-dot"></span>Notified body &amp; market surveillance ready</div>
+  </div>
+
+  <!-- DOC PREVIEW -->
+  <p class="sec-label" style="margin-bottom:1rem">Document architecture — sample preview</p>
+  <div class="doc-preview-grid">
+    <div class="doc-preview-card" onclick="openSampleModal('p2a')" role="button" tabindex="0" aria-label="Preview P2A Annex IV sample" onkeydown="if(event.key==='Enter'||event.key===' ')openSampleModal('p2a')">
+      <div class="doc-preview-inner">
+        <div class="doc-preview-header">
+          <div class="doc-9dots"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></div>
+          <span class="doc-preview-title">P2A · Annex IV</span>
+        </div>
+        <div class="doc-lines">
+          <div class="doc-line h"></div>
+          <div class="doc-line m"></div>
+          <div class="doc-line"></div>
+          <div class="doc-line s"></div>
+          <div class="doc-line h" style="margin-top:6px"></div>
+          <div class="doc-line m"></div>
+          <div class="doc-line xs"></div>
+          <div class="doc-line"></div>
+          <div class="doc-line s"></div>
+          <div class="doc-line m"></div>
+        </div>
+        <div class="doc-blur-overlay"><span class="doc-sample-tag">SAMPLE</span><span class="doc-preview-hint">Click to preview</span></div>
+      </div>
+      <p class="doc-meta">Technical Documentation · Annex IV · 9 sections</p>
+    </div>
+    <div class="doc-preview-card" onclick="openSampleModal('p2b')" role="button" tabindex="0" aria-label="Preview P2B FRIA DPIA sample" onkeydown="if(event.key==='Enter'||event.key===' ')openSampleModal('p2b')">
+      <div class="doc-preview-inner">
+        <div class="doc-preview-header">
+          <div class="doc-9dots"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></div>
+          <span class="doc-preview-title">P2B · FRIA</span>
+        </div>
+        <div class="doc-lines">
+          <div class="doc-line h"></div>
+          <div class="doc-line"></div>
+          <div class="doc-line m"></div>
+          <div class="doc-line s"></div>
+          <div class="doc-line h" style="margin-top:6px"></div>
+          <div class="doc-line m"></div>
+          <div class="doc-line"></div>
+          <div class="doc-line xs"></div>
+          <div class="doc-line m"></div>
+          <div class="doc-line s"></div>
+        </div>
+        <div class="doc-blur-overlay"><span class="doc-sample-tag">SAMPLE</span><span class="doc-preview-hint">Click to preview</span></div>
+      </div>
+      <p class="doc-meta">Fundamental Rights Impact Assessment · Art. 27</p>
+    </div>
+    <div class="doc-preview-card" onclick="openSampleModal('fh')" role="button" tabindex="0" aria-label="Preview Family H Overlay sample" onkeydown="if(event.key==='Enter'||event.key===' ')openSampleModal('fh')">
+      <div class="doc-preview-inner">
+        <div class="doc-preview-header">
+          <div class="doc-9dots"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></div>
+          <span class="doc-preview-title">Family H · Overlay</span>
+        </div>
+        <div class="doc-lines">
+          <div class="doc-line h"></div>
+          <div class="doc-line s"></div>
+          <div class="doc-line m"></div>
+          <div class="doc-line"></div>
+          <div class="doc-line h" style="margin-top:6px"></div>
+          <div class="doc-line xs"></div>
+          <div class="doc-line m"></div>
+          <div class="doc-line s"></div>
+          <div class="doc-line"></div>
+          <div class="doc-line m"></div>
+        </div>
+        <div class="doc-blur-overlay"><span class="doc-sample-tag">SAMPLE</span><span class="doc-preview-hint">Click to preview</span></div>
+      </div>
+      <p class="doc-meta">Country Overlay · 27 EU Member States + 3 EEA</p>
+    </div>
+  </div>
+
+  <!-- SAMPLE PDF MODAL -->
+  <div id="sample-modal" role="dialog" aria-modal="true" aria-labelledby="sample-modal-title" style="display:none;position:fixed;inset:0;z-index:9000;background:rgba(0,0,0,0.82);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);align-items:center;justify-content:center;padding:1.5rem;">
+    <div style="background:var(--bg1,#0e0e0e);border:0.5px solid var(--line2,#2a2a2a);border-radius:10px;width:100%;max-width:860px;max-height:90vh;display:flex;flex-direction:column;overflow:hidden;box-shadow:0 32px 80px rgba(0,0,0,0.7);">
+      <div style="display:flex;align-items:center;justify-content:space-between;padding:1rem 1.25rem;border-bottom:0.5px solid var(--line2,#2a2a2a);flex-shrink:0;">
+        <div style="display:flex;align-items:center;gap:0.75rem;">
+          <span style="font-size:9px;letter-spacing:0.12em;text-transform:uppercase;color:var(--gold,#c9a84c);font-weight:600;border:0.5px solid var(--gold,#c9a84c);padding:2px 7px;border-radius:3px;">SAMPLE</span>
+          <span id="sample-modal-title" style="font-size:13px;color:var(--fg,#e8e8e8);font-weight:500;"></span>
+        </div>
+        <div style="display:flex;align-items:center;gap:0.5rem;">
+          <a id="sample-modal-download" href="#" download style="font-size:11px;color:var(--muted,#666);text-decoration:none;padding:5px 10px;border:0.5px solid var(--line2,#2a2a2a);border-radius:4px;transition:color 0.15s,border-color 0.15s;" onmouseover="this.style.color='var(--gold,#c9a84c)';this.style.borderColor='var(--gold,#c9a84c)'" onmouseout="this.style.color='var(--muted,#666)';this.style.borderColor='var(--line2,#2a2a2a)'">Download PDF</a>
+          <button onclick="closeSampleModal()" aria-label="Close sample preview" style="background:none;border:0.5px solid var(--line2,#2a2a2a);color:var(--muted,#666);width:30px;height:30px;border-radius:4px;cursor:pointer;font-size:18px;display:flex;align-items:center;justify-content:center;transition:color 0.15s,border-color 0.15s;" onmouseover="this.style.color='var(--fg,#e8e8e8)';this.style.borderColor='var(--muted,#666)'" onmouseout="this.style.color='var(--muted,#666)';this.style.borderColor='var(--line2,#2a2a2a)'">&times;</button>
+        </div>
+      </div>
+      <div style="padding:0.6rem 1.25rem;background:rgba(201,168,76,0.05);border-bottom:0.5px solid var(--line2,#2a2a2a);flex-shrink:0;">
+        <p style="font-size:10.5px;color:var(--muted,#666);margin:0;">Sample document — for preview purposes only. Not for regulatory submission. &copy; 2026 EU AI Compliance Engine.</p>
+      </div>
+      <div id="sample-modal-body" style="flex:1;overflow-y:auto;min-height:0;">
+      </div>
+    </div>
+  </div>
+
+
+  <div class="two-col">
+    <div class="tc">
+      <h3>Architecture</h3>
+      <p>Four prompt engines (P1–P4) routed by risk classification result. Each engine contains structured Ultra Modules generating deterministic, reproducible outputs. All outputs are cross-referenced, version-controlled, and carry a structured evidence layer (EID/MEI) with full audit trail.</p>
+    </div>
+    <div class="tc">
+      <h3>Coverage</h3>
+      <p>70+ documents across ten document families (Fast Start, Foundation + Families A–H, plus the GDPR & ePrivacy External Template Suite). Sector overlays for employment, healthcare/MedTech, and finance/banking/AML. Country overlays for all 27 EU member states and 3 EEA countries.</p>
+    </div>
+  </div>
+
+  <p class="sec-label">Four prompt engines</p>
+  <div class="engines">
+    <div class="ec">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--gold)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="margin-bottom:0.6rem;opacity:0.8" aria-hidden="true"><circle cx="12" cy="12" r="3"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"/></svg>
+      <p class="ec-id">P1</p><p class="ec-title">Territorial scope & risk classification</p><p class="ec-art">Jurisdiction · applicability · risk tier routing · Art. 5 clearance</p>
+    </div>
+    <div class="ec">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--gold)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="margin-bottom:0.6rem;opacity:0.8" aria-hidden="true"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="M9 12l2 2 4-4"/></svg>
+      <p class="ec-id">P2A</p><p class="ec-title">High-risk provider compliance</p><p class="ec-art">Arts. 9–17, 43, 47–49, 51–55, 72–73</p>
+    </div>
+    <div class="ec">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--gold)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="margin-bottom:0.6rem;opacity:0.8" aria-hidden="true"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+      <p class="ec-id">P2B</p><p class="ec-title">High-risk deployer compliance</p><p class="ec-art">Arts. 26–27, 50 · Full operational lifecycle</p>
+    </div>
+    <div class="ec">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--gold)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="margin-bottom:0.6rem;opacity:0.8" aria-hidden="true"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+      <p class="ec-id">P3 · P4</p><p class="ec-title">Limited & minimal risk</p><p class="ec-art">Art. 50/52 · Art. 6(3) · Art. 95</p>
+    </div>
+  </div>
+
+  <div class="chef-visual-pair" aria-label="Engine output examples — Art. 5 clearance and Art. 9–17 provider obligations">
+    <img src="chef_art5.png" alt="Art. 5 Clearance Passed — 8 prohibited practices screened, deployment authorised">
+    <img src="chef_art9.png" alt="Art. 9–17 Provider Obligations — conformity, CE marking, registration">
+  </div>
+
+  <p class="sec-label">Structured output categories — per engine</p>
+  <div class="output-groups">
+    <div class="og">
+      <p class="og-engine">P1 — Classification engine</p>
+      <p class="og-title">Scoping & routing outputs</p>
+      <div class="og-cat">Territorial scope determination</div>
+      <div class="og-cat">Risk classification & tier routing</div>
+      <div class="og-cat">Art. 5 prohibited practices clearance</div>
+      <div class="og-cat">Sector & jurisdiction activation</div>
+      <div class="og-cat">Evidence layer initialisation</div>
+    </div>
+    <div class="og">
+      <p class="og-engine">P2A — High-risk provider</p>
+      <p class="og-title">Provider compliance outputs</p>
+      <div class="og-cat">Technical documentation (Annex IV) <span class="og-sub">9 sections</span></div>
+      <div class="og-cat">Risk management system (Art. 9)</div>
+      <div class="og-cat">Human oversight design <span class="og-sub">5 sub-packages</span></div>
+      <div class="og-cat">Conformity assessment & CE marking</div>
+      <div class="og-cat">Post-market monitoring & incident reporting</div>
+      <div class="og-cat">GDPR processor package <span class="og-sub">3 sub-packages</span></div>
+      <div class="og-cat">GPAI compliance package (conditional)</div>
+      <div class="og-cat">Evidence layer + CSV export <span class="og-sub">4 audit CSVs</span></div>
+    </div>
+    <div class="og">
+      <p class="og-engine">P2B — High-risk deployer</p>
+      <p class="og-title">Deployer compliance outputs</p>
+      <div class="og-cat">Operational procedures & logging</div>
+      <div class="og-cat">Human oversight implementation</div>
+      <div class="og-cat">GDPR controller package</div>
+      <div class="og-cat">DPIA integration (Art. 27)</div>
+      <div class="og-cat">Worker & user transparency packages</div>
+      <div class="og-cat">Training, change & lifecycle management</div>
+      <div class="og-cat">National overlays — deployer <span class="og-sub">27 + 3 EEA</span></div>
+      <div class="og-cat">Decommissioning & evidence layer</div>
+    </div>
+    <div class="og">
+      <p class="og-engine">P3 · P4 — Limited & minimal risk</p>
+      <p class="og-title">Transparency & documentation outputs</p>
+      <div class="og-cat">Art. 50(1) AI interaction notice</div>
+      <div class="og-cat">Art. 50(2) emotion & biometric notice</div>
+      <div class="og-cat">Art. 50(3) deepfake & synthetic content</div>
+      <div class="og-cat">Art. 52 GPAI transparency notice</div>
+      <div class="og-cat">Art. 26(11) worker transparency notice</div>
+      <div class="og-cat">Art. 6(3) assessment & EU DB registration</div>
+      <div class="og-cat">Art. 95 minimal-risk documentation</div>
+      <div class="og-cat">GDPR & ePrivacy mini-analysis + evidence</div>
+    </div>
+  </div>
+
+  <p class="sec-label">Document families — 70+ documents across 10 families</p>
+  <div class="families" style="margin-bottom:2.5rem">
+    <div class="fam">
+      <p class="fam-id">FAST START</p>
+      <p class="fam-name">Quick start guide & workflow overview</p>
+    </div>
+    <div class="fam">
+      <p class="fam-id">FOUNDATION</p>
+      <p class="fam-name">Core components, navigation guide, glossary, transition guide, licensing & commercial documents</p>
+      <p class="fam-docs">7 documents</p>
+    </div>
+    <div class="fam">
+      <p class="fam-id">FAMILY A</p>
+      <p class="fam-name">Classification, territorial scope & evidence layer</p>
+      <p class="fam-docs">P1 engine · Evidence layer · CSV specs</p>
+    </div>
+    <div class="fam">
+      <p class="fam-id">FAMILY B</p>
+      <p class="fam-name">High-risk provider compliance (P2A engine)</p>
+      <p class="fam-docs">Architecture · Prompt 2 · Evidence · CSV</p>
+    </div>
+    <div class="fam">
+      <p class="fam-id">FAMILY C</p>
+      <p class="fam-name">Transparency & limited risk (P3 engine)</p>
+      <p class="fam-docs">Art. 50/52 · Art. 6(3) · Evidence layer</p>
+    </div>
+    <div class="fam">
+      <p class="fam-id">FAMILY D</p>
+      <p class="fam-name">Minimal risk documentation (P4 engine)</p>
+      <p class="fam-docs">Art. 95 · Evidence layer · CSV specs</p>
+    </div>
+    <div class="fam">
+      <p class="fam-id">FAMILY E</p>
+      <p class="fam-name">National & sectoral evidence layer</p>
+      <p class="fam-docs">Cross-border governance · Sectoral evidence</p>
+    </div>
+    <div class="fam">
+      <p class="fam-id">FAMILY F</p>
+      <p class="fam-name">Post-market monitoring, lifecycle & FRIA</p>
+      <p class="fam-docs">Lifecycle module · PMM · Incident templates · FRIA (unified fundamental rights module)</p>
+    </div>
+    <div class="fam">
+      <p class="fam-id">FAMILY G</p>
+      <p class="fam-name">Governance, QMS & notified body selection</p>
+      <p class="fam-docs">Notified body selection logic · Evidence · CSV</p>
+    </div>
+    <div class="fam">
+      <p class="fam-id">FAMILY H</p>
+      <p class="fam-name">Sector & country overlays</p>
+      <p class="fam-docs">Employment · Healthcare/MedTech · Finance/AML · EU-27 country packs · EEA (3) · Combined sector × country templates</p>
+    </div>
+    <div class="fam" style="grid-column:span 2">
+      <p class="fam-id">FAMILY 9 — EXTERNAL SUITE</p>
+      <p class="fam-name">GDPR & ePrivacy external template suite</p>
+      <p class="fam-docs">Complete external-facing GDPR & ePrivacy documentation templates for controller and processor obligations</p>
+    </div>
+  </div>
+
+  <p class="sec-label">Aligned with</p>
+  <div class="align-grid">
+    <span class="align-tag">EU AI Act — Reg. (EU) 2024/1689</span>
+    <span class="align-tag">GDPR — Reg. (EU) 2016/679</span>
+    <span class="align-tag">ePrivacy Directive 2002/58/EC</span>
+    <span class="align-tag">NIS2 — Directive (EU) 2022/2555</span>
+    <span class="align-tag">DSA — Reg. (EU) 2022/2065</span>
+    <span class="align-tag">ISO/IEC 42001 — AI Management Systems</span>
+    <span class="align-tag">ISO/IEC 23894 — AI Risk Management</span>
+    <span class="align-tag">ISO/IEC 27001 — Information Security</span>
+    <span class="align-tag">ISO/IEC 27701 — Privacy Information Management</span>
+    <span class="align-tag">ISO/IEC 27005 — Security Risk Management</span>
+    <span class="align-tag">ISO/IEC 25012 — Data Quality</span>
+    <span class="align-tag">ISO/IEC 38505 — Data Governance</span>
+    <span class="align-tag">NIST AI RMF 1.0</span>
+    <span class="align-tag">ENISA AI Security Guidelines</span>
+    <span class="align-tag">EDPB Guidelines on AI & GDPR</span>
+    <span class="align-tag">EC AI Office Draft Guidance 2025</span>
+    <span class="align-tag">C2PA · IPTC · XMP</span>
+  </div>
+  <div style="margin-top:2rem;display:flex;gap:0.75rem;flex-wrap:wrap;align-items:center">
+    <a href="mailto:digitaldesignlab4u@gmail.com" class="btn btn-primary" aria-label="Get in touch about the EU AI Compliance Engine">Get in touch →</a>
+    <a href="#classifier" class="btn-secondary">Explore P1 classifier</a>
+    <a href="#modules" class="btn-secondary">See module dashboards</a>
+  </div>
+</section>
+
+<!-- P1 CLASSIFIER WIDGET -->
+<section class="sec" id="classifier" aria-labelledby="classifier-heading">
+  <p class="sec-label">P1 &mdash; Quick scope check</p>
+  <h2 id="classifier-heading">Does the EU AI Act<br><em>apply to your system?</em></h2>
+  <p class="sec-intro">P1 &mdash; Territorial Scope &amp; Risk Classification &mdash; is always the first step. Answer three questions to see what the engine needs to determine, and what your next regulatory pathway looks like.</p>
+  <div class="p1-widget" role="form" aria-label="P1 scope and classification quick check">
+  <div class="p1-widget" role="form" aria-label="P1 scope and classification quick check">
+    <div class="p1-grid">
+      <div class="p1-field">
+        <label for="p1-q1" class="p1-label">Does your AI system operate in or affect the EU market?</label>
+        <div class="sel-wrap">
+          <select id="p1-q1" onchange="runP1Check()" aria-label="EU market presence">
+            <option value="">Select...</option>
+            <option value="yes">Yes &mdash; placed on EU market, used in EU, or affects EU persons</option>
+            <option value="no">No &mdash; entirely outside EU scope</option>
+            <option value="unsure">Unsure</option>
+          </select>
+        </div>
+        <p class="p1-hint">Select your system&rsquo;s EU territorial connection</p>
+      </div>
+      <div class="p1-field">
+        <label for="p1-q2" class="p1-label">Does the system interact with users, process biometric data, or generate synthetic content?</label>
+        <div class="sel-wrap">
+          <select id="p1-q2" onchange="runP1Check()" aria-label="Transparency triggers">
+            <option value="">Select...</option>
+            <option value="yes">Yes &mdash; one or more of these apply</option>
+            <option value="no">No</option>
+            <option value="unsure">Unsure</option>
+          </select>
+        </div>
+        <p class="p1-hint">Select transparency triggers that apply to your system</p>
+      </div>
+      <div class="p1-field">
+        <label for="p1-q3" class="p1-label">Does the system operate in a regulated sector (healthcare, employment, law enforcement, critical infrastructure&hellip;)?</label>
+        <div class="sel-wrap">
+          <select id="p1-q3" onchange="runP1Check()" aria-label="Regulated sector">
+            <option value="">Select...</option>
+            <option value="yes">Yes &mdash; operates in Annex III sector</option>
+            <option value="no">No regulated sector</option>
+            <option value="unsure">Unsure</option>
+          </select>
+        </div>
+        <p class="p1-hint">Select regulated sector involvement for Annex III check</p>
+      </div>
+    </div>
+    <div id="p1-result" class="p1-result" aria-live="polite" aria-atomic="true">
+      <div class="p1-result-inner">
+        <div id="p1-traffic" class="p1-traffic"></div>
+        <div>
+          <p class="p1-pathway-label">Indicative P1 pathway</p>
+          <p id="p1-engine"></p>
+          <p id="p1-desc"></p>
+          <p id="p1-note" class="p1-outputs-note">P1 generates 19+ structured outputs: territorial scope determination (Art. 2 EU AI Act, Art. 3 GDPR, Art. 3 ePrivacy) &middot; Art. 5 prohibited practices clearance across all 8 screens &middot; Annex III classification across all 8 categories &middot; Art. 6(3) exception assessment &middot; GPAI dependency check (Art. 52) &middot; GDPR alignment (5-step module: Art. 6, 9, 22, DPIA, lawful basis) &middot; ePrivacy alignment (Art. 5(1), 5(3)) &middot; Standards guidance (harmonised standards status) &middot; National authorities mapping (Art. 77) with sectoral overlays &middot; Implementation timeline with regulatory deadlines &middot; Regulatory delta (delegated acts, guidance updates) &middot; Evidence layer (audit-ready record) &middot; CSV export &mdash; before routing to the relevant part of the engine.</p>
+          <div class="p1-cta-wrap">
+            <button onclick="document.getElementById('contact').scrollIntoView({behavior:'smooth'})" class="btn btn-primary" style="font-size:10.5px;border:none;cursor:pointer" aria-label="Scroll to contact form">Discuss your system &rarr;</button>
+            <p class="p1-cta-note">We&rsquo;ll run P1 with your actual system inputs &mdash; full 19-output classification.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+
+<!-- PILOT -->
+<section class="sec" id="pilot" aria-labelledby="pilot-heading">
+  <div class="pilot-box">
+    <p class="eyebrow" style="margin-bottom:1.4rem">Pilot programme</p>
+    <h2>Limited access.<br><em>Open now.</em></h2>
+    <p class="sec-intro" style="margin-bottom:0">A selected number of organisations can access the full EACE engine at no cost, in exchange for a structured written review and formal assessment. Suitable for compliance teams, legal advisors, consultancies, audit firms, and AI governance practitioners evaluating the system before licensing.</p>
+    <div class="pilot-terms">
+      <span class="pt">Full engine access — complimentary</span>
+      <span class="pt">Structured review protocol provided</span>
+      <span class="pt">Written assessment required in return</span>
+      <span class="pt">Places strictly limited</span>
+    </div>
+    <a href="mailto:digitaldesignlab4u@gmail.com" class="btn btn-primary" aria-label="Express interest in the pilot programme">Express interest →</a>
+  </div>
+</section>
+
+<!-- LICENSING -->
+<section class="sec" id="licensing" aria-labelledby="licensing-heading">
+  <p class="sec-label">Licensing &amp; Enterprise</p>
+  <h2 id="licensing-heading">Structured pathways for <em>every scale.</em></h2>
+  <p class="sec-intro">Access is provided through a controlled licensing model. Each path includes usage rights, access tiers, and a structured onboarding process designed to protect the system's integrity and ensure correct deployment.</p>
+  <div class="lic-grid">
+    <div class="lic-card">
+      <span class="lic-tag">Individual</span>
+      <p class="lic-title">Individual Licensing</p>
+      <p class="lic-desc">For compliance professionals deploying EACE for their own systems or single-client engagements.</p>
+      <ul class="lic-list">
+        <li>Single-entity usage rights</li>
+        <li>Full engine access</li>
+        <li>Structured onboarding</li>
+        <li>Version-controlled outputs</li>
+      </ul>
+    </div>
+    <div class="lic-card featured">
+      <span class="lic-tag">Partnership</span>
+      <p class="lic-title">Partner Programme</p>
+      <p class="lic-desc">For law firms and consulting practices using EACE as a back-end delivery system for client engagements.</p>
+      <ul class="lic-list">
+        <li>White-label delivery rights</li>
+        <li>Multi-client deployment</li>
+        <li>Priority access &amp; support</li>
+        <li>Co-branding options</li>
+      </ul>
+    </div>
+    <div class="lic-card">
+      <span class="lic-tag">Enterprise</span>
+      <p class="lic-title">Enterprise Onboarding</p>
+      <p class="lic-desc">For organisations standardising AI governance across multiple systems, business units, or jurisdictions.</p>
+      <ul class="lic-list">
+        <li>Portfolio-wide deployment</li>
+        <li>Custom sector overlays</li>
+        <li>Dedicated onboarding</li>
+        <li>SLA &amp; audit support</li>
+      </ul>
+    </div>
+  </div>
+  <div class="cta-row" style="margin-top:2rem">
+    <a href="#contact" class="btn btn-primary">Express interest →</a>
+    <a href="#contact" class="btn-ghost" style="font-family:var(--mono);font-size:10px;letter-spacing:0.04em;color:var(--muted);text-decoration:none;border:0.5px solid var(--line2);padding:10px 18px;border-radius:var(--r);display:inline-flex;align-items:center;min-height:44px;transition:border-color 0.15s,color 0.15s">Partnership enquiry →</a>
+  </div>
+</section>
+
+<!-- STANDALONE MODULES -->
+<section class="sec" id="modules" aria-labelledby="modules-heading">
+  <p class="sec-label">02 · 03 — Standalone modules</p>
+  <h2 id="modules-heading">Available <em>separately.</em></h2>
+  <p class="sec-intro">Both modules are available independently of the core engine. Additional modules in development.</p>
+  <div class="modules">
+    <div class="mod">
+      <p class="mod-num">02 · P3-Light</p>
+      <h3 style="display:flex;align-items:center;gap:10px">
+        <span style="display:inline-flex;align-items:center;justify-content:center;width:32px;height:32px;border:0.5px solid rgba(201,168,76,0.35);border-radius:4px;flex-shrink:0" aria-hidden="true">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--gold)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="8" y1="13" x2="16" y2="13"/><line x1="8" y1="17" x2="12" y2="17"/><circle cx="17" cy="18" r="3"/><path d="M17 16.5v1l.75.75"/></svg>
+        </span>
+        Transparency Notice Generator
+      </h3>
+      <div class="scr-wrap" aria-label="Transparency Notice Generator — compliance basis and deployment gate interface">
+        <img src="dashboard_transparency.png" alt="Transparency Light Module — compliance status matrix and deployment gate showing 25 active obligations">
+        <div class="scr-mask-left"></div>
+        <div class="scr-mask-bottom"></div>
+      </div>
+      <p>Generate EU AI Act-compliant transparency notices for any deployment context. Runs entirely in the browser — no backend, no API keys, no data transmission of any kind. Six output languages. Eight deployment channels. Deployment gate with compliance scoring.</p>
+      <div class="mod-files" style="margin-top:0.85rem">
+        <span class="mf">HTML generator</span>
+        <span class="mf">DOCX template</span>
+        <span class="mf">TXT prompt edition</span>
+        <span class="mf">Sector & country overlay engine</span>
+        <span class="mf">Implementation guide</span>
+      </div>
+      <p class="mod-align">EU AI Act Art. 50, 52, 26(11) · GDPR · ePrivacy · ISO/IEC 27001 · EC Draft Guidance 2025 · C2PA · IPTC · XMP</p>
+      <a href="/transparency" class="mod-cta" aria-label="Learn more about the Transparency Notice Generator">Learn more →</a>
+    </div>
+    <div class="mod">
+      <p class="mod-num">03 · Risk & Governance</p>
+      <h3 style="display:flex;align-items:center;gap:10px">
+        <span style="display:inline-flex;align-items:center;justify-content:center;width:32px;height:32px;border:0.5px solid rgba(201,168,76,0.35);border-radius:4px;flex-shrink:0" aria-hidden="true">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--gold)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><path d="M14 17.5h7M17.5 14v7"/></svg>
+        </span>
+        Risk &amp; Governance Management System
+      </h3>
+      <div class="scr-wrap" aria-label="AI Risk and Governance Management dashboard interface">
+        <img src="dashboard_risk.png" alt="Enterprise AI Governance dashboard — risk by domain chart and EU AI Act key obligations tracker">
+        <div class="scr-mask-bottom"></div>
+        <div class="scr-caption">Live KPI dashboard generated locally from the Excel engine — no cloud, no tracking.</div>
+      </div>
+      <p>ISO 42001 AIMS-structured Excel engine — 27 sheets, 234+ controls. Lifecycle gates, risk-control mapping, FRIA/DPIA, HITL logging, supplier risk scoring. HTML offline dashboard. No SaaS dependency — for environments with strict data confidentiality requirements.</p>
+      <div class="mod-files" style="margin-top:0.85rem">
+        <span class="mf">Excel AIMS engine</span>
+        <span class="mf">HTML offline dashboard</span>
+        <span class="mf">Documentation package</span>
+        <span class="mf">Risk scoring model</span>
+        <span class="mf">Evidence pack</span>
+      </div>
+      <p class="mod-align">ISO/IEC 42001 · ISO/IEC 27001 · ISO/IEC 38505 · EU AI Act · GDPR · NIS2</p>
+      <a href="/risk-governance" class="mod-cta" aria-label="Learn more about the Risk and Governance Management System">Learn more →</a>
+    </div>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section class="sec" id="contact" aria-labelledby="contact-heading">
+  <div class="contact-grid">
+    <div class="contact-info">
+      <p class="sec-label">Contact</p>
+      <h2>Get <em>in touch.</em></h2>
+      <p style="word-break:break-word;overflow-wrap:break-word">The EACE Engine and its modules are intellectual property available for licensing, white-label partnership, enterprise deployment, and strategic acquisition. We welcome enquiries from compliance professionals, consulting firms, and organisations preparing for EU AI Act obligations.</p>
+      <div class="contact-detail">
+        <strong style="color:var(--ink);font-weight:500;font-family:var(--mono);font-size:11px;display:block;margin-bottom:0.25rem;letter-spacing:0.05em">digitaldesignlab4u</strong>
+        <a href="mailto:digitaldesignlab4u@gmail.com">digitaldesignlab4u@gmail.com</a><br>
+        Miroslava Feldmana 4<br>
+        10090 Zagreb, Croatia · EU
+      </div>
+      <div class="contact-tags">
+        <span class="ctag">Licensing</span>
+        <span class="ctag">White-label partnership</span>
+        <span class="ctag">Enterprise deployment</span>
+        <span class="ctag">Pilot access</span>
+        <span class="ctag">Strategic partnership</span>
+      </div>
+    </div>
+    <div>
+      <div data-fs-success style="display:none;background:rgba(107,143,113,0.1);border:0.5px solid rgba(107,143,113,0.4);border-radius:var(--r);padding:1.25rem;font-family:var(--mono);font-size:12px;color:var(--green);line-height:1.7;margin-bottom:1rem">
+        Message sent — we'll be in touch shortly.
+      </div>
+      <div data-fs-error style="display:none;background:rgba(192,57,43,0.08);border:0.5px solid rgba(192,57,43,0.3);border-radius:var(--r);padding:1rem;font-family:var(--mono);font-size:11px;color:#c0392b;margin-bottom:1rem"></div>
+      <form id="contact-form">
+        <div class="hp-field"><input type="text" name="website" tabindex="-1" autocomplete="off"></div>
+        <div class="form-group">
+          <label for="fname">Name / Organisation *</label>
+          <input type="text" id="fname" name="name" placeholder="Your name or organisation" required autocomplete="organization" data-fs-field>
+          <span data-fs-error="name" style="font-family:var(--mono);font-size:10px;color:#c0392b;display:block;margin-top:3px"></span>
+        </div>
+        <div class="form-group">
+          <label for="femail">Email address *</label>
+          <input type="email" id="femail" name="email" placeholder="your@email.com" required autocomplete="email" data-fs-field>
+          <span data-fs-error="email" style="font-family:var(--mono);font-size:10px;color:#c0392b;display:block;margin-top:3px"></span>
+        </div>
+        <div class="form-group">
+          <label for="fenquiry">Type of enquiry</label>
+          <div class="sel-wrap">
+            <select id="fenquiry" name="enquiry" data-fs-field>
+              <option value="">Select...</option>
+              <option value="pilot">Pilot programme access</option>
+              <option value="licensing">Core engine licensing</option>
+              <option value="transparency">Transparency Notice module</option>
+              <option value="risk">Risk &amp; Governance module</option>
+              <option value="white-label">White-label partnership</option>
+              <option value="enterprise">Enterprise deployment</option>
+              <option value="strategic">Strategic partnership / acquisition</option>
+              <option value="other">Other</option>
+            </select>
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="fmessage">Message</label>
+          <textarea id="fmessage" name="message" placeholder="Tell us about your organisation, your AI systems, and what you're working on..." data-fs-field></textarea>
+          <span data-fs-error="message" style="font-family:var(--mono);font-size:10px;color:#c0392b;display:block;margin-top:3px"></span>
+        </div>
+        <button type="submit" class="btn btn-primary" data-fs-submit-btn style="width:100%;text-align:center;padding:12px;font-size:11px">Send message</button>
+        <p class="form-note">Your data will not be shared with third parties. See our <a href="/privacy">Privacy & Cookie Policy</a>.</p>
+      </form>
+      <script>
+        window.formspree = window.formspree || function(){(formspree.q=formspree.q||[]).push(arguments)};
+        formspree('initForm',{formElement:'#contact-form',formId:'meevklpq'});
+      </script>
+      <script src="https://unpkg.com/@formspree/ajax@1" defer></script>
+    </div>
+  </div>
+</section>
+
+</div><!-- /wrap -->
+
+<!-- FOOTER -->
+<footer>
+  <div class="wrap">
+    <p class="foot-legal" style="text-align:justify">The EU AI Compliance Engine (EACE) and all associated materials are aligned with EU AI Act Regulation (EU) 2024/1689, ISO/IEC 42001, ISO/IEC 23894, ISO/IEC 27001, ISO/IEC 27701, ISO/IEC 27005, ISO/IEC 25012, ISO/IEC 38505, GDPR (EU) 2016/679, NIS2 Directive (EU) 2022/2555, ePrivacy Directive 2002/58/EC, DSA Regulation (EU) 2022/2065, NIST AI RMF 1.0, ENISA AI Security Guidelines, EDPB Guidelines on AI &amp; GDPR, and European Commission AI Office Draft Guidance 2025. This system does not constitute legal advice. Users are responsible for verifying all compliance outputs with qualified legal counsel.</p>
+
+    <!-- EACE LOGO -->
+    <div style="display:flex;align-items:center;gap:12px;margin-bottom:1.75rem;padding-bottom:1.75rem;border-bottom:0.5px solid var(--line)">
+      <div style="width:40px;height:40px;background:var(--bg2);border:0.5px solid var(--line2);border-radius:6px;display:grid;grid-template-columns:repeat(3,1fr);gap:3px;padding:8px;flex-shrink:0" aria-hidden="true">
+        <div style="background:var(--gold);border-radius:1.5px"></div>
+        <div style="background:var(--gold);border-radius:1.5px"></div>
+        <div style="background:var(--gold);border-radius:1.5px"></div>
+        <div style="background:var(--gold);border-radius:1.5px"></div>
+        <div style="background:rgba(201,168,76,0.45);border-radius:1.5px"></div>
+        <div style="background:rgba(201,168,76,0.45);border-radius:1.5px"></div>
+        <div style="background:var(--faint);border-radius:1.5px"></div>
+        <div style="background:var(--faint);border-radius:1.5px"></div>
+        <div style="background:var(--faint);border-radius:1.5px"></div>
+      </div>
+      <div>
+        <p style="font-family:var(--serif);font-size:18px;font-weight:400;color:var(--ink);line-height:1">EACE</p>
+        <p style="font-family:var(--mono);font-size:8px;letter-spacing:0.14em;text-transform:uppercase;color:var(--faint);margin-top:3px">EU AI Compliance Engine</p>
+      </div>
+    </div>
+    <div class="foot-main">
+      <div class="foot-col">
+        <p class="foot-col-title">Pages</p>
+        <a href="/">EU AI Compliance Engine</a>
+        <a href="/transparency">Transparency Notice</a>
+        <a href="/risk-governance">Risk & Governance</a>
+        <a href="/privacy">Privacy & Cookie Policy</a>
+      </div>
+      <div class="foot-col">
+        <p class="foot-col-title">Contact & purchase</p>
+        <a href="mailto:digitaldesignlab4u@gmail.com">digitaldesignlab4u@gmail.com</a>
+        <a href="https://designforge28.gumroad.com" target="_blank" rel="noopener">Gumroad store</a>
+        <p style="margin-top:0.5rem">Miroslava Feldmana 4<br>10090 Zagreb, Croatia · EU</p>
+      </div>
+      <div class="foot-col">
+        <p class="foot-col-title">Intellectual property</p>
+        <p style="font-size:12px;line-height:1.7;margin-bottom:0.65rem">The EACE Engine, all documentation, prompt engines, methodologies, document families, overlay architectures, and the "From Crisis to Authority™" system are the exclusive intellectual property of digitaldesignlab4u. All rights reserved.</p>
+        <div style="display:flex;flex-wrap:wrap;gap:5px">
+          <span style="font-family:var(--mono);font-size:8.5px;color:var(--faint);background:var(--bg2);border:0.5px solid var(--line);padding:3px 8px;border-radius:2px">Open to licensing</span>
+          <span style="font-family:var(--mono);font-size:8.5px;color:var(--faint);background:var(--bg2);border:0.5px solid var(--line);padding:3px 8px;border-radius:2px">White-label arrangements</span>
+          <span style="font-family:var(--mono);font-size:8.5px;color:var(--faint);background:var(--bg2);border:0.5px solid var(--line);padding:3px 8px;border-radius:2px">Strategic partnerships</span>
+          <span style="font-family:var(--mono);font-size:8.5px;color:var(--faint);background:var(--bg2);border:0.5px solid var(--line);padding:3px 8px;border-radius:2px">Enterprise deployment</span>
+          <span style="font-family:var(--mono);font-size:8.5px;color:var(--faint);background:var(--bg2);border:0.5px solid var(--line);padding:3px 8px;border-radius:2px">Strategic acquisition</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- SOCIAL ICONS -->
+    <div class="foot-social-bar" role="navigation" aria-label="Social media and external links">
+      <a href="https://www.youtube.com/@DigitalDesignLab4u" class="sico" target="_blank" rel="noopener" aria-label="YouTube">
+        <svg viewBox="0 0 24 24"><path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg>
+      </a>
+      <a href="https://www.linkedin.com/in/digital-design-lab/" class="sico" target="_blank" rel="noopener" aria-label="LinkedIn">
+        <svg viewBox="0 0 24 24"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 0 1-2.063-2.065 2.064 2.064 0 1 1 2.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>
+      </a>
+      <a href="https://www.facebook.com/profile.php?id=61585210434590" class="sico" target="_blank" rel="noopener" aria-label="Facebook">
+        <svg viewBox="0 0 24 24"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>
+      </a>
+      <a href="https://x.com/DLab4u" class="sico" target="_blank" rel="noopener" aria-label="X / Twitter">
+        <svg viewBox="0 0 24 24"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+      </a>
+      <a href="https://www.instagram.com/digitaldesignlabfouru/" class="sico" target="_blank" rel="noopener" aria-label="Instagram">
+        <svg viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 1 0 0 12.324 6.162 6.162 0 0 0 0-12.324zM12 16a4 4 0 1 1 0-8 4 4 0 0 1 0 8zm6.406-11.845a1.44 1.44 0 1 0 0 2.881 1.44 1.44 0 0 0 0-2.881z"/></svg>
+      </a>
+      <a href="https://www.tiktok.com/@digitaldesignlab4u" class="sico" target="_blank" rel="noopener" aria-label="TikTok">
+        <svg viewBox="0 0 24 24"><path d="M12.525.02c1.31-.02 2.61-.01 3.91-.02.08 1.53.63 3.09 1.75 4.17 1.12 1.11 2.7 1.62 4.24 1.79v4.03c-1.44-.05-2.89-.35-4.2-.97-.57-.26-1.1-.59-1.62-.93-.01 2.92.01 5.84-.02 8.75-.08 1.4-.54 2.79-1.35 3.94-1.31 1.92-3.58 3.17-5.91 3.21-1.43.08-2.86-.31-4.08-1.03-2.02-1.19-3.44-3.37-3.65-5.71-.02-.5-.03-1-.01-1.49.18-1.9 1.12-3.72 2.58-4.96 1.66-1.44 3.98-2.13 6.15-1.72.02 1.48-.04 2.96-.04 4.44-.99-.32-2.15-.23-3.02.37-.63.41-1.11 1.04-1.36 1.75-.21.51-.15 1.07-.14 1.61.24 1.64 1.82 3.02 3.5 2.87 1.12-.01 2.19-.66 2.77-1.61.19-.33.4-.67.41-1.06.1-1.79.06-3.57.07-5.36.01-4.03-.01-8.05.02-12.07z"/></svg>
+      </a>
+      <a href="https://www.pinterest.com/digitaldesign1981/" class="sico" target="_blank" rel="noopener" aria-label="Pinterest">
+        <svg viewBox="0 0 24 24"><path d="M12 0C5.373 0 0 5.373 0 12c0 5.084 3.163 9.426 7.627 11.174-.105-.949-.2-2.405.042-3.441.218-.937 1.407-5.965 1.407-5.965s-.359-.719-.359-1.782c0-1.668.967-2.914 2.171-2.914 1.023 0 1.518.769 1.518 1.69 0 1.029-.655 2.568-.994 3.995-.283 1.194.599 2.169 1.777 2.169 2.133 0 3.772-2.249 3.772-5.495 0-2.873-2.064-4.882-5.012-4.882-3.414 0-5.418 2.561-5.418 5.207 0 1.031.397 2.138.893 2.738a.36.36 0 0 1 .083.345l-.333 1.36c-.053.22-.174.267-.402.161-1.499-.698-2.436-2.889-2.436-4.649 0-3.785 2.75-7.262 7.929-7.262 4.163 0 7.398 2.967 7.398 6.931 0 4.136-2.607 7.464-6.227 7.464-1.216 0-2.359-.632-2.75-1.378l-.748 2.853c-.271 1.043-1.002 2.35-1.492 3.146C9.57 23.812 10.763 24 12 24c6.627 0 12-5.373 12-12S18.627 0 12 0z"/></svg>
+      </a>
+      <a href="https://medium.com/@digitaldesignlab4u" class="sico" target="_blank" rel="noopener" aria-label="Medium">
+        <svg viewBox="0 0 24 24"><path d="M13.54 12a6.8 6.8 0 0 1-6.77 6.82A6.8 6.8 0 0 1 0 12a6.8 6.8 0 0 1 6.77-6.82A6.8 6.8 0 0 1 13.54 12zM20.96 12c0 3.54-1.51 6.42-3.38 6.42-1.87 0-3.39-2.88-3.39-6.42s1.52-6.42 3.39-6.42 3.38 2.88 3.38 6.42M24 12c0 3.17-.53 5.75-1.19 5.75-.66 0-1.19-2.58-1.19-5.75s.53-5.75 1.19-5.75C23.47 6.25 24 8.83 24 12z"/></svg>
+      </a>
+      <div class="sdiv"></div>
+      <a href="https://designforge28.gumroad.com" class="sico-text" target="_blank" rel="noopener">Gumroad store</a>
+    </div>
+
+    <div class="foot-bottom">
+      <div class="foot-brand">
+        <strong>From Crisis to Authority™</strong>
+        © 2026 digitaldesignlab4u · All rights reserved
+      </div>
+      <div class="foot-links-bottom">
+        <a href="/privacy">Privacy & Cookie Policy</a>
+        <a href="mailto:digitaldesignlab4u@gmail.com">digitaldesignlab4u@gmail.com</a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<script>
+// Scroll to top
+);}
+
+// P1 scope check
+function runP1Check(){
+  var q1=document.getElementById('p1-q1').value;
+  var q2=document.getElementById('p1-q2').value;
+  var q3=document.getElementById('p1-q3').value;
+  var result=document.getElementById('p1-result');
+  var eng=document.getElementById('p1-engine');
+  var desc=document.getElementById('p1-desc');
+  var light=document.getElementById('p1-traffic');
+  if(!q1)return;
+  result.style.display='block';
+  if(q1==='no'){
+    light.style.background='#6b8f71';
+    eng.textContent='EU AI Act likely does not apply';
+    desc.textContent='If your system does not operate in, or affect persons in, the EU, the EU AI Act territorial scope (Art. 2) is not triggered. P1 confirms this with a full territorial scope analysis.';
+    return;
+  }
+  if(q1==='unsure'){
+    light.style.background='#b8995a';
+    eng.textContent='Run P1 — Territorial Scope & Risk Classification first';
+    desc.textContent='Territorial scope is the first determination P1 makes. It analyses your system\'s connection to the EU market across provider, deployer, and affected-person dimensions before any risk classification begins.';
+    return;
+  }
+  if(q3==='yes'){
+    light.style.background='#c0392b';
+    eng.textContent='High-risk pathway — Annex III classification required';
+    desc.textContent='Operating in a regulated sector triggers full Annex III classification. P1 performs a point-by-point analysis (8 categories), Art. 5 prohibited practices clearance, GDPR/ePrivacy alignment, and routes to the high-risk obligation stack or the Art. 6(3) exception pathway.';
+  } else if(q2==='yes'){
+    light.style.background='#b8995a';
+    eng.textContent='Limited-risk pathway — Art. 50/52 transparency obligations';
+    desc.textContent='Transparency triggers activate Art. 50 and/or Art. 52 obligations. P1 confirms which triggers apply and routes to the limited-risk and transparency part of the engine.';
+  } else if(q2==='no'&&q3==='no'){
+    light.style.background='#6b8f71';
+    eng.textContent='Minimal-risk pathway — Art. 95 general duties';
+    desc.textContent='If no Annex III category and no Art. 50/52 triggers are confirmed, P1 routes to the minimal-risk pathway. Art. 95 applies — no specific EU AI Act obligations, but the engine generates the minimal-risk documentation and GDPR/ePrivacy mini-analysis.';
+  } else {
+    light.style.background='#b8995a';
+    eng.textContent='Full P1 classification required';
+    desc.textContent='Your system\'s inputs require P1\'s complete 19-output classification sequence — territorial scope, Art. 5 clearance, Annex III analysis, GPAI dependency check, GDPR/ePrivacy alignment, and regulatory routing.';
+  }
+}
+</script>
+
+
+      <button class="cb-btn cb-reject" onclick="rejectNonEssential()" aria-label="Reject non-essential cookies">Reject non-essential</button>
+      <button class="cb-btn cb-config" onclick="openPanel()" aria-label="Configure cookie preferences">Configure</button>
+    </div>
+  </div>
+</div>
+
+<!-- COOKIE PANEL -->
+<div id="cookie-panel" role="dialog" aria-labelledby="cp-title-id" aria-modal="true">
+  <div class="cookie-panel-inner">
+    <div class="cp-header">
+      <p class="cp-title" id="cp-title-id">Cookie preferences</p>
+      <button class="cp-close" onclick="closePanel()" aria-label="Close cookie preferences">&times;</button>
+    </div>
+    <p class="cp-intro">We use cookies and similar technologies. Essential cookies keep the site working. Optional categories are off by default &mdash; you choose what to enable. Your choice is saved locally and never shared.</p>
+    <div class="cc-list">
+      <!-- Essential -->
+      <div class="cc-item">
+        <div class="cc-header" onclick="toggleCcItem(this)" role="button" tabindex="0" aria-expanded="false">
+          <div class="cc-toggle-wrap">
+            <input type="checkbox" class="cc-toggle" checked disabled id="toggle-essential" aria-label="Essential cookies (always active)">
+            <div class="cc-track"><div class="cc-thumb"></div></div>
+          </div>
+          <div class="cc-info">
+            <p class="cc-name">Essential</p>
+            <p class="cc-desc">Required for the website to function. Cannot be disabled.</p>
+          </div>
+          <span class="cc-badge badge-required">Always active</span>
+        </div>
+        <div class="cc-details">
+          <table class="cc-table">
+            <tr><th>Name</th><th>Provider</th><th>Purpose</th><th>Duration</th><th>Type</th></tr>
+            <tr><td>eace_consent_v1</td><td>digitaldesignlab4u (this site)</td><td>Stores your cookie consent preferences</td><td>1 year</td><td>localStorage</td></tr>
+          </table>
+        </div>
+      </div>
+      <!-- Analytics -->
+      <div class="cc-item">
+        <div class="cc-header" onclick="toggleCcItem(this)" role="button" tabindex="0" aria-expanded="false">
+          <div class="cc-toggle-wrap">
+            <input type="checkbox" class="cc-toggle" id="toggle-analytics" aria-label="Enable analytics cookies">
+            <div class="cc-track"><div class="cc-thumb"></div></div>
+          </div>
+          <div class="cc-info">
+            <p class="cc-name">Analytics</p>
+            <p class="cc-desc">Helps us understand how visitors use the site. Plausible is cookieless and GDPR-compliant by design.</p>
+          </div>
+          <span class="cc-badge badge-optional">Optional</span>
+        </div>
+        <div class="cc-details">
+          <table class="cc-table">
+            <tr><th>Name</th><th>Provider</th><th>Purpose</th><th>Duration</th><th>Type</th></tr>
+            <tr><td>No cookies set</td><td>Plausible Analytics (EU-hosted)</td><td>Anonymous page view counts, referrers, device type. No personal data. No cross-site tracking.</td><td>Session only</td><td>Cookieless (script)</td></tr>
+          </table>
+        </div>
+      </div>
+      <!-- Embedded Media -->
+      <div class="cc-item">
+        <div class="cc-header" onclick="toggleCcItem(this)" role="button" tabindex="0" aria-expanded="false">
+          <div class="cc-toggle-wrap">
+            <input type="checkbox" class="cc-toggle" id="toggle-media" aria-label="Enable embedded media cookies">
+            <div class="cc-track"><div class="cc-thumb"></div></div>
+          </div>
+          <div class="cc-info">
+            <p class="cc-name">Embedded media</p>
+            <p class="cc-desc">Enables YouTube video playback directly on this page (youtube-nocookie.com). Without consent, video will open on YouTube.</p>
+          </div>
+          <span class="cc-badge badge-optional">Optional</span>
+        </div>
+        <div class="cc-details">
+          <table class="cc-table">
+            <tr><th>Name</th><th>Provider</th><th>Purpose</th><th>Duration</th><th>Type</th></tr>
+            <tr><td>VISITOR_INFO1_LIVE, YSC</td><td>YouTube (Google LLC, USA)</td><td>Tracks embedded video views. Data transferred to USA under SCCs.</td><td>Session / 6 months</td><td>Cookie</td></tr>
+            <tr><td>yt-remote-*</td><td>YouTube</td><td>Stores video player preferences</td><td>Persistent (localStorage)</td><td>localStorage</td></tr>
+          </table>
+          <p style="font-family:var(--mono);font-size:10px;color:var(--faint);margin-top:0.75rem;line-height:1.6">Note: Social media links (LinkedIn, Instagram, X, TikTok, Pinterest, Facebook, Medium, Gumroad) open in new tabs. This site does not embed social widgets or tracking pixels from these providers.</p>
+        </div>
+      </div>
+    </div>
+    <div class="cp-footer">
+      <button class="cp-accept-all" onclick="acceptAll();closePanel()">Accept all</button>
+      <button class="cp-save" onclick="savePanel()" aria-label="Save cookie preferences">Save preferences</button>
+    </div>
+  </div>
+</div>
+
+<!-- SCROLL TO TOP -->
+
+
+<!-- SCROLL TO TOP -->
+<button id="scroll-top" type="button" aria-label="Scroll to top of page">
+  <svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true">
+    <path d="M7 11V3M3 7l4-4 4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+  </svg>
+</button>
+
+<script src="eace-shared.js"></script>
+
+<script>
+/* ── SAMPLE PDF MODAL ── */
+var SAMPLES = {
+  p2a: { title: 'P2A · Annex IV · Technical Documentation', img: 'P2A_sample.png', pdf: 'P2A_AnnexIV_TechnicalDocumentation_SAMPLE.pdf' },
+  p2b: { title: 'P2B · FRIA + DPIA · Integrated Assessment', img: 'P2B_sample.png', pdf: 'P2B_FRIA_DPIA_SAMPLE.pdf' },
+  fh:  { title: 'Family H · Health × Estonia · Sector Overlay', img: 'FamilyH_sample.png', pdf: 'FamilyH_Health_Estonia_Overlay_SAMPLE.pdf' }
+};
+function openSampleModal(key) {
+  var s = SAMPLES[key]; if(!s) return;
+  var modal = document.getElementById('sample-modal');
+  var body  = document.getElementById('sample-modal-body');
+  var title = document.getElementById('sample-modal-title');
+  var dl    = document.getElementById('sample-modal-download');
+  if(!modal||!body) return;
+  title.textContent = s.title;
+  dl.href = s.pdf;
+  dl.setAttribute('download', s.pdf.split('/').pop());
+  body.innerHTML = '';
+  var img = document.createElement('img');
+  img.src = s.img;
+  img.alt = s.title;
+  img.style.cssText = 'width:100%;display:block;max-width:100%;height:auto;';
+  body.appendChild(img);
+  modal.style.display = 'flex';
+  document.body.style.overflow = 'hidden';
+}
+function closeSampleModal() {
+  var modal = document.getElementById('sample-modal');
+  var body  = document.getElementById('sample-modal-body');
+  if(!modal||!body) return;
+  modal.style.display = 'none';
+  body.innerHTML = '';
+  document.body.style.overflow = '';
+}
+document.getElementById('sample-modal').addEventListener('click', function(e){ if(e.target===this) closeSampleModal(); });
+</script>
+
+
+<script>
+/* ── COUNTER ANIMATION ── */
+(function(){
+  function countUp(el, target, suffix, duration) {
+    var start = 0, step = target / (duration / 16);
+    var timer = setInterval(function() {
+      start += step;
+      if (start >= target) { start = target; clearInterval(timer); }
+      el.textContent = Math.floor(start) + (suffix || '');
+    }, 16);
+  }
+  var counters = document.querySelectorAll('[data-count]');
+  if (!counters.length) return;
+  var obs = new IntersectionObserver(function(entries) {
+    entries.forEach(function(e) {
+      if (e.isIntersecting && !e.target.dataset.counted) {
+        e.target.dataset.counted = '1';
+        var target = parseInt(e.target.dataset.count);
+        var suffix = e.target.dataset.suffix || '';
+        countUp(e.target, target, suffix, 1200);
+      }
+    });
+  }, { threshold: 0.5 });
+  counters.forEach(function(c) { obs.observe(c); });
+})();
+</script>
+
+<script>
+/* ── SECTION FADE-IN ── */
+(function(){
+  var secs = document.querySelectorAll('.sec');
+  secs.forEach(function(s){ s.classList.add('fade-hidden'); });
+  var obs = new IntersectionObserver(function(entries){
+    entries.forEach(function(e){
+      if(e.isIntersecting){ e.target.classList.remove('fade-hidden'); obs.unobserve(e.target); }
+    });
+  },{threshold:0.08});
+  secs.forEach(function(s){ obs.observe(s); });
+})();
+</script>
+</body>
+</html>

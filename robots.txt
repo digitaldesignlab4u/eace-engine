@@ -1,4 +1,3 @@
 User-agent: *
 Allow: /
-
 Sitemap: https://eace.ai/sitemap.xml

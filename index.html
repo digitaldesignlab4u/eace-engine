@@ -1284,9 +1284,6 @@ function runP1Check(){
 </div>
 
 <!-- SCROLL TO TOP -->
-
-
-<!-- SCROLL TO TOP -->
 <button id="scroll-top" type="button" aria-label="Scroll to top of page">
   <svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true">
     <path d="M7 11V3M3 7l4-4 4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
@@ -1294,6 +1291,32 @@ function runP1Check(){
 </button>
 
 <script src="eace-shared.js"></script>
+<script>
+(function(){
+  var btn=document.getElementById('hamburger');
+  var menu=document.getElementById('mobile-menu');
+  if(!btn||!menu)return;
+  btn.addEventListener('click',function(){
+    var o=menu.classList.toggle('open');
+    btn.classList.toggle('open',o);
+    btn.setAttribute('aria-expanded',o?'true':'false');
+    document.body.style.overflow=o?'hidden':'';
+  });
+  document.addEventListener('click',function(e){
+    if(!btn.contains(e.target)&&!menu.contains(e.target)){
+      menu.classList.remove('open');btn.classList.remove('open');
+      btn.setAttribute('aria-expanded','false');document.body.style.overflow='';
+    }
+  });
+  menu.querySelectorAll('a').forEach(function(a){
+    a.addEventListener('click',function(){
+      menu.classList.remove('open');btn.classList.remove('open');
+      btn.setAttribute('aria-expanded','false');document.body.style.overflow='';
+    });
+  });
+})();
+</script>
+
 
 <script>
 /* ── SAMPLE PDF MODAL ── */

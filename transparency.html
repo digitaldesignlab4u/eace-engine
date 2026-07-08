@@ -93,7 +93,7 @@ h2 em{font-style:italic;color:var(--gold)}
 .tag-mandatory{background:rgba(192,57,43,0.12);color:#c0392b;border:0.5px solid rgba(192,57,43,0.3)}
 .tag-conditional{background:rgba(184,153,90,0.1);color:var(--gold);border:0.5px solid rgba(184,153,90,0.25)}
 
-.files-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:2rem}
+.files-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin-bottom:2rem}
 @media(max-width:600px){.files-grid{grid-template-columns:1fr}}
 .file-card{background:var(--bg2);border:0.5px solid var(--line);border-radius:var(--r);padding:1.1rem}
 .file-type{font-family:var(--mono);font-size:10px;font-weight:500;color:var(--gold);margin-bottom:0.4rem;letter-spacing:0.06em}
@@ -130,6 +130,9 @@ footer{border-top:0.5px solid var(--line);padding:2.5rem 0 2rem}
 @media(min-width:601px) and (max-width:900px){
   .nav-links a{font-size:9.5px !important;padding:3px 6px !important}
 }
+/* Fallback: keeps mobile menu hidden even if eace-style.css fails to load */
+.mobile-menu{display:none}
+.mobile-menu.open{display:flex}
 </style>
 
 
@@ -234,23 +237,28 @@ footer{border-top:0.5px solid var(--line);padding:2.5rem 0 2rem}
 
 <section class="sec">
   <p class="sec-label">What's included</p>
-  <h2>Three formats.<br><em>One integrated system.</em></h2>
-  <p class="sec-intro">Every notice type is available in three production-ready formats — for deployment teams, legal review, and LLM-assisted workflows.</p>
+  <h2>Four formats.<br><em>One integrated system.</em></h2>
+  <p class="sec-intro">Every notice is generated once and exported in four ready-to-use formats — directly from the same session.</p>
   <div class="files-grid">
     <div class="file-card">
       <p class="file-type">HTML</p>
-      <p class="file-name">Interactive Generator</p>
-      <p class="file-desc">Fully static — hostable on any web server, intranet, or SharePoint. No backend required. Runs offline. Sector & country overlay engine built in. Export All function included.</p>
+      <p class="file-name">Styled HTML</p>
+      <p class="file-desc">Formatted, ready-to-deploy HTML output — same appearance as the interactive generator. Hostable on any web server, intranet, or SharePoint.</p>
     </div>
     <div class="file-card">
       <p class="file-type">DOCX</p>
-      <p class="file-name">Template for Legal Review</p>
-      <p class="file-desc">Complete transparency notice templates for offline use, legal sign-off, PDF export, and audit record. All placeholders clearly marked. Evidence layer included.</p>
+      <p class="file-name">Word .doc</p>
+      <p class="file-desc">Editable Word document for legal review, redlining, and sign-off before deployment.</p>
+    </div>
+    <div class="file-card">
+      <p class="file-type">PDF</p>
+      <p class="file-name">Print / PDF</p>
+      <p class="file-desc">One-click browser print-to-PDF of the generated notice — for archival, board approval, and audit packages.</p>
     </div>
     <div class="file-card">
       <p class="file-type">TXT</p>
-      <p class="file-name">Prompt Edition</p>
-      <p class="file-desc">Optimised prompt for use with Claude, ChatGPT, Copilot, or Gemini. Same logic as the HTML and DOCX — deterministic, structured, reproducible. For LLM-assisted workflows.</p>
+      <p class="file-name">Copy TXT</p>
+      <p class="file-desc">Plain-text copy of the generated notice, ready to paste into any document, CMS, or messaging system.</p>
     </div>
   </div>
   <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">

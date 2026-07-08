@@ -292,6 +292,7 @@ nav.scrolled{background:rgba(12,12,10,0.97);backdrop-filter:blur(10px);-webkit-b
 .scr-wrap img{width:100%;display:block;opacity:0.88}
 .scr-mask-bottom{position:absolute;bottom:0;left:0;right:0;height:35%;background:linear-gradient(to bottom,transparent,var(--bg2))}
 .scr-mask-left{position:absolute;top:0;left:0;bottom:0;width:22%;background:linear-gradient(to right,var(--bg2),transparent)}
+.scr-mask-right{position:absolute;top:0;right:0;bottom:0;width:20%;background:linear-gradient(to left,var(--bg2),transparent)}
 
 /* Chef visual pair */
 .chef-visual-pair{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:2rem 0}

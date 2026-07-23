@@ -79,7 +79,7 @@ nav.scrolled{background:rgba(12,12,10,0.97);backdrop-filter:blur(10px);-webkit-b
 .nav-logo{font-family:var(--mono);font-size:11px;font-weight:500;letter-spacing:0.08em;
   color:var(--gold);text-decoration:none;white-space:nowrap;min-height:44px;
   display:flex;align-items:center}
-.nav-logo span{color:rgba(255,255,255,0.45);font-weight:400}
+.nav-logo span{color:rgba(255,255,255,0.55);font-weight:400}
 .nav-links{display:flex;list-style:none;flex-wrap:wrap;gap:2px}
 .nav-links a{font-family:var(--mono);font-size:10.5px;letter-spacing:0.03em;
   color:rgba(255,255,255,0.5);text-decoration:none;padding:5px 11px;
@@ -336,7 +336,7 @@ nav.scrolled{background:rgba(12,12,10,0.97);backdrop-filter:blur(10px);-webkit-b
 
 /* ── SHARED FOOTER ── */
 footer{border-top:0.5px solid var(--line);padding:3rem 0 2rem}
-.foot-legal{font-size:11px;color:var(--faint);line-height:1.85;max-width:720px;margin-bottom:2.5rem;text-align:justify;hyphens:auto}
+.foot-legal{font-size:11px;color:var(--faint);line-height:1.85;max-width:720px;margin-bottom:2.5rem}
 .foot-main{display:grid;grid-template-columns:1.2fr 1fr 1fr;gap:2rem;margin-bottom:2rem}
 @media(max-width:640px){.foot-main{grid-template-columns:1fr 1fr}}
 @media(max-width:400px){.foot-main{grid-template-columns:1fr}}

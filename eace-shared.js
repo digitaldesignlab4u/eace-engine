@@ -199,13 +199,6 @@ function initCookieConsent(){
   document.addEventListener('keydown',function(e){
     if(e.key==='Escape')closePanel();
   });
-  document.addEventListener('keydown',function(e){
-    if(e.key!=='Enter'&&e.key!==' ')return;
-    var header=e.target.closest&&e.target.closest('.cc-header[role="button"]');
-    if(!header)return;
-    e.preventDefault();
-    toggleCcItem(header);
-  });
 }
 if(document.readyState==='loading'){
   document.addEventListener('DOMContentLoaded',initCookieConsent);

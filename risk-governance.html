@@ -327,21 +327,21 @@ footer{border-top:0.5px solid var(--line);padding:2.5rem 0 2rem}
     <p class="cp-intro">Essential cookies keep the site working. Optional categories are off by default. Your choice is saved locally and never shared.</p>
     <div class="cc-list">
       <div class="cc-item">
-        <div class="cc-header" onclick="toggleCcItem(this)" role="button" tabindex="0" aria-expanded="false">
+        <div class="cc-header" onclick="toggleCcItem(this)" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();toggleCcItem(this)}" role="button" tabindex="0" aria-expanded="false">
           <div class="cc-toggle-wrap"><input type="checkbox" class="cc-toggle" checked disabled id="toggle-essential" aria-label="Essential cookies (always active)"><div class="cc-track"><div class="cc-thumb"></div></div></div>
           <div class="cc-info"><p class="cc-name">Essential</p><p class="cc-desc">Required for the website to function.</p></div>
           <span class="cc-badge badge-required">Always active</span>
         </div>
       </div>
       <div class="cc-item">
-        <div class="cc-header" onclick="toggleCcItem(this)" role="button" tabindex="0" aria-expanded="false">
+        <div class="cc-header" onclick="toggleCcItem(this)" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();toggleCcItem(this)}" role="button" tabindex="0" aria-expanded="false">
           <div class="cc-toggle-wrap"><input type="checkbox" class="cc-toggle" id="toggle-analytics" aria-label="Enable analytics cookies"><div class="cc-track"><div class="cc-thumb"></div></div></div>
           <div class="cc-info"><p class="cc-name">Analytics</p><p class="cc-desc">Plausible Analytics &mdash; cookieless, GDPR-compliant, EU-hosted.</p></div>
           <span class="cc-badge badge-optional">Optional</span>
         </div>
       </div>
       <div class="cc-item">
-        <div class="cc-header" onclick="toggleCcItem(this)" role="button" tabindex="0" aria-expanded="false">
+        <div class="cc-header" onclick="toggleCcItem(this)" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();toggleCcItem(this)}" role="button" tabindex="0" aria-expanded="false">
           <div class="cc-toggle-wrap"><input type="checkbox" class="cc-toggle" id="toggle-media" aria-label="Enable embedded media cookies"><div class="cc-track"><div class="cc-thumb"></div></div></div>
           <div class="cc-info"><p class="cc-name">Embedded media</p><p class="cc-desc">YouTube video playback on-page (youtube-nocookie.com).</p></div>
           <span class="cc-badge badge-optional">Optional</span>

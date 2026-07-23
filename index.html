@@ -1012,7 +1012,7 @@ button:focus-visible,a:focus-visible,[role="button"]:focus-visible{outline:2px s
       </div>
       <div data-fs-error style="display:none;background:rgba(192,57,43,0.08);border:0.5px solid rgba(192,57,43,0.3);border-radius:var(--r);padding:1rem;font-family:var(--mono);font-size:11px;color:#f85149;margin-bottom:1rem"></div>
       <form id="contact-form">
-        <div class="hp-field"><input type="text" name="website" tabindex="-1" autocomplete="off"></div>
+        <div class="hp-field" aria-hidden="true"><label for="fwebsite">Leave this field blank</label><input type="text" id="fwebsite" name="website" tabindex="-1" autocomplete="off"></div>
         <div class="form-group">
           <label for="fname">Name / Organisation *</label>
           <input type="text" id="fname" name="name" placeholder="Your name or organisation" required autocomplete="organization" data-fs-field>

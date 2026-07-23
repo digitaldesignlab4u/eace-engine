@@ -56,7 +56,7 @@ function runP1Check(){
       title='Run P1 — Territorial Scope & Risk Classification first';
       text='Territorial scope is the first determination P1 makes. It analyses your system\'s connection to the EU market across provider, deployer, and affected-person dimensions before any risk classification begins. Unsure inputs receive a conservative (broad) scope assessment.';
     } else if(v3==='yes'){
-      color='#c0392b';
+      color='#f85149';
       title='High-risk pathway — Annex III classification required';
       text='Operating in a regulated sector triggers full Annex III classification. P1 performs a point-by-point analysis across 8 Annex III categories (including biometrics, critical infrastructure, employment, education, law enforcement, migration, justice, and GPAI dependency), runs Art. 5 prohibited practices clearance across all 8 prohibited practice screens, assesses GDPR/ePrivacy alignment, maps national authorities, and generates the implementation timeline and regulatory delta — before routing to the high-risk obligation stack (Arts. 9–17, 43) or the Art. 6(3) exception pathway.';
     } else if(v2==='yes'){
@@ -181,7 +181,9 @@ function updatePanelToggles(){
 
 function toggleCcItem(el){
   var item=el.closest('.cc-item');
-  if(item)item.classList.toggle('open');
+  if(!item)return;
+  var open=item.classList.toggle('open');
+  el.setAttribute('aria-expanded',open?'true':'false');
 }
 
 // Init — handle both DOMContentLoaded and already-loaded state
@@ -196,6 +198,13 @@ function initCookieConsent(){
   });
   document.addEventListener('keydown',function(e){
     if(e.key==='Escape')closePanel();
+  });
+  document.addEventListener('keydown',function(e){
+    if(e.key!=='Enter'&&e.key!==' ')return;
+    var header=e.target.closest&&e.target.closest('.cc-header[role="button"]');
+    if(!header)return;
+    e.preventDefault();
+    toggleCcItem(header);
   });
 }
 if(document.readyState==='loading'){

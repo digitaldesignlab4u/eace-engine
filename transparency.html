@@ -31,7 +31,7 @@
   --mono:'IBM Plex Mono',monospace;
   --bg:#0c0c0a;--bg2:#141410;--bg3:#1a1a16;
   --line:#272720;--line2:#3a3a30;
-  --ink:#ede8df;--muted:#8c8778;--faint:#4a4840;
+  --ink:#ede8df;--muted:#8c8778;--faint:#837f70;
   --gold:#b8995a;--green:#6b8f71;--r:3px;
 }
 html{scroll-behavior:smooth}
@@ -90,7 +90,7 @@ h2 em{font-style:italic;color:var(--gold)}
 .notice-name{font-size:13px;font-weight:500;color:var(--ink);margin-bottom:0.25rem}
 .notice-desc{font-size:11.5px;color:var(--faint);line-height:1.55}
 .notice-tag{display:inline-block;font-family:var(--mono);font-size:9px;padding:2px 7px;border-radius:1px;margin-top:0.4rem}
-.tag-mandatory{background:rgba(192,57,43,0.12);color:#c0392b;border:0.5px solid rgba(192,57,43,0.3)}
+.tag-mandatory{background:rgba(192,57,43,0.12);color:#f85149;border:0.5px solid rgba(192,57,43,0.3)}
 .tag-conditional{background:rgba(184,153,90,0.1);color:var(--gold);border:0.5px solid rgba(184,153,90,0.25)}
 
 .files-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin-bottom:2rem}
@@ -164,7 +164,7 @@ footer{border-top:0.5px solid var(--line);padding:2.5rem 0 2rem}
       <li><a href="/transparency" class="active" aria-current="page">Transparency Notice</a></li>
       <li><a href="/risk-governance" >Risk &amp; Governance</a></li>
     </ul>
-        <a href="#" class="nav-contact">Contact</a>
+        <a href="/#contact" class="nav-contact">Contact</a>
     <button class="hamburger" id="hamburger" aria-label="Open navigation menu" aria-expanded="false" aria-controls="mobile-menu">
       <span></span><span></span><span></span>
     </button>
@@ -387,27 +387,27 @@ footer{border-top:0.5px solid var(--line);padding:2.5rem 0 2rem}
   <div class="cookie-panel-inner">
     <div class="cp-header">
       <p class="cp-title">Cookie preferences</p>
-      <button class="cp-close" onclick="closePanel()">&times;</button>
+      <button class="cp-close" onclick="closePanel()" aria-label="Close cookie preferences">&times;</button>
     </div>
     <p class="cp-intro">Essential cookies keep the site working. Optional categories are off by default. Your choice is saved locally and never shared.</p>
     <div class="cc-list">
       <div class="cc-item">
-        <div class="cc-header" onclick="toggleCcItem(this)">
-          <div class="cc-toggle-wrap"><input type="checkbox" class="cc-toggle" checked disabled><div class="cc-track"><div class="cc-thumb"></div></div></div>
+        <div class="cc-header" onclick="toggleCcItem(this)" role="button" tabindex="0" aria-expanded="false">
+          <div class="cc-toggle-wrap"><input type="checkbox" class="cc-toggle" checked disabled id="toggle-essential" aria-label="Essential cookies (always active)"><div class="cc-track"><div class="cc-thumb"></div></div></div>
           <div class="cc-info"><p class="cc-name">Essential</p><p class="cc-desc">Required for the website to function.</p></div>
           <span class="cc-badge badge-required">Always active</span>
         </div>
       </div>
       <div class="cc-item">
-        <div class="cc-header" onclick="toggleCcItem(this)">
-          <div class="cc-toggle-wrap"><input type="checkbox" class="cc-toggle" id="toggle-analytics"><div class="cc-track"><div class="cc-thumb"></div></div></div>
+        <div class="cc-header" onclick="toggleCcItem(this)" role="button" tabindex="0" aria-expanded="false">
+          <div class="cc-toggle-wrap"><input type="checkbox" class="cc-toggle" id="toggle-analytics" aria-label="Enable analytics cookies"><div class="cc-track"><div class="cc-thumb"></div></div></div>
           <div class="cc-info"><p class="cc-name">Analytics</p><p class="cc-desc">Plausible Analytics &mdash; cookieless, GDPR-compliant, EU-hosted.</p></div>
           <span class="cc-badge badge-optional">Optional</span>
         </div>
       </div>
       <div class="cc-item">
-        <div class="cc-header" onclick="toggleCcItem(this)">
-          <div class="cc-toggle-wrap"><input type="checkbox" class="cc-toggle" id="toggle-media"><div class="cc-track"><div class="cc-thumb"></div></div></div>
+        <div class="cc-header" onclick="toggleCcItem(this)" role="button" tabindex="0" aria-expanded="false">
+          <div class="cc-toggle-wrap"><input type="checkbox" class="cc-toggle" id="toggle-media" aria-label="Enable embedded media cookies"><div class="cc-track"><div class="cc-thumb"></div></div></div>
           <div class="cc-info"><p class="cc-name">Embedded media</p><p class="cc-desc">YouTube video playback on-page (youtube-nocookie.com).</p></div>
           <span class="cc-badge badge-optional">Optional</span>
         </div>
@@ -419,11 +419,6 @@ footer{border-top:0.5px solid var(--line);padding:2.5rem 0 2rem}
     </div>
   </div>
 </div>
-
-
-<script>
-
-</script>
 <!-- SCROLL TO TOP -->
 <button id="scroll-top" type="button" aria-label="Scroll to top of page">
   <svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true">

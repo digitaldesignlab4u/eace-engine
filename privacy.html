@@ -29,7 +29,7 @@
   --sans:'IBM Plex Sans',-apple-system,sans-serif;
   --mono:'IBM Plex Mono',monospace;
   --bg:#0c0c0a;--bg2:#141410;--line:#272720;--line2:#3a3a30;
-  --ink:#ede8df;--muted:#8c8778;--faint:#4a4840;--gold:#b8995a;--r:3px;
+  --ink:#ede8df;--muted:#8c8778;--faint:#837f70;--gold:#b8995a;--r:3px;
 }
 html{scroll-behavior:smooth}
 body{overflow-x:hidden;background:var(--bg);color:var(--ink);font-family:var(--sans);font-weight:300;-webkit-font-smoothing:antialiased;line-height:1.7}
@@ -101,7 +101,7 @@ footer a:hover{color:var(--gold)}
       <li><a href="/transparency" >Transparency Notice</a></li>
       <li><a href="/risk-governance" >Risk &amp; Governance</a></li>
     </ul>
-        <a href="#" class="nav-contact">Contact</a>
+        <a href="/#contact" class="nav-contact">Contact</a>
     <button class="hamburger" id="hamburger" aria-label="Open navigation menu" aria-expanded="false" aria-controls="mobile-menu">
       <span></span><span></span><span></span>
     </button>
@@ -309,27 +309,27 @@ footer a:hover{color:var(--gold)}
   <div class="cookie-panel-inner">
     <div class="cp-header">
       <p class="cp-title">Cookie preferences</p>
-      <button class="cp-close" onclick="closePanel()">&times;</button>
+      <button class="cp-close" onclick="closePanel()" aria-label="Close cookie preferences">&times;</button>
     </div>
     <p class="cp-intro">Essential cookies keep the site working. Optional categories are off by default. Your choice is saved locally and never shared.</p>
     <div class="cc-list">
       <div class="cc-item">
-        <div class="cc-header" onclick="toggleCcItem(this)">
-          <div class="cc-toggle-wrap"><input type="checkbox" class="cc-toggle" checked disabled><div class="cc-track"><div class="cc-thumb"></div></div></div>
+        <div class="cc-header" onclick="toggleCcItem(this)" role="button" tabindex="0" aria-expanded="false">
+          <div class="cc-toggle-wrap"><input type="checkbox" class="cc-toggle" checked disabled id="toggle-essential" aria-label="Essential cookies (always active)"><div class="cc-track"><div class="cc-thumb"></div></div></div>
           <div class="cc-info"><p class="cc-name">Essential</p><p class="cc-desc">Required for the website to function.</p></div>
           <span class="cc-badge badge-required">Always active</span>
         </div>
       </div>
       <div class="cc-item">
-        <div class="cc-header" onclick="toggleCcItem(this)">
-          <div class="cc-toggle-wrap"><input type="checkbox" class="cc-toggle" id="toggle-analytics"><div class="cc-track"><div class="cc-thumb"></div></div></div>
+        <div class="cc-header" onclick="toggleCcItem(this)" role="button" tabindex="0" aria-expanded="false">
+          <div class="cc-toggle-wrap"><input type="checkbox" class="cc-toggle" id="toggle-analytics" aria-label="Enable analytics cookies"><div class="cc-track"><div class="cc-thumb"></div></div></div>
           <div class="cc-info"><p class="cc-name">Analytics</p><p class="cc-desc">Plausible Analytics &mdash; cookieless, GDPR-compliant, EU-hosted.</p></div>
           <span class="cc-badge badge-optional">Optional</span>
         </div>
       </div>
       <div class="cc-item">
-        <div class="cc-header" onclick="toggleCcItem(this)">
-          <div class="cc-toggle-wrap"><input type="checkbox" class="cc-toggle" id="toggle-media"><div class="cc-track"><div class="cc-thumb"></div></div></div>
+        <div class="cc-header" onclick="toggleCcItem(this)" role="button" tabindex="0" aria-expanded="false">
+          <div class="cc-toggle-wrap"><input type="checkbox" class="cc-toggle" id="toggle-media" aria-label="Enable embedded media cookies"><div class="cc-track"><div class="cc-thumb"></div></div></div>
           <div class="cc-info"><p class="cc-name">Embedded media</p><p class="cc-desc">YouTube video playback on-page (youtube-nocookie.com).</p></div>
           <span class="cc-badge badge-optional">Optional</span>
         </div>
@@ -341,11 +341,6 @@ footer a:hover{color:var(--gold)}
     </div>
   </div>
 </div>
-
-
-<script>
-
-</script>
 <!-- SCROLL TO TOP -->
 <button id="scroll-top" type="button" aria-label="Scroll to top of page">
   <svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true">

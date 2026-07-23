@@ -22,7 +22,7 @@
 <meta name="robots" content="index, follow">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;1,400&family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@300;400;500&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="eace-style.css">
+<link rel="stylesheet" href="eace-style.css?v=20260723">
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
 :root{
@@ -31,7 +31,7 @@
   --mono:'IBM Plex Mono',monospace;
   --bg:#0c0c0a;--bg2:#141410;--bg3:#1a1a16;
   --line:#272720;--line2:#3a3a30;
-  --ink:#ede8df;--muted:#8c8778;--faint:#4a4840;
+  --ink:#ede8df;--muted:#8c8778;--faint:#8f8b7c;
   --gold:#b8995a;--green:#6b8f71;--r:3px;
 }
 html{scroll-behavior:smooth}
@@ -139,11 +139,10 @@ footer{border-top:0.5px solid var(--line);padding:2.5rem 0 2rem}
   <div class="nav-inner">
     <a href="/" class="nav-logo" aria-label="EACE Home">EACE <span>— EU AI Compliance Engine</span></a>
     <ul class="nav-links">
-      <li><a href="/">EU AI Compliance Engine</a></li>
       <li><a href="/transparency" >Transparency Notice</a></li>
       <li><a href="/risk-governance" class="active" aria-current="page">Risk &amp; Governance</a></li>
     </ul>
-        <a href="#" class="nav-contact">Contact</a>
+        <a href="/#contact" class="nav-contact">Contact</a>
     <button class="hamburger" id="hamburger" aria-label="Open navigation menu" aria-expanded="false" aria-controls="mobile-menu">
       <span></span><span></span><span></span>
     </button>
@@ -183,7 +182,7 @@ footer{border-top:0.5px solid var(--line);padding:2.5rem 0 2rem}
   <h2>Risk by domain. Obligations tracked.<br><em>Evidence built in.</em></h2>
   <p class="sec-intro">The HTML offline dashboard gives your governance team a visual overview of risk scores, EU AI Act key obligation status, and open action items — without a single API call or server dependency.</p>
   <div class="scr-wrap" aria-label="Enterprise AI Governance EACE dashboard showing risk by domain and EU AI Act key obligations">
-    <img src="dashboard_risk.png" alt="EACE AI Risk and Governance dashboard — 27 total risks, critical/high indicator, AI compliance score 42%, open actions, risk by domain chart, EU AI Act key obligations tracker">
+    <img src="dashboard_risk.png" alt="EACE AI Risk and Governance dashboard — risk by domain and EU AI Act key obligations">
     <div class="scr-mask-bottom"></div>
   </div>
   <div class="stats-row">
@@ -322,27 +321,27 @@ footer{border-top:0.5px solid var(--line);padding:2.5rem 0 2rem}
   <div class="cookie-panel-inner">
     <div class="cp-header">
       <p class="cp-title">Cookie preferences</p>
-      <button class="cp-close" onclick="closePanel()">&times;</button>
+      <button class="cp-close" onclick="closePanel()" aria-label="Close cookie preferences">&times;</button>
     </div>
     <p class="cp-intro">Essential cookies keep the site working. Optional categories are off by default. Your choice is saved locally and never shared.</p>
     <div class="cc-list">
       <div class="cc-item">
-        <div class="cc-header" onclick="toggleCcItem(this)">
-          <div class="cc-toggle-wrap"><input type="checkbox" class="cc-toggle" checked disabled><div class="cc-track"><div class="cc-thumb"></div></div></div>
+        <div class="cc-header" onclick="toggleCcItem(this)" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();toggleCcItem(this)}" role="button" tabindex="0" aria-expanded="false">
+          <div class="cc-toggle-wrap"><input type="checkbox" class="cc-toggle" checked disabled id="toggle-essential" aria-label="Essential cookies (always active)"><div class="cc-track"><div class="cc-thumb"></div></div></div>
           <div class="cc-info"><p class="cc-name">Essential</p><p class="cc-desc">Required for the website to function.</p></div>
           <span class="cc-badge badge-required">Always active</span>
         </div>
       </div>
       <div class="cc-item">
-        <div class="cc-header" onclick="toggleCcItem(this)">
-          <div class="cc-toggle-wrap"><input type="checkbox" class="cc-toggle" id="toggle-analytics"><div class="cc-track"><div class="cc-thumb"></div></div></div>
+        <div class="cc-header" onclick="toggleCcItem(this)" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();toggleCcItem(this)}" role="button" tabindex="0" aria-expanded="false">
+          <div class="cc-toggle-wrap"><input type="checkbox" class="cc-toggle" id="toggle-analytics" aria-label="Enable analytics cookies"><div class="cc-track"><div class="cc-thumb"></div></div></div>
           <div class="cc-info"><p class="cc-name">Analytics</p><p class="cc-desc">Plausible Analytics &mdash; cookieless, GDPR-compliant, EU-hosted.</p></div>
           <span class="cc-badge badge-optional">Optional</span>
         </div>
       </div>
       <div class="cc-item">
-        <div class="cc-header" onclick="toggleCcItem(this)">
-          <div class="cc-toggle-wrap"><input type="checkbox" class="cc-toggle" id="toggle-media"><div class="cc-track"><div class="cc-thumb"></div></div></div>
+        <div class="cc-header" onclick="toggleCcItem(this)" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();toggleCcItem(this)}" role="button" tabindex="0" aria-expanded="false">
+          <div class="cc-toggle-wrap"><input type="checkbox" class="cc-toggle" id="toggle-media" aria-label="Enable embedded media cookies"><div class="cc-track"><div class="cc-thumb"></div></div></div>
           <div class="cc-info"><p class="cc-name">Embedded media</p><p class="cc-desc">YouTube video playback on-page (youtube-nocookie.com).</p></div>
           <span class="cc-badge badge-optional">Optional</span>
         </div>
@@ -354,11 +353,6 @@ footer{border-top:0.5px solid var(--line);padding:2.5rem 0 2rem}
     </div>
   </div>
 </div>
-
-
-<script>
-
-</script>
 <!-- SCROLL TO TOP -->
 <button id="scroll-top" type="button" aria-label="Scroll to top of page">
   <svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true">
@@ -366,7 +360,7 @@ footer{border-top:0.5px solid var(--line);padding:2.5rem 0 2rem}
   </svg>
 </button>
 
-<script src="eace-shared.js"></script>
+<script src="eace-shared.js?v=20260723"></script>
 
 <script>
 (function(){

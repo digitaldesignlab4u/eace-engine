@@ -25,7 +25,7 @@
 <meta name="robots" content="index, follow">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;1,400&family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@300;400;500&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="eace-style.css">
+<link rel="stylesheet" href="eace-style.css?v=20260723">
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
 :root{
@@ -39,7 +39,7 @@
   --line2:#3a3a30;
   --ink:#ede8df;
   --muted:#8c8778;
-  --faint:#4a4840;
+  --faint:#8f8b7c;
   --gold:#b8995a;
   --green:#6b8f71;
   --r:3px;
@@ -54,7 +54,7 @@ nav{position:fixed;top:0;left:0;right:0;z-index:100;background:rgba(12,12,10,0);
 nav.scrolled{background:rgba(12,12,10,0.97);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);border-bottom-color:var(--line)}
 .nav-inner{display:flex;align-items:center;justify-content:space-between;padding:0.9rem 2rem;max-width:960px;margin:0 auto;gap:0.5rem;flex-wrap:nowrap}
 .nav-logo{font-family:var(--mono);font-size:11px;font-weight:500;letter-spacing:0.08em;color:var(--gold);text-decoration:none;white-space:nowrap}
-.nav-logo span{color:rgba(255,255,255,0.45);font-weight:400}
+.nav-logo span{color:rgba(255,255,255,0.55);font-weight:400}
 .nav-links{display:flex;list-style:none;flex-wrap:wrap;gap:2px}
 .nav-links a{font-family:var(--mono);font-size:10.5px;letter-spacing:0.03em;color:rgba(255,255,255,0.5);text-decoration:none;padding:5px 11px;border-radius:var(--r);transition:color 0.15s;white-space:nowrap}
 .nav-links a:hover{color:#fff}
@@ -74,30 +74,30 @@ nav.scrolled{background:rgba(12,12,10,0.97);backdrop-filter:blur(10px);-webkit-b
 .hero-bg::after{content:'';position:absolute;inset:0;background:linear-gradient(160deg,rgba(12,12,10,0.05) 0%,rgba(12,12,10,0.28) 40%,rgba(12,12,10,0.82) 75%,rgba(12,12,10,0.97) 100%)}
 .hero-content{position:relative;z-index:2;padding:5rem 2rem 4rem;max-width:960px;margin:0 auto;width:100%}
 /* EYEBROW — From Crisis to Authority™ */
-.hero-eyebrow{font-family:var(--mono);font-size:10.5px;letter-spacing:0.2em;color:rgba(184,153,90,0.75);text-transform:uppercase;margin-bottom:0.6rem;display:flex;align-items:center;gap:10px}
+.hero-eyebrow{font-family:var(--mono);font-size:10.5px;letter-spacing:0.2em;color:#e0c992;text-transform:uppercase;margin-bottom:0.6rem;display:flex;align-items:center;gap:10px;text-shadow:0 1px 3px rgba(0,0,0,0.9),0 1px 10px rgba(0,0,0,0.7)}
 .hero-eyebrow::after{content:'';display:inline-block;width:24px;height:0.5px;background:rgba(184,153,90,0.35)}
 .hero-eyebrow sup{font-size:7px;letter-spacing:0;vertical-align:super;margin-left:1px}
 /* TAGLINE — EACE descriptor */
-.hero-tagline{font-family:var(--mono);font-size:11.5px;letter-spacing:0.08em;color:rgba(201,168,76,0.9);text-transform:uppercase;margin-bottom:1.4rem;font-weight:500}
-.hero-tagline span{color:rgba(184,153,90,0.45);margin:0 6px}
+.hero-tagline{font-family:var(--mono);font-size:11.5px;letter-spacing:0.08em;color:#e0c992;text-transform:uppercase;margin-bottom:1.4rem;font-weight:500;text-shadow:0 1px 3px rgba(0,0,0,0.9),0 1px 10px rgba(0,0,0,0.7)}
+.hero-tagline span{color:#c9ab6f;margin:0 6px}
 /* H1 */
 h1{font-family:var(--serif);font-size:clamp(2rem,3.4vw,3.4rem);color:var(--ink);font-weight:400;line-height:1.1;max-width:720px;margin-bottom:0.6rem}
 h1 em{font-style:italic;color:var(--gold)}
 /* SUBHEADLINE */
-.hero-sub{font-family:var(--serif);font-size:clamp(1rem,1.6vw,1.2rem);color:rgba(237,232,223,0.62);font-weight:400;font-style:italic;max-width:600px;margin-bottom:1.5rem;line-height:1.42}
-.hero-desc{font-size:14px;line-height:1.8;color:rgba(140,135,120,0.85);max-width:540px;margin-bottom:1.75rem}
+.hero-sub{font-family:var(--serif);font-size:clamp(1rem,1.6vw,1.2rem);color:rgba(237,232,223,0.95);font-weight:400;font-style:italic;max-width:600px;margin-bottom:1.5rem;line-height:1.42;text-shadow:0 1px 3px rgba(0,0,0,0.9),0 1px 10px rgba(0,0,0,0.7)}
+.hero-desc{font-size:14px;line-height:1.8;color:rgba(140,135,120,0.95);max-width:540px;margin-bottom:1.75rem;text-shadow:0 1px 3px rgba(0,0,0,0.9),0 1px 10px rgba(0,0,0,0.7)}
 .cta-row{display:flex;gap:0.85rem;align-items:center;flex-wrap:wrap;margin-bottom:2.75rem}
 .btn{font-family:var(--mono);font-size:10.5px;font-weight:500;letter-spacing:0.07em;text-transform:uppercase;text-decoration:none;border:none;cursor:pointer;border-radius:var(--r);display:inline-block;transition:opacity 0.15s,background 0.15s,border-color 0.15s}
 .btn-primary{background:var(--gold);color:var(--bg);padding:11px 22px}
 .btn-primary:hover{opacity:0.87}
-.btn-ghost{font-family:var(--mono);font-size:10px;letter-spacing:0.04em;color:rgba(237,232,223,0.55);text-decoration:none;transition:color 0.15s}
+.btn-ghost{font-family:var(--mono);font-size:10px;letter-spacing:0.04em;color:rgba(237,232,223,0.95);text-decoration:none;transition:color 0.15s;text-shadow:0 1px 3px rgba(0,0,0,0.9),0 1px 10px rgba(0,0,0,0.7)}
 .btn-ghost:hover{color:var(--ink)}
-.pilot-live{display:inline-flex;align-items:center;gap:8px;font-family:var(--mono);font-size:10px;letter-spacing:0.05em;color:var(--green);border:0.5px solid rgba(107,143,113,0.4);padding:8px 14px;border-radius:var(--r);text-decoration:none;transition:background 0.15s}
+.pilot-live{display:inline-flex;align-items:center;gap:8px;font-family:var(--mono);font-size:10px;letter-spacing:0.05em;color:#8fbb96;border:0.5px solid rgba(107,143,113,0.4);padding:8px 14px;border-radius:var(--r);text-decoration:none;transition:background 0.15s;text-shadow:0 1px 3px rgba(0,0,0,0.9),0 1px 10px rgba(0,0,0,0.7)}
 .pilot-live:hover{background:rgba(107,143,113,0.07)}
 .dot{width:6px;height:6px;border-radius:50%;background:var(--green);display:inline-block;flex-shrink:0;animation:blink 2.2s infinite}
 @keyframes blink{0%,100%{opacity:1}50%{opacity:0.2}}
 .atags{display:flex;flex-wrap:wrap;gap:5px}
-.atag{font-family:var(--mono);font-size:9px;color:rgba(74,72,64,0.85);background:rgba(20,20,16,0.65);border:0.5px solid rgba(39,39,32,0.75);padding:3px 8px;border-radius:1px;letter-spacing:0.04em;white-space:nowrap}
+.atag{font-family:var(--mono);font-size:9px;color:rgba(131,127,112,0.98);background:rgba(10,10,8,0.9);border:0.5px solid rgba(39,39,32,0.75);padding:3px 8px;border-radius:1px;letter-spacing:0.04em;white-space:nowrap}
 
 /* ── CHEF SPLIT ── */
 .chef-wrap{display:grid;grid-template-columns:1fr 1fr;border-top:0.5px solid var(--line);border-bottom:0.5px solid var(--line)}
@@ -379,14 +379,12 @@ button:focus-visible,a:focus-visible,[role="button"]:focus-visible{outline:2px s
 </head>
 <body>
 <a href="#main-content" class="skip-nav" style="position:absolute;top:-100px;left:1rem;background:var(--gold);color:var(--bg);padding:8px 16px;border-radius:4px;font-family:var(--mono);font-size:11px;text-decoration:none;z-index:9999;transition:top 0.2s" onfocus="this.style.top='1rem'" onblur="this.style.top='-100px'">Skip to main content</a>
-<a href="#main-content" class="skip-link" style="position:absolute;left:-9999px;top:0;font-family:var(--mono);font-size:11px;background:var(--gold);color:var(--bg);padding:8px 16px;border-radius:var(--r);z-index:9999;text-decoration:none" onfocus="this.style.left='1rem'" onblur="this.style.left='-9999px'">Skip to main content</a>
 
 <!-- NAV -->
 <nav id="main-nav" aria-label="Main navigation">
   <div class="nav-inner">
     <a href="/" class="nav-logo">EACE <span>— EU AI Compliance Engine</span></a>
     <ul class="nav-links" role="list">
-      <li><a href="/" class="active" aria-current="page">EU AI Compliance Engine</a></li>
       <li><a href="/transparency">Transparency Notice</a></li>
       <li><a href="/risk-governance">Risk & Governance</a></li>
     </ul>
@@ -807,7 +805,6 @@ button:focus-visible,a:focus-visible,[role="button"]:focus-visible{outline:2px s
   <h2 id="classifier-heading">Does the EU AI Act<br><em>apply to your system?</em></h2>
   <p class="sec-intro">P1 &mdash; Territorial Scope &amp; Risk Classification &mdash; is always the first step. Answer three questions to see what the engine needs to determine, and what your next regulatory pathway looks like.</p>
   <div class="p1-widget" role="form" aria-label="P1 scope and classification quick check">
-  <div class="p1-widget" role="form" aria-label="P1 scope and classification quick check">
     <div class="p1-grid">
       <div class="p1-field">
         <label for="p1-q1" class="p1-label">Does your AI system operate in or affect the EU market?</label>
@@ -870,7 +867,7 @@ button:focus-visible,a:focus-visible,[role="button"]:focus-visible{outline:2px s
 <section class="sec" id="pilot" aria-labelledby="pilot-heading">
   <div class="pilot-box">
     <p class="eyebrow" style="margin-bottom:1.4rem">Pilot programme</p>
-    <h2>Limited access.<br><em>Open now.</em></h2>
+    <h2 id="pilot-heading">Limited access.<br><em>Open now.</em></h2>
     <p class="sec-intro" style="margin-bottom:0">A selected number of organisations can access the full EACE engine at no cost, in exchange for a structured written review and formal assessment. Suitable for compliance teams, legal advisors, consultancies, audit firms, and AI governance practitioners evaluating the system before licensing.</p>
     <div class="pilot-terms">
       <span class="pt">Full engine access — complimentary</span>
@@ -943,7 +940,7 @@ button:focus-visible,a:focus-visible,[role="button"]:focus-visible{outline:2px s
         Transparency Notice Generator
       </h3>
       <div class="scr-wrap" aria-label="Transparency Notice Generator — compliance basis and deployment gate interface">
-        <img src="dashboard_transparency.png" alt="Transparency Notice Generator — Executive Command Bar, go-live readiness score and deployment gate interface">
+        <img src="dashboard_transparency.png" alt="Transparency Notice Generator dashboard — go-live readiness score and deployment gate">
         <div class="scr-mask-left"></div>
         <div class="scr-mask-right"></div>
         <div class="scr-mask-bottom"></div>
@@ -991,7 +988,7 @@ button:focus-visible,a:focus-visible,[role="button"]:focus-visible{outline:2px s
   <div class="contact-grid">
     <div class="contact-info">
       <p class="sec-label">Contact</p>
-      <h2>Get <em>in touch.</em></h2>
+      <h2 id="contact-heading">Get <em>in touch.</em></h2>
       <p style="word-break:break-word;overflow-wrap:break-word">The EACE Engine and its modules are intellectual property available for licensing, white-label partnership, enterprise deployment, and strategic acquisition. We welcome enquiries from compliance professionals, consulting firms, and organisations preparing for EU AI Act obligations.</p>
       <div class="contact-detail">
         <strong style="color:var(--ink);font-weight:500;font-family:var(--mono);font-size:11px;display:block;margin-bottom:0.25rem;letter-spacing:0.05em">digitaldesignlab4u</strong>
@@ -1011,18 +1008,18 @@ button:focus-visible,a:focus-visible,[role="button"]:focus-visible{outline:2px s
       <div data-fs-success style="display:none;background:rgba(107,143,113,0.1);border:0.5px solid rgba(107,143,113,0.4);border-radius:var(--r);padding:1.25rem;font-family:var(--mono);font-size:12px;color:var(--green);line-height:1.7;margin-bottom:1rem">
         Message sent — we'll be in touch shortly.
       </div>
-      <div data-fs-error style="display:none;background:rgba(192,57,43,0.08);border:0.5px solid rgba(192,57,43,0.3);border-radius:var(--r);padding:1rem;font-family:var(--mono);font-size:11px;color:#c0392b;margin-bottom:1rem"></div>
+      <div data-fs-error style="display:none;background:rgba(192,57,43,0.08);border:0.5px solid rgba(192,57,43,0.3);border-radius:var(--r);padding:1rem;font-family:var(--mono);font-size:11px;color:#f85149;margin-bottom:1rem"></div>
       <form id="contact-form">
-        <div class="hp-field"><input type="text" name="website" tabindex="-1" autocomplete="off"></div>
+        <div class="hp-field" aria-hidden="true"><label for="fwebsite">Leave this field blank</label><input type="text" id="fwebsite" name="website" tabindex="-1" autocomplete="off"></div>
         <div class="form-group">
           <label for="fname">Name / Organisation *</label>
           <input type="text" id="fname" name="name" placeholder="Your name or organisation" required autocomplete="organization" data-fs-field>
-          <span data-fs-error="name" style="font-family:var(--mono);font-size:10px;color:#c0392b;display:block;margin-top:3px"></span>
+          <span data-fs-error="name" style="font-family:var(--mono);font-size:10px;color:#f85149;display:block;margin-top:3px"></span>
         </div>
         <div class="form-group">
           <label for="femail">Email address *</label>
           <input type="email" id="femail" name="email" placeholder="your@email.com" required autocomplete="email" data-fs-field>
-          <span data-fs-error="email" style="font-family:var(--mono);font-size:10px;color:#c0392b;display:block;margin-top:3px"></span>
+          <span data-fs-error="email" style="font-family:var(--mono);font-size:10px;color:#f85149;display:block;margin-top:3px"></span>
         </div>
         <div class="form-group">
           <label for="fenquiry">Type of enquiry</label>
@@ -1043,7 +1040,7 @@ button:focus-visible,a:focus-visible,[role="button"]:focus-visible{outline:2px s
         <div class="form-group">
           <label for="fmessage">Message</label>
           <textarea id="fmessage" name="message" placeholder="Tell us about your organisation, your AI systems, and what you're working on..." data-fs-field></textarea>
-          <span data-fs-error="message" style="font-family:var(--mono);font-size:10px;color:#c0392b;display:block;margin-top:3px"></span>
+          <span data-fs-error="message" style="font-family:var(--mono);font-size:10px;color:#f85149;display:block;margin-top:3px"></span>
         </div>
         <button type="submit" class="btn btn-primary" data-fs-submit-btn style="width:100%;text-align:center;padding:12px;font-size:11px">Send message</button>
         <p class="form-note">Your data will not be shared with third parties. See our <a href="/privacy">Privacy & Cookie Policy</a>.</p>
@@ -1062,7 +1059,7 @@ button:focus-visible,a:focus-visible,[role="button"]:focus-visible{outline:2px s
 <!-- FOOTER -->
 <footer>
   <div class="wrap">
-    <p class="foot-legal" style="text-align:justify">The EU AI Compliance Engine (EACE) and all associated materials are aligned with EU AI Act Regulation (EU) 2024/1689, ISO/IEC 42001, ISO/IEC 23894, ISO/IEC 27001, ISO/IEC 27701, ISO/IEC 27005, ISO/IEC 25012, ISO/IEC 38505, GDPR (EU) 2016/679, NIS2 Directive (EU) 2022/2555, ePrivacy Directive 2002/58/EC, DSA Regulation (EU) 2022/2065, NIST AI RMF 1.0, ENISA AI Security Guidelines, EDPB Guidelines on AI &amp; GDPR, and European Commission AI Office Draft Guidance 2025. This system does not constitute legal advice. Users are responsible for verifying all compliance outputs with qualified legal counsel.</p>
+    <p class="foot-legal">The EU AI Compliance Engine (EACE) and all associated materials are aligned with EU AI Act Regulation (EU) 2024/1689, ISO/IEC 42001, ISO/IEC 23894, ISO/IEC 27001, ISO/IEC 27701, ISO/IEC 27005, ISO/IEC 25012, ISO/IEC 38505, GDPR (EU) 2016/679, NIS2 Directive (EU) 2022/2555, ePrivacy Directive 2002/58/EC, DSA Regulation (EU) 2022/2065, NIST AI RMF 1.0, ENISA AI Security Guidelines, EDPB Guidelines on AI &amp; GDPR, and European Commission AI Office Draft Guidance 2025. This system does not constitute legal advice. Users are responsible for verifying all compliance outputs with qualified legal counsel.</p>
 
     <!-- EACE LOGO -->
     <div style="display:flex;align-items:center;gap:12px;margin-bottom:1.75rem;padding-bottom:1.75rem;border-bottom:0.5px solid var(--line)">
@@ -1154,54 +1151,15 @@ button:focus-visible,a:focus-visible,[role="button"]:focus-visible{outline:2px s
   </div>
 </footer>
 
-<script>
-// Scroll to top
-);}
-
-// P1 scope check
-function runP1Check(){
-  var q1=document.getElementById('p1-q1').value;
-  var q2=document.getElementById('p1-q2').value;
-  var q3=document.getElementById('p1-q3').value;
-  var result=document.getElementById('p1-result');
-  var eng=document.getElementById('p1-engine');
-  var desc=document.getElementById('p1-desc');
-  var light=document.getElementById('p1-traffic');
-  if(!q1)return;
-  result.style.display='block';
-  if(q1==='no'){
-    light.style.background='#6b8f71';
-    eng.textContent='EU AI Act likely does not apply';
-    desc.textContent='If your system does not operate in, or affect persons in, the EU, the EU AI Act territorial scope (Art. 2) is not triggered. P1 confirms this with a full territorial scope analysis.';
-    return;
-  }
-  if(q1==='unsure'){
-    light.style.background='#b8995a';
-    eng.textContent='Run P1 — Territorial Scope & Risk Classification first';
-    desc.textContent='Territorial scope is the first determination P1 makes. It analyses your system\'s connection to the EU market across provider, deployer, and affected-person dimensions before any risk classification begins.';
-    return;
-  }
-  if(q3==='yes'){
-    light.style.background='#c0392b';
-    eng.textContent='High-risk pathway — Annex III classification required';
-    desc.textContent='Operating in a regulated sector triggers full Annex III classification. P1 performs a point-by-point analysis (8 categories), Art. 5 prohibited practices clearance, GDPR/ePrivacy alignment, and routes to the high-risk obligation stack or the Art. 6(3) exception pathway.';
-  } else if(q2==='yes'){
-    light.style.background='#b8995a';
-    eng.textContent='Limited-risk pathway — Art. 50/52 transparency obligations';
-    desc.textContent='Transparency triggers activate Art. 50 and/or Art. 52 obligations. P1 confirms which triggers apply and routes to the limited-risk and transparency part of the engine.';
-  } else if(q2==='no'&&q3==='no'){
-    light.style.background='#6b8f71';
-    eng.textContent='Minimal-risk pathway — Art. 95 general duties';
-    desc.textContent='If no Annex III category and no Art. 50/52 triggers are confirmed, P1 routes to the minimal-risk pathway. Art. 95 applies — no specific EU AI Act obligations, but the engine generates the minimal-risk documentation and GDPR/ePrivacy mini-analysis.';
-  } else {
-    light.style.background='#b8995a';
-    eng.textContent='Full P1 classification required';
-    desc.textContent='Your system\'s inputs require P1\'s complete 19-output classification sequence — territorial scope, Art. 5 clearance, Annex III analysis, GPAI dependency check, GDPR/ePrivacy alignment, and regulatory routing.';
-  }
-}
-</script>
-
-
+<!-- COOKIE BANNER -->
+<div id="cookie-banner" role="dialog" aria-label="Cookie consent">
+  <div class="cookie-banner-inner">
+    <div class="cookie-banner-text">
+      <p class="cookie-banner-title">Your data. Your control.</p>
+      <p class="cookie-banner-desc">Only essential cookies are active by default. You decide the rest &mdash; no dark patterns, no hidden trackers.</p>
+    </div>
+    <div class="cookie-banner-btns">
+      <button class="cb-btn cb-accept" onclick="acceptAll()" aria-label="Accept all cookies">Accept all</button>
       <button class="cb-btn cb-reject" onclick="rejectNonEssential()" aria-label="Reject non-essential cookies">Reject non-essential</button>
       <button class="cb-btn cb-config" onclick="openPanel()" aria-label="Configure cookie preferences">Configure</button>
     </div>
@@ -1219,7 +1177,7 @@ function runP1Check(){
     <div class="cc-list">
       <!-- Essential -->
       <div class="cc-item">
-        <div class="cc-header" onclick="toggleCcItem(this)" role="button" tabindex="0" aria-expanded="false">
+        <div class="cc-header" onclick="toggleCcItem(this)" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();toggleCcItem(this)}" role="button" tabindex="0" aria-expanded="false">
           <div class="cc-toggle-wrap">
             <input type="checkbox" class="cc-toggle" checked disabled id="toggle-essential" aria-label="Essential cookies (always active)">
             <div class="cc-track"><div class="cc-thumb"></div></div>
@@ -1232,14 +1190,14 @@ function runP1Check(){
         </div>
         <div class="cc-details">
           <table class="cc-table">
-            <tr><th>Name</th><th>Provider</th><th>Purpose</th><th>Duration</th><th>Type</th></tr>
+            <tr><th scope="col">Name</th><th scope="col">Provider</th><th scope="col">Purpose</th><th scope="col">Duration</th><th scope="col">Type</th></tr>
             <tr><td>eace_consent_v1</td><td>digitaldesignlab4u (this site)</td><td>Stores your cookie consent preferences</td><td>1 year</td><td>localStorage</td></tr>
           </table>
         </div>
       </div>
       <!-- Analytics -->
       <div class="cc-item">
-        <div class="cc-header" onclick="toggleCcItem(this)" role="button" tabindex="0" aria-expanded="false">
+        <div class="cc-header" onclick="toggleCcItem(this)" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();toggleCcItem(this)}" role="button" tabindex="0" aria-expanded="false">
           <div class="cc-toggle-wrap">
             <input type="checkbox" class="cc-toggle" id="toggle-analytics" aria-label="Enable analytics cookies">
             <div class="cc-track"><div class="cc-thumb"></div></div>
@@ -1252,14 +1210,14 @@ function runP1Check(){
         </div>
         <div class="cc-details">
           <table class="cc-table">
-            <tr><th>Name</th><th>Provider</th><th>Purpose</th><th>Duration</th><th>Type</th></tr>
+            <tr><th scope="col">Name</th><th scope="col">Provider</th><th scope="col">Purpose</th><th scope="col">Duration</th><th scope="col">Type</th></tr>
             <tr><td>No cookies set</td><td>Plausible Analytics (EU-hosted)</td><td>Anonymous page view counts, referrers, device type. No personal data. No cross-site tracking.</td><td>Session only</td><td>Cookieless (script)</td></tr>
           </table>
         </div>
       </div>
       <!-- Embedded Media -->
       <div class="cc-item">
-        <div class="cc-header" onclick="toggleCcItem(this)" role="button" tabindex="0" aria-expanded="false">
+        <div class="cc-header" onclick="toggleCcItem(this)" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();toggleCcItem(this)}" role="button" tabindex="0" aria-expanded="false">
           <div class="cc-toggle-wrap">
             <input type="checkbox" class="cc-toggle" id="toggle-media" aria-label="Enable embedded media cookies">
             <div class="cc-track"><div class="cc-thumb"></div></div>
@@ -1272,7 +1230,7 @@ function runP1Check(){
         </div>
         <div class="cc-details">
           <table class="cc-table">
-            <tr><th>Name</th><th>Provider</th><th>Purpose</th><th>Duration</th><th>Type</th></tr>
+            <tr><th scope="col">Name</th><th scope="col">Provider</th><th scope="col">Purpose</th><th scope="col">Duration</th><th scope="col">Type</th></tr>
             <tr><td>VISITOR_INFO1_LIVE, YSC</td><td>YouTube (Google LLC, USA)</td><td>Tracks embedded video views. Data transferred to USA under SCCs.</td><td>Session / 6 months</td><td>Cookie</td></tr>
             <tr><td>yt-remote-*</td><td>YouTube</td><td>Stores video player preferences</td><td>Persistent (localStorage)</td><td>localStorage</td></tr>
           </table>
@@ -1294,7 +1252,7 @@ function runP1Check(){
   </svg>
 </button>
 
-<script src="eace-shared.js"></script>
+<script src="eace-shared.js?v=20260723"></script>
 <script>
 (function(){
   var btn=document.getElementById('hamburger');

@@ -58,19 +58,19 @@ function runP1Check(){
     } else if(v3==='yes'){
       color='#f85149';
       title='High-risk pathway — Annex III classification required';
-      text='Operating in a regulated sector triggers full Annex III classification. P1 performs a point-by-point analysis across 8 Annex III categories (including biometrics, critical infrastructure, employment, education, law enforcement, migration, justice, and GPAI dependency), runs Art. 5 prohibited practices clearance across all 8 prohibited practice screens, assesses GDPR/ePrivacy alignment, maps national authorities, and generates the implementation timeline and regulatory delta — before routing to the high-risk obligation stack (Arts. 9–17, 43) or the Art. 6(3) exception pathway.';
+      text='Operating in a regulated sector triggers full Annex III classification. P1 performs a point-by-point analysis across 8 Annex III categories (including biometrics, critical infrastructure, employment, education, law enforcement, migration, justice, and GPAI dependency), runs Art. 5 prohibited practices clearance across all 10 prohibited practice screens (8 original + 2 added by Reg. (EU) 2026/1744, Art. 5(1)(ba)/(bb)), assesses GDPR/ePrivacy alignment, maps national authorities, and generates the implementation timeline and regulatory delta — before routing to the high-risk obligation stack (Arts. 9–17, 43) or the Art. 6(3) exception pathway.';
     } else if(v2==='yes'){
       color='#b8995a';
-      title='Limited-risk pathway — Art. 50/52 transparency obligations';
-      text='Transparency triggers (user interaction, emotion recognition, biometric categorisation, synthetic content, GPAI dependency) activate Art. 50 and/or Art. 52 obligations. P1 confirms which specific triggers apply across 16 trigger modules, checks for Art. 6(3) exception eligibility, and routes to the limited-risk and transparency part of the engine.';
+      title='Limited-risk pathway — Art. 50 transparency obligations';
+      text='Transparency triggers (user interaction, emotion recognition, biometric categorisation, synthetic content, GPAI dependency) activate Art. 50 obligations (Art. 52 is the AI Office\'s systemic-risk designation procedure, not a user-notice basis). P1 confirms which specific triggers apply across 16 trigger modules, checks for Art. 6(3) exception eligibility, and routes to the limited-risk and transparency part of the engine.';
     } else if(v2==='no'&&v3==='no'){
       color='#6b8f71';
       title='Minimal-risk pathway — Art. 95 general duties';
-      text='If no Annex III category and no Art. 50/52 triggers are confirmed, P1 routes to the minimal-risk pathway. Art. 95 applies — no specific EU AI Act obligations. The engine generates the minimal-risk documentation package, GDPR/ePrivacy mini-analysis, voluntary code of conduct recommendations, and a national overlay report.';
+      text='If no Annex III category and no Art. 50 triggers are confirmed, P1 routes to the minimal-risk pathway. Art. 95 applies — no specific EU AI Act obligations. The engine generates the minimal-risk documentation package, GDPR/ePrivacy mini-analysis, voluntary code of conduct recommendations, and a national overlay report.';
     } else {
       color='#b8995a';
       title='Full P1 classification required';
-      text='Your system\'s inputs require P1\'s complete 19-output classification sequence — territorial scope, Art. 5 clearance (8 screens), Annex III analysis (8 categories), GPAI dependency check, GDPR/ePrivacy alignment, national authority mapping, standards guidance, implementation timeline, and regulatory delta.';
+      text='Your system\'s inputs require P1\'s complete 19-output classification sequence — territorial scope, Art. 5 clearance (10 screens), Annex III analysis (8 categories), GPAI dependency check, GDPR/ePrivacy alignment, national authority mapping, standards guidance, implementation timeline, and regulatory delta.';
     }
     if(light){light.style.background=color;light.style.transition='background 0.3s';}
     if(eng)eng.textContent=title;

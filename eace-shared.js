@@ -207,6 +207,17 @@ if(document.readyState==='loading'){
   initCookieConsent();
 }
 
+/* ── NAV SCROLL — toggles opaque background once page scrolls past hero ── */
+(function(){
+  var nav = document.getElementById('main-nav');
+  if(!nav) return;
+  function onScroll(){
+    nav.classList.toggle('scrolled', window.scrollY > 20);
+  }
+  window.addEventListener('scroll', onScroll, {passive:true});
+  onScroll();
+})();
+
 /* ── SCROLL TO TOP ── */
 (function(){
   var btn = document.getElementById('scroll-top');

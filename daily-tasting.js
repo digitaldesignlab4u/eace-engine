@@ -17,7 +17,7 @@
 (function(){
   if(typeof michelinMenu==='undefined'||!michelinMenu.length) return;
 
-  var STORAGE_KEY='eace_tasting_seen_v1';
+  var STORAGE_KEY='eace_tasting_seen_v2'; // v2: bumped so stale "seen" marks written under the old immediate-mark-on-render logic don't suppress the fixed dwell/dismiss gate
   var SCROLL_THRESHOLD=0.35; // fraction of scrollable page height
   var DWELL_MS=4000; // card must stay visible this long before counting as "seen"
 

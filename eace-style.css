@@ -274,6 +274,7 @@ nav.scrolled{background:rgba(12,12,10,0.97);backdrop-filter:blur(10px);-webkit-b
 
 .align-grid{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:2rem}
 .align-tag{font-family:var(--mono);font-size:11px;color:var(--muted);background:var(--bg2);border:0.5px solid var(--line);padding:4px 10px;border-radius:1px;letter-spacing:0.03em}
+.align-subhead{font-family:var(--mono);font-size:10px;letter-spacing:0.1em;text-transform:uppercase;color:var(--faint);margin-bottom:0.6rem}
 
 .modules{display:grid;grid-template-columns:1fr 1fr;gap:12px}
 @media(max-width:600px){.modules{grid-template-columns:1fr}}

@@ -686,7 +686,7 @@ footer{border-top:0.5px solid var(--line);padding:3rem 0 2rem}
 
 /* ═══════════════════════════════════════════════════
    DAILY AUDIT TASTING — rotating homepage tip card
-   Triggers on partial scroll; Elba (editorial/gold) and
+   Triggers on partial scroll; Alba (editorial/gold) and
    Kai (technical/blue) share the card, Wave (green) only
    renders inside .tasting-wave on explicit user click.
 ═══════════════════════════════════════════════════ */
@@ -707,16 +707,16 @@ footer{border-top:0.5px solid var(--line);padding:3rem 0 2rem}
 .tasting-meta{font-family:var(--mono);font-size:10px;color:var(--faint);letter-spacing:0.02em;margin-bottom:12px}
 .tasting-persona{display:flex;gap:10px;margin-top:10px}
 .tasting-avatar{flex-shrink:0;width:24px;height:24px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:var(--serif);font-size:11px;font-weight:600}
-.tasting-avatar.is-elba{background:rgba(184,153,90,0.15);color:var(--gold);border:1px solid rgba(184,153,90,0.4)}
+.tasting-avatar.is-alba{background:rgba(184,153,90,0.15);color:var(--gold);border:1px solid rgba(184,153,90,0.4)}
 .tasting-avatar.is-kai{background:rgba(111,147,184,0.15);color:var(--blue);border:1px solid rgba(111,147,184,0.4)}
 .tasting-avatar.is-wave{background:rgba(107,143,113,0.15);color:var(--green);border:1px solid rgba(107,143,113,0.4)}
 .tasting-say{min-width:0}
 .tasting-name{font-size:10px;letter-spacing:0.08em;text-transform:uppercase;font-weight:600;margin-bottom:3px}
-.tasting-name.is-elba{color:var(--gold)}
+.tasting-name.is-alba{color:var(--gold)}
 .tasting-name.is-kai{color:var(--blue)}
 .tasting-name.is-wave{color:var(--green)}
 .tasting-text{font-size:12.5px;line-height:1.62;color:var(--ink);font-weight:300}
-.tasting-text.is-elba{font-style:italic;color:#ded6c4}
+.tasting-text.is-alba{font-style:italic;color:#ded6c4}
 .tasting-action{margin-top:12px;padding:8px 10px;background:rgba(184,153,90,0.06);border-left:2px solid var(--gold);border-radius:0 4px 4px 0;font-size:11.5px;line-height:1.55;color:var(--muted)}
 .tasting-action b{color:var(--gold);font-weight:600}
 .tasting-wave{display:none;margin-top:12px;padding-top:12px;border-top:0.5px solid var(--line)}

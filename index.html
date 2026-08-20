@@ -172,6 +172,7 @@ h2 em{font-style:italic;color:var(--gold)}
 /* ALIGN */
 .align-grid{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:2rem}
 .align-tag{font-family:var(--mono);font-size:11px;color:var(--muted);background:var(--bg2);border:0.5px solid var(--line);padding:4px 10px;border-radius:1px;letter-spacing:0.03em}
+.align-subhead{font-family:var(--mono);font-size:10px;letter-spacing:0.1em;text-transform:uppercase;color:var(--faint);margin-bottom:0.6rem}
 
 /* IMPACT */
 .impact-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:2rem}
@@ -774,12 +775,19 @@ button:focus-visible,a:focus-visible,[role="button"]:focus-visible{outline:2px s
   </div>
 
   <p class="sec-label">Aligned with</p>
+  <p class="align-subhead">Binding regulatory framework</p>
   <div class="align-grid">
     <span class="align-tag">EU AI Act — Reg. (EU) 2024/1689, as amended by Reg. (EU) 2026/1744 (Digital Omnibus)</span>
     <span class="align-tag">GDPR — Reg. (EU) 2016/679</span>
     <span class="align-tag">ePrivacy Directive 2002/58/EC</span>
+  </div>
+  <p class="align-subhead">Conditional regulatory overlays</p>
+  <div class="align-grid">
     <span class="align-tag">NIS2 — Directive (EU) 2022/2555</span>
     <span class="align-tag">DSA — Reg. (EU) 2022/2065</span>
+  </div>
+  <p class="align-subhead">Standards &amp; governance frameworks</p>
+  <div class="align-grid">
     <span class="align-tag">ISO/IEC 42001 — AI Management Systems</span>
     <span class="align-tag">ISO/IEC 23894 — AI Risk Management</span>
     <span class="align-tag">ISO/IEC 27001 — Information Security</span>
@@ -787,6 +795,9 @@ button:focus-visible,a:focus-visible,[role="button"]:focus-visible{outline:2px s
     <span class="align-tag">ISO/IEC 27005 — Security Risk Management</span>
     <span class="align-tag">ISO/IEC 25012 — Data Quality</span>
     <span class="align-tag">ISO/IEC 38505 — Data Governance</span>
+  </div>
+  <p class="align-subhead">Guidance &amp; technical references</p>
+  <div class="align-grid">
     <span class="align-tag">NIST AI RMF 1.0</span>
     <span class="align-tag">ENISA AI Security Guidelines</span>
     <span class="align-tag">EDPB Guidelines on AI & GDPR</span>
@@ -1060,7 +1071,7 @@ button:focus-visible,a:focus-visible,[role="button"]:focus-visible{outline:2px s
 <!-- FOOTER -->
 <footer>
   <div class="wrap">
-    <p class="foot-legal">The EU AI Compliance Engine (EACE) and all associated materials are aligned with EU AI Act Regulation (EU) 2024/1689, as amended by Regulation (EU) 2026/1744 (Digital Omnibus on AI), ISO/IEC 42001, ISO/IEC 23894, ISO/IEC 27001, ISO/IEC 27701, ISO/IEC 27005, ISO/IEC 25012, ISO/IEC 38505, GDPR (EU) 2016/679, NIS2 Directive (EU) 2022/2555, ePrivacy Directive 2002/58/EC, DSA Regulation (EU) 2022/2065, NIST AI RMF 1.0, ENISA AI Security Guidelines, EDPB Guidelines on AI &amp; GDPR, and European Commission AI Office Guidance on Article 50 transparency (published 20 July 2026; Article 50 obligations applicable from 2 August 2026). This system does not constitute legal advice. Users are responsible for verifying all compliance outputs with qualified legal counsel.</p>
+    <p class="foot-legal">This system does not constitute legal advice. Users are responsible for verifying all compliance outputs with qualified legal counsel. See the regulatory and standards basis above for the specific frameworks this engine is designed and mapped against.</p>
 
     <!-- EACE LOGO -->
     <div style="display:flex;align-items:center;gap:12px;margin-bottom:1.75rem;padding-bottom:1.75rem;border-bottom:0.5px solid var(--line)">

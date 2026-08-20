@@ -19,6 +19,7 @@
 
   var STORAGE_KEY='eace_tasting_seen_v1';
   var SCROLL_THRESHOLD=0.35; // fraction of scrollable page height
+  var DWELL_MS=4000; // card must stay visible this long before counting as "seen"
 
   function todayStamp(d){
     d=d||new Date();
@@ -86,7 +87,8 @@
     return card;
   }
 
-  function dismiss(card){
+  function dismiss(card, dwellTimer){
+    clearTimeout(dwellTimer);
     card.classList.remove('show');
     markShownToday();
     setTimeout(function(){ if(card.parentNode) card.parentNode.removeChild(card); }, 400);
@@ -104,7 +106,9 @@
     var card=buildCard(dish, waveLine, dayIndex);
     document.body.appendChild(card);
 
-    card.querySelector('.tasting-close').addEventListener('click', function(){ dismiss(card); });
+    var dwellTimer=setTimeout(markShownToday, DWELL_MS);
+
+    card.querySelector('.tasting-close').addEventListener('click', function(){ dismiss(card, dwellTimer); });
 
     var waveBtn=card.querySelector('#tasting-wave-btn');
     var wavePanel=card.querySelector('#tasting-wave');
@@ -122,8 +126,6 @@
     requestAnimationFrame(function(){
       requestAnimationFrame(function(){ card.classList.add('show'); });
     });
-
-    markShownToday();
   }
 
   function scrollFraction(){

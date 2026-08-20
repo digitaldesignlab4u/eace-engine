@@ -10,7 +10,7 @@
  *    the page (no overlay, no scroll lock) — it's a corner card, dismissible.
  *  - Wave's line is a SEPARATE reveal: hidden until the visitor explicitly
  *    clicks "What does this mean for me?" — it never renders automatically
- *    alongside Elba/Kai, and never merges into their text.
+ *    alongside Alba/Kai, and never merges into their text.
  *
  * Requires daily-tasting-data.js (michelinMenu, waveBridgeLines) loaded first.
  */
@@ -57,10 +57,10 @@
       '<p class="tasting-title">'+esc(dish.title)+'</p>'+
       '<p class="tasting-meta">'+esc(dish.meta)+'</p>'+
       '<div class="tasting-persona">'+
-        '<div class="tasting-avatar is-elba" aria-hidden="true">E</div>'+
+        '<div class="tasting-avatar is-alba" aria-hidden="true">A</div>'+
         '<div class="tasting-say">'+
-          '<p class="tasting-name is-elba">Elba</p>'+
-          '<p class="tasting-text is-elba">'+esc(dish.elba)+'</p>'+
+          '<p class="tasting-name is-alba">Alba</p>'+
+          '<p class="tasting-text is-alba">'+esc(dish.alba)+'</p>'+
         '</div>'+
       '</div>'+
       '<div class="tasting-persona">'+

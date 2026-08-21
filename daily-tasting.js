@@ -11,6 +11,9 @@
  *  - Wave's line is a SEPARATE reveal: hidden until the visitor explicitly
  *    clicks "What does this mean for me?" — it never renders automatically
  *    alongside Alba/Kai, and never merges into their text.
+ *  - Tracks the cookie-consent banner's real height in --cookie-clearance
+ *    (see eace-style.css) so the card's bottom offset clears it on a
+ *    first-time visitor instead of being covered by it.
  *
  * Requires daily-tasting-data.js (michelinMenu, waveBridgeLines) loaded first.
  */
@@ -20,6 +23,28 @@
   var STORAGE_KEY='eace_tasting_seen_v2'; // v2: bumped so stale "seen" marks written under the old immediate-mark-on-render logic don't suppress the fixed dwell/dismiss gate
   var SCROLL_THRESHOLD=0.35; // fraction of scrollable page height
   var DWELL_MS=4000; // card must stay visible this long before counting as "seen"
+  var COOKIE_GAP=12; // breathing room above the cookie-consent banner when both are on screen
+
+  // On a first-time visitor the cookie banner (#cookie-banner, z-index 1000) can be
+  // taller than the card's fixed bottom clearance and render on top of it. Track the
+  // banner's real height in --cookie-clearance so eace-style.css can push the card up
+  // (see .tasting-card's bottom:calc(...)) instead of letting the banner cover it.
+  function syncCookieClearance(){
+    var banner=document.getElementById('cookie-banner');
+    var h=(banner&&banner.classList.contains('show'))
+      ? Math.ceil(banner.getBoundingClientRect().height)+COOKIE_GAP
+      : 0;
+    document.documentElement.style.setProperty('--cookie-clearance', h+'px');
+  }
+
+  function watchCookieBanner(){
+    syncCookieClearance();
+    var banner=document.getElementById('cookie-banner');
+    if(banner&&typeof MutationObserver!=='undefined'){
+      new MutationObserver(syncCookieClearance).observe(banner, {attributes:true, attributeFilter:['class']});
+    }
+    window.addEventListener('resize', syncCookieClearance, {passive:true});
+  }
 
   function todayStamp(d){
     d=d||new Date();
@@ -105,6 +130,7 @@
 
     var card=buildCard(dish, waveLine, dayIndex);
     document.body.appendChild(card);
+    syncCookieClearance(); // re-check right before reveal in case the banner appeared after page load
 
     var dwellTimer=setTimeout(markShownToday, DWELL_MS);
 
@@ -136,6 +162,7 @@
   }
 
   function initTasting(){
+    watchCookieBanner();
     if(alreadyShownToday()) return;
 
     var triggered=false;

@@ -692,7 +692,8 @@ footer{border-top:0.5px solid var(--line);padding:3rem 0 2rem}
    renders inside .tasting-wave on explicit user click.
 ═══════════════════════════════════════════════════ */
 .tasting-card{
-  position:fixed;right:20px;bottom:100px;width:384px;max-width:calc(100vw - 32px);
+  position:fixed;right:20px;bottom:calc(100px + var(--cookie-clearance,0px));width:384px;max-width:calc(100vw - 32px);
+  max-height:calc(100vh - 100px - var(--cookie-clearance,0px) - 12px);overflow-y:auto;-webkit-overflow-scrolling:touch;
   background:var(--bg2);border:0.5px solid var(--line2);border-radius:10px;
   box-shadow:0 20px 60px rgba(0,0,0,0.55);z-index:150;
   padding:18px 20px 16px;
@@ -727,5 +728,6 @@ footer{border-top:0.5px solid var(--line);padding:3rem 0 2rem}
 .tasting-wave-btn:hover,.tasting-wave-btn[aria-expanded="true"]{color:var(--green);border-color:rgba(107,143,113,0.5)}
 .tasting-count{font-family:var(--mono);font-size:9.5px;color:var(--faint);letter-spacing:0.04em}
 @media(max-width:480px){
-  .tasting-card{right:12px;left:12px;bottom:96px;width:auto;max-width:none;padding:16px 16px 14px}
+  .tasting-card{right:12px;left:12px;bottom:calc(96px + var(--cookie-clearance,0px));width:auto;max-width:none;padding:16px 16px 14px;
+    max-height:calc(100vh - 96px - var(--cookie-clearance,0px) - 12px)}
 }

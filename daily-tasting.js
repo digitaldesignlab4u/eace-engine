@@ -2,8 +2,15 @@
  * EACE.ai — "The Daily Audit Tasting" — homepage popup controller
  *
  * Behaviour:
- *  - Picks today's dish via dayIndex = date.getDate() % michelinMenu.length
- *    (40 entries → never repeats within a calendar month).
+ *  - Picks today's dish via dayIndex = dayOfYear(date) % michelinMenu.length.
+ *    IMPORTANT: this was previously `date.getDate() % michelinMenu.length`
+ *    (calendar day-of-month, 1-31). That formula only works correctly when
+ *    michelinMenu.length <= 31 — with more entries than that, getDate()
+ *    never produces a value large enough for the modulo to wrap, so every
+ *    entry past index 31 becomes permanently unreachable dead content.
+ *    Switched to day-of-year (1-366) so the full menu cycles completely
+ *    (a 120-entry menu repeats roughly every 4 months; a 40-entry menu
+ *    still gets a full month-plus of non-repeating rotation, same as before).
  *  - Renders once the visitor has scrolled ~35% into the page — never on
  *    page load, so it never blocks the hero or first impression.
  *  - Shows at most once per calendar day (localStorage), and never blocks
@@ -49,6 +56,15 @@
   function todayStamp(d){
     d=d||new Date();
     return d.getFullYear()+'-'+(d.getMonth()+1)+'-'+d.getDate();
+  }
+
+  // Day-of-year (1-366), local time — used to rotate through menus of any
+  // length without the day-of-month ceiling (see file header note above).
+  function dayOfYear(d){
+    d=d||new Date();
+    var start=new Date(d.getFullYear(),0,0);
+    var diffMs=d-start;
+    return Math.floor(diffMs/86400000);
   }
 
   function alreadyShownToday(){
@@ -122,7 +138,7 @@
   function showTastingCard(){
     if(document.getElementById('tasting-card')) return;
 
-    var dayIndex=new Date().getDate() % michelinMenu.length;
+    var dayIndex=dayOfYear(new Date()) % michelinMenu.length;
     var dish=michelinMenu[dayIndex];
     var waveLine=(typeof waveBridgeLines!=='undefined'&&waveBridgeLines[dayIndex])
       ? waveBridgeLines[dayIndex]

@@ -267,6 +267,49 @@ cut the file count without losing anything a real deployment needs:
   `reference-org-signer.js` with one script, two subcommands (`keygen`,
   `serve`).
 
+## The all-in-one build
+
+`../eace-compliance-tasting-menu-all-in-one.html` is a separate, single-file
+distribution: the Portable Edition's engine plus a **base64-embedded copy**
+of this directory's `evidence.js` and `evidence-admin.html`, so the whole
+product (learner flow, receipt, Evidence Mode, and the admin tool) ships as
+one physical file with no `<script src>`/`<link>` to anything else. It does
+not load these files — it carries its own copies, inlined — so changes here
+do not automatically reach it, and vice versa.
+
+That build is currently **one schema version ahead** of this directory:
+
+- **Evidence schema v2** (this directory is still v1): the evidence object
+  and its signed payload gained `completion_status`, `benchmark_type`,
+  `benchmark_threshold`, and `benchmark_met`, so a verifier reads pass/fail
+  directly instead of inferring it from raw `score`/`total`. For exam mode,
+  `benchmark_type` is `'EACE_INTERNAL'` and the threshold is `80`; every
+  other mode carries `null` for all three benchmark fields.
+- **Receipt v3** (Portable/Web Edition stay v2): the receipt payload gained
+  a 10th field, the session's `attempt_id` — the same ID the evidence
+  object (if the person opted in) carries — so the two artifacts can be
+  shown to correlate to one attempt without either one carrying the other's
+  payload (no name added to Evidence, just a shared opaque ID, generated
+  once at `startSession()`).
+- **Admin tool reachability**: the all-in-one build has no admin
+  launcher/dialog/iframe on the learner screen at all. Its embedded admin
+  tool opens only via `?mode=admin` on the same URL (a `document.write()`
+  full-document swap, deferred to `DOMContentLoaded` so it actually
+  replaces the document instead of inserting mid-parse — verified in a real
+  browser, not assumed), and "Verify locally" on the result screen opens
+  that same URL with `&verify=<token>` in a new tab, which the embedded
+  admin document reads from `location.search` to prefill and auto-run.
+- The evidence result is also excluded from the learner's own "Print
+  completion summary" action; a separate "Print evidence record" button
+  toggles a `body.printing-evidence-only` class for its own dedicated
+  print pass, cleaned up on the `afterprint` event.
+
+If the schema changes again, update **three** copies by hand, not two:
+`evidence.js` and `evidence-admin.html` here, and the corresponding
+embedded copies (`evidence.js`'s content and `ADMIN_B64`) inside
+`eace-compliance-tasting-menu-all-in-one.html`. Nothing generates one from
+the other, same trade-off as "One tool, one library" above, one layer up.
+
 ## Files in this directory
 
 | File | Role |
@@ -312,3 +355,18 @@ was actually exercised against a second, independent process. Fixed by
 moving `grade`/`timestamp_trust`/`tsa` out of the device-signed payload and
 into the org-signed one instead, where they're supposed to change — see
 `evidence.js`'s comment on `signablePayload()` for the full reasoning.
+
+The all-in-one build (see "The all-in-one build" above) has its own
+end-to-end checks, run directly against it rather than through
+`npm run test:evidence`:
+
+```sh
+cd test
+node run.js ../eace-compliance-tasting-menu-all-in-one.html   # full mode × track × sector regression
+node test-fix5-fields.js                                       # completion_status/benchmark_* fields, real exam + pulse sessions
+```
+
+`run.js` decodes whichever receipt shape it's actually handed
+(`receipt_version` `v2` = 9 fields, no `attempt_id`; `v3` = 10 fields, with
+it) rather than assuming a single global field count, since the Portable
+and Web Editions are still on v2 and the all-in-one build is on v3.

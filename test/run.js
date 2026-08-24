@@ -75,6 +75,7 @@ function decodeReceiptToken(token) {
     mode: parts[6],
     pool_version: parts[7],
     assessment_manifest_id: parts[8],
+    attempt_id: parts[9],
     partCount: parts.length
   };
 }
@@ -138,8 +139,20 @@ async function runOne(browser, run) {
       if (decoded.mode !== run.mode) throw new Error(`mode field mismatch: got "${decoded.mode}", expected "${run.mode}"`);
       if (!decoded.pool_version) throw new Error('missing pool_version field');
       if (!decoded.assessment_manifest_id) throw new Error('missing assessment_manifest_id field');
-      if (decoded.partCount !== 9) throw new Error('unexpected receipt field count: ' + decoded.partCount);
-      receiptDetail = `receipt ${decoded.receipt_version} ok, diacritics ok, manifest=${decoded.assessment_manifest_id}`;
+      // v3 (all-in-one build) adds attempt_id as a 10th field, correlating the
+      // receipt with an Evidence Mode record; older builds (Portable/Web
+      // Edition, still v2) don't carry it — check whichever shape this
+      // particular receipt_version claims to be, not a single global count.
+      if (decoded.receipt_version === 'v3') {
+        if (!decoded.attempt_id || decoded.attempt_id === 'unattributed') throw new Error('missing/unattributed attempt_id field: ' + decoded.attempt_id);
+        if (decoded.partCount !== 10) throw new Error('unexpected v3 receipt field count: ' + decoded.partCount);
+      } else if (decoded.receipt_version === 'v2') {
+        if (decoded.partCount !== 9) throw new Error('unexpected v2 receipt field count: ' + decoded.partCount);
+      } else {
+        throw new Error('unrecognised receipt_version for field-count check: ' + decoded.receipt_version);
+      }
+      receiptDetail = `receipt ${decoded.receipt_version} ok, diacritics ok, manifest=${decoded.assessment_manifest_id}` +
+        (decoded.attempt_id ? `, attempt=${decoded.attempt_id.slice(0, 20)}…` : '');
     }
 
     if (cspViolations.length) {

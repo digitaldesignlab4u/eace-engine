@@ -6,7 +6,8 @@
   "scripts": {
     "test": "node run.js",
     "test:portable": "node run.js",
-    "test:web": "node run-web-edition.js"
+    "test:web": "node run-web-edition.js",
+    "test:evidence": "node evidence-suite.js"
   },
   "dependencies": {
     "playwright": "^1.62.1"

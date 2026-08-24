@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>EACE.ai — Evidence Verifier</title>
+<style>
+:root{
+  --bg:#050708; --bg2:#0B1112; --bg3:#151D1E; --line:#2C393A; --line2:#3a4a4b;
+  --ink:#e6e5e1; --muted:#9b9a93; --gold:#cbaa6e; --green:#2fa7a3; --red:#b43a3a;
+  --mono:'DM Mono','IBM Plex Mono',Consolas,monospace; --sans:'Instrument Sans','IBM Plex Sans',Inter,system-ui,sans-serif;
+  --r:3px;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--bg);color:var(--ink);font-family:var(--sans);font-weight:300;line-height:1.65;padding:2rem 1rem;min-height:100vh}
+.wrap{max-width:820px;margin:0 auto}
+h1{font-family:var(--mono);font-size:1.1rem;font-weight:600;letter-spacing:0.02em;color:var(--gold);margin-bottom:0.3rem}
+.sub{color:var(--muted);font-size:13px;margin-bottom:1.75rem;max-width:64ch}
+.card{background:var(--bg2);border:0.5px solid var(--line);border-radius:var(--r);padding:1.5rem;margin-bottom:1.25rem}
+label{display:block;font-family:var(--mono);font-size:10.5px;letter-spacing:0.08em;text-transform:uppercase;color:var(--muted);margin-bottom:0.5rem}
+textarea,input[type=text]{width:100%;background:var(--bg3);border:0.5px solid var(--line2);border-radius:var(--r);
+  padding:0.75rem;color:var(--ink);font-family:var(--mono);font-size:12.5px}
+textarea{min-height:120px;resize:vertical}
+.btn{font-family:var(--mono);font-size:11.5px;font-weight:500;letter-spacing:0.07em;text-transform:uppercase;
+  border-radius:var(--r);padding:0.75rem 1.4rem;border:0.5px solid var(--line2);background:transparent;
+  color:var(--ink);cursor:pointer;margin-top:1rem}
+.btn:hover{border-color:var(--gold)}
+.btn-primary{background:linear-gradient(180deg,#e0c48a,#cbaa6e);color:var(--bg);border:none;font-weight:600}
+.hint{font-size:11.5px;color:var(--muted);margin-top:0.4rem}
+.check-row{display:flex;justify-content:space-between;gap:1rem;align-items:flex-start;padding:0.7rem 0;border-bottom:0.5px solid var(--line)}
+.check-row:last-child{border-bottom:none}
+.check-label{font-size:13px}
+.check-note{font-size:11.5px;color:var(--muted);margin-top:0.2rem;max-width:52ch}
+.badge{font-family:var(--mono);font-size:10px;letter-spacing:0.06em;text-transform:uppercase;padding:0.25rem 0.55rem;
+  border-radius:var(--r);white-space:nowrap;flex:none}
+.badge.pass{background:rgba(47,167,163,0.16);color:var(--green);border:0.5px solid var(--green)}
+.badge.fail{background:rgba(180,58,58,0.16);color:var(--red);border:0.5px solid var(--red)}
+.badge.na{background:var(--bg3);color:var(--muted);border:0.5px solid var(--line2)}
+.verdict{font-family:var(--mono);font-size:13px;padding:1rem;border-radius:var(--r);margin-bottom:1.25rem}
+.verdict.ok{background:rgba(47,167,163,0.1);border:0.5px solid var(--green);color:var(--green)}
+.verdict.bad{background:rgba(180,58,58,0.1);border:0.5px solid var(--red);color:var(--red)}
+.meta-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:0.75rem;font-family:var(--mono);font-size:12px}
+.meta-grid div span{display:block}
+.meta-label{color:var(--muted);font-size:9.5px;text-transform:uppercase;letter-spacing:0.06em}
+.error{color:var(--red);font-family:var(--mono);font-size:12px;white-space:pre-wrap}
+.legal{font-family:var(--mono);font-size:10px;color:var(--muted);line-height:1.7;margin-top:1.5rem}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1>EACE.AI — EVIDENCE VERIFIER</h1>
+  <p class="sub">Offline verification tool for Evidence Mode records (grade: local or attested). This
+    is a separate tool from the existing completion-receipt decoder — receipts and evidence objects
+    are different artifact types with different trust guarantees; do not conflate their results.</p>
+
+  <div class="card">
+    <label for="in-token">Evidence token (starts with EACE-EVID-) or raw JSON</label>
+    <textarea id="in-token" placeholder="EACE-EVID-..."></textarea>
+    <label for="in-org-key" style="margin-top:1rem">Organisation public key (JWK) — optional, only needed to verify Grade 2 org attestations</label>
+    <textarea id="in-org-key" placeholder='{"kty":"EC","crv":"P-256","x":"...","y":"..."}'></textarea>
+    <p class="hint">Leave blank if you only need to verify Grade 1 (Local Evidence) records, or if you
+      haven't deployed org attestation yet. See keygen.html to generate an organisation keypair.</p>
+    <button class="btn btn-primary" id="btn-verify">Verify →</button>
+  </div>
+
+  <div id="out-error" class="card" style="display:none">
+    <label>Could not verify</label>
+    <div class="error" id="out-error-text"></div>
+  </div>
+
+  <div id="out-result" style="display:none">
+    <div id="out-verdict" class="verdict"></div>
+    <div class="card">
+      <label>Record summary</label>
+      <div class="meta-grid" id="out-meta"></div>
+    </div>
+    <div class="card">
+      <label>Checks performed</label>
+      <div id="out-checks"></div>
+    </div>
+  </div>
+
+  <p class="legal">This tool performs cryptographic and structural checks only — it does not confirm the
+    named person's real-world identity, and a Grade 1 (Local Evidence) verdict does not mean an
+    organisation attested to this record. Read every check's note, not just the pass/fail badge.
+    Evidence Mode records are a stronger artifact than the product's completion receipt, but "stronger"
+    is not "absolute" — see README.md for the full trust model.</p>
+</div>
+
+<script src="evidence-core.js"></script>
+<script>
+(function(){
+  'use strict';
+
+  // ---- Known assessment manifests, for the question-set cross-check ----
+  // Kept in sync with the product's own ASSESSMENT_MANIFESTS by hand, the
+  // same way this tool's whole existence assumes the verifier operator
+  // holds a trusted copy of the product's reference data — exactly the
+  // "decoded locally by EACE's admin tool" pattern the existing receipt
+  // already relies on. If the pool is regenerated with new manifests,
+  // update this list too.
+  const KNOWN_MANIFESTS = {
+    exam: { id: 'EXAM-2026-v1', question_ids: ["q108","q136","q149","q145","q46","q152","q131","q61","q127","q159","q134","q38","q97","q137","q25","q91","q161","q19","q116","q118","q81","q104","q96","q88","q101","q37","q48","q132","q105","q140"] },
+    deepdive: { id: 'DEEPDIVE-2026-H2-v1', question_ids: ["q71","q2","q92","q134","q65","q130","q4","q102","q147","q90","q10","q53","q50","q128","q14","q131","q135","q8","q59","q88"] },
+    onboarding: { id: 'ONBOARDING-2026-08-v1', question_ids: ["q131","q4","q143","q86","q3","q55","q151","q93","q56","q21","q23","q24","q57","q20","q64","q2","q36","q15"] }
+  };
+
+  const DOM = {
+    inToken: document.getElementById('in-token'),
+    inOrgKey: document.getElementById('in-org-key'),
+    btnVerify: document.getElementById('btn-verify'),
+    outError: document.getElementById('out-error'),
+    outErrorText: document.getElementById('out-error-text'),
+    outResult: document.getElementById('out-result'),
+    outVerdict: document.getElementById('out-verdict'),
+    outMeta: document.getElementById('out-meta'),
+    outChecks: document.getElementById('out-checks')
+  };
+
+  function metaField(label, value){
+    return '<div><span class="meta-label">' + label + '</span><span>' + esc(value) + '</span></div>';
+  }
+  function esc(s){ return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+
+  function checkRow(label, status, note){
+    const badge = status === true ? '<span class="badge pass">Pass</span>'
+      : status === false ? '<span class="badge fail">Fail</span>'
+      : '<span class="badge na">' + esc(status) + '</span>';
+    return '<div class="check-row"><div><div class="check-label">' + esc(label) + '</div>' +
+      (note ? '<div class="check-note">' + esc(note) + '</div>' : '') + '</div>' + badge + '</div>';
+  }
+
+  async function importEcdsaPublicKey(jwk){
+    return crypto.subtle.importKey('jwk', jwk, { name: 'ECDSA', namedCurve: 'P-256' }, true, ['verify']);
+  }
+  function b64ToBytes(b64){
+    const binary = atob(b64);
+    const bytes = new Uint8Array(binary.length);
+    for (let i = 0; i < binary.length; i++) bytes[i] = binary.charCodeAt(i);
+    return bytes;
+  }
+  async function verifyEcdsaSignature(publicKeyJwk, message, signatureB64){
+    try {
+      const key = await importEcdsaPublicKey(publicKeyJwk);
+      return await crypto.subtle.verify(
+        { name: 'ECDSA', hash: 'SHA-256' }, key, b64ToBytes(signatureB64), new TextEncoder().encode(message)
+      );
+    } catch (e) {
+      return false;
+    }
+  }
+
+  async function runVerification(){
+    DOM.outError.style.display = 'none';
+    DOM.outResult.style.display = 'none';
+
+    const raw = DOM.inToken.value.trim();
+    if (!raw){
+      DOM.outError.style.display = 'block';
+      DOM.outErrorText.textContent = 'Paste an evidence token or raw JSON first.';
+      return;
+    }
+
+    let evidence;
+    try {
+      evidence = raw.startsWith(EvidenceCore.TOKEN_PREFIX)
+        ? EvidenceCore.decodeEvidenceToken(raw)
+        : JSON.parse(raw);
+    } catch (e) {
+      DOM.outError.style.display = 'block';
+      DOM.outErrorText.textContent = 'Could not decode: ' + e.message;
+      return;
+    }
+
+    const checks = [];
+    let allPass = true;
+    function record(label, status, note){
+      checks.push({ label, status, note });
+      if (status === false) allPass = false;
+    }
+
+    // 1. Structural sanity
+    const requiredFields = ['attempt_id','mode','question_ids','answers','question_set_hash','device_signature','device_public_key_jwk'];
+    const missing = requiredFields.filter((f) => evidence[f] === undefined || evidence[f] === null);
+    record('Required fields present', missing.length === 0, missing.length ? 'Missing: ' + missing.join(', ') : 'attempt_id, mode, question_ids, answers, question_set_hash, device_signature, device_public_key_jwk all present.');
+
+    // 2. Question-set hash recomputation
+    let hashOk = false;
+    try {
+      const recomputed = await EvidenceCore.questionSetHash(evidence.question_ids);
+      hashOk = recomputed === evidence.question_set_hash;
+      record('Question-set hash matches claimed question list', hashOk,
+        hashOk ? 'Recomputed SHA-256 over the sorted question_ids matches question_set_hash.' : 'Recomputed hash does not match — question_ids may have been edited after signing.');
+    } catch (e) {
+      record('Question-set hash matches claimed question list', false, 'Could not recompute: ' + e.message);
+    }
+
+    // 3. Manifest cross-check (exam/deepdive/onboarding only)
+    const manifestCheck = EvidenceCore.verifyQuestionSetAgainstManifest(evidence, KNOWN_MANIFESTS);
+    if (!manifestCheck.applicable) {
+      record('Question set matches a known fixed manifest', 'N/A', manifestCheck.reason);
+    } else {
+      record('Question set matches a known fixed manifest', manifestCheck.pass,
+        manifestCheck.pass
+          ? `Matches this verifier's own copy of ${evidence.assessment_manifest_id} independently of what the evidence object claims.`
+          : `Does not match this verifier's own copy of ${evidence.assessment_manifest_id} — the claimed question_ids differ from the known manifest.`);
+    }
+
+    // 4. Score recomputation from the answer record
+    const correctCount = (evidence.answers || []).filter((a) => a.correct).length;
+    const totalCount = (evidence.answers || []).length;
+    const scoreOk = correctCount === evidence.score && totalCount === evidence.total;
+    record('Score matches the per-question answer record', scoreOk,
+      scoreOk ? `${evidence.score}/${evidence.total} matches ${correctCount} correct of ${totalCount} recorded answers.`
+        : `Declared ${evidence.score}/${evidence.total} does not match ${correctCount} correct of ${totalCount} recorded answers.`);
+
+    // 5. Device signature
+    let deviceSigOk = false;
+    try {
+      deviceSigOk = await verifyEcdsaSignature(evidence.device_public_key_jwk, EvidenceCore.signablePayload(evidence), evidence.device_signature);
+    } catch (e) { /* stays false */ }
+    record('Device signature valid', deviceSigOk,
+      deviceSigOk
+        ? 'Proves this record has not been altered since this device signed it. Does NOT prove an organisation attested to it, and does not prove the signer’s real-world identity — only that the same private key produced this record and no field covered by the signature has changed.'
+        : 'Signature does not verify against the embedded device public key — the record was likely altered after signing, or is malformed.');
+
+    // 6. Timestamp trust — always shown, never silently upgraded
+    if (evidence.timestamp_trust === 'local-unverified') {
+      record('Timestamp trust level', 'Local (unverified)',
+        `completed_at (${evidence.completed_at}) is a plain local device timestamp — trivially forgeable by changing the system clock. Treat as informational, not evidentiary.`);
+    } else if (evidence.timestamp_trust === 'tsa-attested' && evidence.tsa) {
+      record('Timestamp trust level', 'TSA-attested (structure only — see note)',
+        `Evidence object claims a timestamp authority token from "${evidence.tsa.authority}" at ${evidence.tsa.timestamp}. This verifier checks the token is PRESENT and well-formed, not that it was issued by a certificate-audited timestamp authority — that requires validating the TSA's own certificate chain, which this build does not implement. Do not treat this as equivalent to a certified RFC 3161 timestamp without that additional check.`);
+    } else {
+      record('Timestamp trust level', 'Unknown', 'evidence.timestamp_trust is neither local-unverified nor tsa-attested — unrecognised value: ' + evidence.timestamp_trust);
+    }
+
+    // 7. Org attestation (Grade 2 only)
+    if (evidence.grade !== 'attested' || !evidence.org_attestation) {
+      record('Organisation co-signature', 'N/A', evidence.grade === 'local' ? 'This is a Grade 1 (Local Evidence) record — no organisation attestation is claimed.' : 'Marked as attested grade but org_attestation is missing.');
+    } else {
+      const orgKeyRaw = DOM.inOrgKey.value.trim();
+      if (!orgKeyRaw) {
+        record('Organisation co-signature', 'Not checked', 'Record claims an organisation attestation, but no organisation public key was provided above — paste it to verify.');
+      } else {
+        try {
+          const orgKeyJwk = JSON.parse(orgKeyRaw);
+          const orgSigOk = await verifyEcdsaSignature(orgKeyJwk, EvidenceCore.orgSignablePayload(evidence), evidence.org_attestation.org_signature);
+          record('Organisation co-signature', orgSigOk,
+            orgSigOk ? 'Verifies against the organisation public key provided above — the organisation attested to this exact record (including its device signature and timestamp token).'
+              : 'Does NOT verify against the organisation public key provided — either the wrong key was pasted, or this attestation is invalid.');
+        } catch (e) {
+          record('Organisation co-signature', false, 'Could not parse the pasted organisation public key as JSON: ' + e.message);
+        }
+      }
+    }
+
+    // ---- Render ----
+    DOM.outMeta.innerHTML = [
+      metaField('Attempt ID', evidence.attempt_id),
+      metaField('Grade', evidence.grade),
+      metaField('Mode', evidence.mode),
+      metaField('Track / sector', evidence.role_or_sector),
+      metaField('Score', evidence.score + ' / ' + evidence.total),
+      metaField('Manifest', evidence.assessment_manifest_id),
+      metaField('Pool version', evidence.pool_version),
+      metaField('Completed at (local)', evidence.completed_at),
+      metaField('Device key ID', evidence.device_key_id)
+    ].join('');
+
+    DOM.outChecks.innerHTML = checks.map((c) => checkRow(c.label, c.status, c.note)).join('');
+
+    DOM.outVerdict.className = 'verdict ' + (allPass ? 'ok' : 'bad');
+    DOM.outVerdict.textContent = allPass
+      ? 'All structural and cryptographic checks passed. Read each check’s note above — a passing verdict here is scoped to exactly what each check tests, not a general "this is true" stamp.'
+      : 'One or more checks failed — see below. Do not treat this record as reliable.';
+
+    DOM.outResult.style.display = 'block';
+  }
+
+  DOM.btnVerify.addEventListener('click', function(){
+    runVerification().catch(function(e){
+      DOM.outError.style.display = 'block';
+      DOM.outErrorText.textContent = 'Unexpected error: ' + e.message;
+    });
+  });
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<!-- Single-file utility tool, same trade-off as the product's own Portable
+     Edition: no build step, inline <style>/<script> by design, so
+     script-src/style-src need 'unsafe-inline'. Nothing else is permitted —
+     no images, no fonts, no network of any kind (connect-src 'none'),
+     since this page's only job is generating a keypair locally. -->
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'unsafe-inline'; style-src 'unsafe-inline'; connect-src 'none'; frame-src 'none'; object-src 'none'; base-uri 'none'; form-action 'none';">
+<title>EACE.ai — Organisation Evidence Keypair Generator</title>
+<style>
+:root{
+  --bg:#050708; --bg2:#0B1112; --bg3:#151D1E; --line:#2C393A; --line2:#3a4a4b;
+  --ink:#e6e5e1; --muted:#9b9a93; --gold:#cbaa6e; --red:#b43a3a;
+  --mono:'DM Mono','IBM Plex Mono',Consolas,monospace; --sans:'Instrument Sans','IBM Plex Sans',Inter,system-ui,sans-serif;
+  --r:3px;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--bg);color:var(--ink);font-family:var(--sans);font-weight:300;line-height:1.65;padding:2rem 1rem;min-height:100vh}
+.wrap{max-width:720px;margin:0 auto}
+h1{font-family:var(--mono);font-size:1.1rem;font-weight:600;letter-spacing:0.02em;color:var(--gold);margin-bottom:0.3rem}
+.sub{color:var(--muted);font-size:13px;margin-bottom:1.5rem;max-width:64ch}
+.card{background:var(--bg2);border:0.5px solid var(--line);border-radius:var(--r);padding:1.5rem;margin-bottom:1.25rem}
+.warn{background:rgba(180,58,58,0.1);border:0.5px solid var(--red);color:var(--red);padding:1rem;border-radius:var(--r);
+  font-size:12.5px;margin-bottom:1.5rem;line-height:1.6}
+label{display:block;font-family:var(--mono);font-size:10.5px;letter-spacing:0.08em;text-transform:uppercase;color:var(--muted);margin-bottom:0.5rem}
+textarea{width:100%;min-height:110px;background:var(--bg3);border:0.5px solid var(--line2);border-radius:var(--r);
+  padding:0.75rem;color:var(--ink);font-family:var(--mono);font-size:11.5px;resize:vertical}
+.btn{font-family:var(--mono);font-size:11.5px;font-weight:500;letter-spacing:0.07em;text-transform:uppercase;
+  border-radius:var(--r);padding:0.75rem 1.4rem;border:0.5px solid var(--line2);background:transparent;
+  color:var(--ink);cursor:pointer;margin-top:0.5rem}
+.btn:hover{border-color:var(--gold)}
+.btn-primary{background:linear-gradient(180deg,#e0c48a,#cbaa6e);color:var(--bg);border:none;font-weight:600}
+.hint{font-size:11.5px;color:var(--muted);margin-top:0.5rem}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1>EACE.AI — ORGANISATION EVIDENCE KEYPAIR GENERATOR</h1>
+  <p class="sub">Generates the ECDSA P-256 keypair an organisation uses to co-sign Grade 2 (Attested
+    Evidence) records. Runs entirely in this browser tab — the keypair is generated locally and never
+    sent anywhere by this page.</p>
+
+  <div class="warn">
+    Run this ONCE, on a machine HR/IT actually trusts, then close the tab. This page does not save
+    anything — if you navigate away before copying both keys out, they are gone and you generate a new
+    pair. The PRIVATE key below is the organisation's entire signing authority for Grade 2 evidence:
+    anyone who has it can attest records on the organisation's behalf. Store it like any other
+    organisational secret (a password manager, an HSM if you have one, or at minimum an encrypted,
+    access-controlled file) — never commit it to source control, and never put it anywhere a browser
+    or web server can serve it to the public. This product has no key-rotation or revocation
+    mechanism built in; if this key is compromised, that is a manual incident-response problem for
+    your organisation to handle, the same as any other leaked signing key.
+  </div>
+
+  <div class="card">
+    <button class="btn btn-primary" id="btn-generate">Generate a new keypair →</button>
+  </div>
+
+  <div id="out" style="display:none">
+    <div class="card">
+      <label>Public key (JWK) — embed this in evidence-verifier.html and in your Grade 2 attestation endpoint's config; safe to distribute widely</label>
+      <textarea id="out-public" readonly></textarea>
+    </div>
+    <div class="card">
+      <label>Private key (JWK) — keep this secret; only your Grade 2 attestation endpoint (see scripts/reference-org-signer.js) ever loads it, and it never ships in any build of the product itself</label>
+      <textarea id="out-private" readonly></textarea>
+    </div>
+  </div>
+</div>
+
+<script>
+(function(){
+  'use strict';
+  document.getElementById('btn-generate').addEventListener('click', async function(){
+    const keyPair = await crypto.subtle.generateKey({ name: 'ECDSA', namedCurve: 'P-256' }, true, ['sign', 'verify']);
+    const publicKeyJwk = await crypto.subtle.exportKey('jwk', keyPair.publicKey);
+    const privateKeyJwk = await crypto.subtle.exportKey('jwk', keyPair.privateKey);
+    document.getElementById('out-public').value = JSON.stringify(publicKeyJwk, null, 2);
+    document.getElementById('out-private').value = JSON.stringify(privateKeyJwk, null, 2);
+    document.getElementById('out').style.display = 'block';
+  });
+})();
+</script>
+</body>
+</html>

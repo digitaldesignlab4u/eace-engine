@@ -1,10 +1,12 @@
 {
   "name": "eace-tasting-menu-regression",
   "version": "1.0.0",
-  "description": "Regression harness for eace-compliance-tasting-menu.html — drives every mode x track x sector combination through a full quiz session and checks for zero console errors.",
+  "description": "Regression harness for both EACE Compliance Tasting Menu editions — drives every mode x track x sector combination through a full quiz session, checking for zero console errors, zero CSP violations, and a correctly round-tripping completion receipt (incl. Croatian diacritics).",
   "private": true,
   "scripts": {
-    "test": "node run.js"
+    "test": "node run.js",
+    "test:portable": "node run.js",
+    "test:web": "node run-web-edition.js"
   },
   "dependencies": {
     "playwright": "^1.62.1"

@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<!-- ═══════════════════════════════════════════════════
+     EDITION: Enterprise/Web Edition (this build)
+     Markup, styles and data live in separate same-origin files
+     (styles.css, questions.js, legal-sources.js, app.js), which is what
+     lets the CSP below drop 'unsafe-inline'. Built FROM the single-file
+     Portable Edition (../eace-compliance-tasting-menu.html, the source
+     of truth) by ../scripts/build-web-edition.js — never hand-edit the
+     files in this directory; re-run that script instead, or edits will
+     be silently lost and the two editions will drift apart. See
+     README.md in this directory for the two editions' respective
+     trade-offs and when to use each.
+     ═══════════════════════════════════════════════════ -->
+<!-- This file loads no external network resources of its own (no <img>,
+     fetch, XHR, WebSocket, or sendBeacon anywhere in the code) beyond the
+     same-origin <link>/<script> files below — connect-src 'none' makes
+     that a browser-enforced guarantee, not just a design intent. This is
+     the Enterprise/Web Edition (see eace-compliance-tasting-menu.html for
+     the single-file Portable Edition): styles.css, questions.js,
+     legal-sources.js and app.js are all served same-origin, so
+     script-src/style-src can be 'self' instead of the Portable Edition's
+     'unsafe-inline' — no inline script or style exists in this file.
+     Instrument Sans and DM Mono stay embedded as base64 data: URIs inside
+     styles.css, so font-src still allows data: rather than 'self'. -->
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self'; style-src 'self'; img-src data:; font-src data:; connect-src 'none'; frame-src 'none'; object-src 'none'; base-uri 'none'; form-action 'none';">
+<title>EACE.ai — Compliance Tasting Menu (Web Edition)</title>
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<div class="wrap">
+
+  <!-- SCREEN 1 — Welcome / name entry (local only — never transmitted) -->
+  <section id="screen-welcome">
+    <div class="brand-row">
+      <div class="brand-mark">
+        <div class="d w"></div><div class="d w"></div><div class="d w"></div>
+        <div class="d w"></div><div class="d g"></div><div class="d w"></div>
+        <div class="d g"></div><div class="d w"></div><div class="d g"></div>
+      </div>
+      <div class="brand-word">EACE<span class="gd">.ai</span></div>
+    </div>
+    <div class="brand-tagline">From Crisis to Authority&trade;</div>
+    <div class="eyebrow">EU AI Compliance Engine</div>
+    <h1 id="welcome-title" tabindex="-1">AI Literacy That Can Survive an Audit</h1>
+    <p class="lede lede-tight">355 legally mapped scenarios · 12 sector tracks · role-based learning · local-first assessment</p>
+    <p class="lede" id="welcome-sub">Compliance Tasting Menu — a short, scenario-based AI Act check-in.</p>
+    <p class="trust-strip">Runs locally · No account · No tracking · No answers transmitted</p>
+    <div class="card">
+
+      <div class="step">
+        <div class="step-head"><span class="step-num">01</span><span class="step-title">Choose your session</span><span class="step-rule"></span></div>
+        <div class="mode-grid" id="mode-grid">
+          <button type="button" class="mode-card" data-mode="pulse" aria-pressed="false">
+            <span class="m-tag">5 questions · ~5 min</span>
+            <span class="m-name">Daily Pulse</span>
+            <span class="m-desc">Stay sharp. A short rotating draw from the live pool.</span>
+          </button>
+          <button type="button" class="mode-card" data-mode="onboarding" aria-pressed="false">
+            <span class="m-tag">18 questions · ~15 min</span>
+            <span class="m-name">Onboarding</span>
+            <span class="m-desc">Build the foundation. The same fixed set for every new hire.</span>
+          </button>
+          <button type="button" class="mode-card" data-mode="deepdive" aria-pressed="false">
+            <span class="m-tag">20 questions · ~20 min</span>
+            <span class="m-name">Deep Dive</span>
+            <span class="m-desc">Test applied understanding. Fixed set, rotates every six months.</span>
+          </button>
+          <button type="button" class="mode-card" data-mode="exam" aria-pressed="false">
+            <span class="m-tag">30 questions · 80% to pass</span>
+            <span class="m-name">Annual Assessment</span>
+            <span class="m-desc">Measure competence. Feedback withheld until the assessment ends.</span>
+          </button>
+        </div>
+      </div>
+
+      <div class="step is-hidden" id="step-scope">
+        <div class="step-head"><span class="step-num">02</span><span class="step-title">Set the scope</span><span class="step-rule"></span></div>
+        <div class="chip-row" id="scope-chips">
+          <button type="button" class="chip active" data-scope="all" aria-pressed="true">General</button>
+          <button type="button" class="chip" data-scope="manager" aria-pressed="false">Manager</button>
+          <button type="button" class="chip" data-scope="compliance" aria-pressed="false">Compliance &amp; Legal</button>
+          <button type="button" class="chip" data-scope="technical" aria-pressed="false">Technical</button>
+          <button type="button" class="chip" data-scope="sector" aria-pressed="false">Sector</button>
+        </div>
+        <p class="step-note is-hidden" id="mode-note"></p>
+        <div id="role-field" class="is-hidden">
+          <label for="in-role">Track</label>
+          <select id="in-role"></select>
+        </div>
+        <div id="sector-field" class="is-hidden">
+          <label for="in-sector">Sector</label>
+          <select id="in-sector"></select>
+          <p class="hint">Your sector does not determine your AI Act risk class. The scenarios below test the legal triggers that may arise within it.</p>
+        </div>
+      </div>
+
+      <div class="step is-hidden" id="step-name">
+        <div class="step-head"><span class="step-num">03</span><span class="step-title">Sign the session</span><span class="step-rule"></span></div>
+        <label for="in-name" class="mt-0">Your name</label>
+        <input type="text" id="in-name" placeholder="e.g. Ana Kovač" autocomplete="off">
+        <p class="hint">Used only for this session and the completion receipt. EACE does not store or transmit it.</p>
+        <label class="checkbox-row" for="in-remember">
+          <input type="checkbox" id="in-remember">
+          <span>Remember which questions I've seen on this device</span>
+        </label>
+        <p class="hint">Opt-in only. Stores question IDs alone — no name, no answers, no scores — so Pulse/Sector draws can favour questions you haven't had yet. <button type="button" class="link-btn hidden-init" id="btn-reset-progress">Reset this device's progress</button></p>
+      </div>
+
+      <div class="btn-row">
+        <button class="btn btn-primary" id="btn-start" disabled>Begin →</button>
+      </div>
+    </div>
+    <p class="hint">Content mapped to and under rolling legal review against Regulation (EU) 2024/1689, as amended by Regulation (EU) 2026/1744. General pool: 161 questions, grounded in the 120-card Daily Audit Tasting library. Manager/Compliance/Technical tracks add a separate, harder layer on top. Sector pool: 194 questions across 12 tracks — scenario groupings tested against use-case and legal-trigger analysis, not industry labels — designed as a companion to the general foundation, accessible any time via ?type=sector. Pulse, onboarding, 6-month deep-dive and annual exam cadences.</p>
+  </section>
+
+  <!-- SCREEN 2 — Question -->
+  <section id="screen-quiz" class="hidden-init">
+    <button type="button" class="btn-back" id="btn-back-quiz">← Change session</button>
+    <div class="progress-track" role="progressbar" aria-label="Question progress" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" id="progress-track"><div class="progress-fill" id="progress-fill"></div></div>
+    <div id="exam-note" class="exam-note no-print hidden-init">
+      Exam mode — fixed question set for this year, feedback withheld until the end. 80% is EACE's internal assessment benchmark, not a regulatory threshold.
+    </div>
+    <div class="quiz-grid">
+      <aside class="rail" id="rail">
+        <div class="rail-block"><div class="r-label">Session</div><div class="r-val" id="rail-session">—</div></div>
+        <div class="rail-block" id="rail-scope-block"><div class="r-label" id="rail-scope-label">Track</div><div class="r-val" id="rail-scope">—</div></div>
+        <div class="rail-block"><div class="r-label">Legal area</div><div class="r-val" id="rail-area">—</div></div>
+        <div class="rail-block"><div class="r-label">Source</div><div class="r-val mono" id="q-source"></div></div>
+        <div class="rail-block"><div class="r-label">Progress</div><div class="r-val mono" id="q-count"></div></div>
+        <div class="rail-block" id="rail-diff-block"><div class="r-label">Difficulty</div><div class="r-val" id="rail-diff"></div></div>
+      </aside>
+      <div class="quiz-main">
+        <div class="card">
+          <p class="q-text" id="q-text" tabindex="-1"></p>
+          <div id="q-options"></div>
+
+          <div class="feedback" id="feedback" role="status" aria-live="polite">
+            <div class="voice">
+              <div class="avatar alba">A</div>
+              <div><div class="voice-name alba">Alba</div><div class="voice-text" id="fb-alba"></div></div>
+            </div>
+            <div class="voice">
+              <div class="avatar kai">K</div>
+              <div><div class="voice-name kai">Kai</div><div class="voice-text" id="fb-kai"></div></div>
+            </div>
+            <div class="btn-row">
+              <button class="btn btn-primary" id="btn-next">Next →</button>
+            </div>
+          </div>
+          <div class="feedback exam-plain" id="feedback-exam" role="status" aria-live="polite">
+            <p class="hint hint-exam-plain">Answer recorded. Feedback is withheld until the assessment ends.</p>
+            <div class="btn-row">
+              <button class="btn btn-primary" id="btn-next-exam">Next →</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SCREEN 3 — Result / completion summary -->
+  <section id="screen-result" class="hidden-init">
+    <div class="brand-row">
+      <div class="brand-mark">
+        <div class="d w"></div><div class="d w"></div><div class="d w"></div>
+        <div class="d w"></div><div class="d g"></div><div class="d w"></div>
+        <div class="d g"></div><div class="d w"></div><div class="d g"></div>
+      </div>
+      <div class="brand-word">EACE<span class="gd">.ai</span></div>
+    </div>
+    <div class="brand-tagline">From Crisis to Authority&trade;</div>
+    <div class="eyebrow">Compliance Tasting Menu</div>
+    <h1 id="result-title" tabindex="-1">Session complete</h1>
+    <div class="progress-track progress-track-result"><div class="progress-fill progress-fill-full"></div></div>
+    <div class="card card-mt-result">
+      <div class="snap-head">
+        <div class="snap-pct" id="result-pct">—</div>
+        <div class="snap-label" id="snap-label">—</div>
+      </div>
+      <div class="snap-score"><span id="result-score">—</span> correct</div>
+      <div id="snap-domains"></div>
+      <div id="snap-callouts"></div>
+      <div class="snap-wave">
+        <div class="wave-note show" id="wave-note">
+          <div class="avatar">W</div>
+          <div class="txt" id="wave-note-txt"></div>
+        </div>
+      </div>
+      <div id="result-body"></div>
+      <div id="token-section" class="hidden-init">
+        <label class="label-mt-sm">EACE completion receipt</label>
+        <div class="token-box" id="token-out"></div>
+        <p class="hint">This is a self-reported completion receipt, not an auditable evidence record. Copy it and send it to HR/IT via your internal channel — it encodes name, score, date and focus area, nothing else, and is decoded locally by EACE's admin tool, never transmitted by this page. If you choose to copy, print or send this receipt, that subsequent handling happens outside this local module and is governed by your organisation's own processes.</p>
+      </div>
+      <div class="btn-row no-print">
+        <button class="btn" id="btn-restart">Start again</button>
+        <button class="btn btn-primary" id="btn-print">Print completion summary →</button>
+      </div>
+    </div>
+    <div class="legal">
+      Legal Notice — This module is an organisational training aid and does not constitute legal advice. Content mapped to and under rolling legal review against Regulation (EU) 2024/1689 (EU AI Act), as amended by Regulation (EU) 2026/1744 (Digital Omnibus on AI). High-risk AI systems are subject to human-oversight requirements under Article 14, with oversight measures appropriate to the risks, level of autonomy and context of use.<br>
+      © 2026 EACE · digitaldesignlab4u · FROM CRISIS TO AUTHORITY™
+    </div>
+  </section>
+
+</div>
+
+<script src="questions.js"></script>
+<script src="legal-sources.js"></script>
+<script src="app.js"></script>
+</body>
+</html>

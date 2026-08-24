@@ -38,7 +38,12 @@ async function runExamSession(page) {
     if (!(await page.isVisible('#screen-quiz'))) break;
     await page.waitForSelector('#q-options .opt', { state: 'visible' });
     await page.click('#q-options .opt >> nth=0');
-    await page.click('#btn-next-exam');
+    await page.click('#btn-next');
+  }
+  // Every question was just answered above, so Review & Submit has nothing
+  // to flag — confirm straight through to the result screen.
+  if (await page.isVisible('#screen-submit')) {
+    await page.click('#btn-confirm-submit');
   }
   await page.waitForSelector('#evidence-result', { state: 'visible' });
   return decodeEvidenceToken(await page.textContent('#evidence-token'));

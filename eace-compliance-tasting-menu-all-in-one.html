@@ -217,10 +217,51 @@ select{width:100%;background:var(--bg3);border:0.5px solid var(--line2);border-r
 .r-sub{font-size:11px;color:var(--muted);line-height:1.5;margin-top:0.2rem}
 .r-sub.mono{font-family:var(--mono);font-size:10px;letter-spacing:0.02em}
 .r-sub.is-hidden{display:none}
-.progress-dots{display:flex;gap:5px;margin:0.35rem 0 0.3rem}
-.progress-dots .dot{width:6px;height:6px;border-radius:50%;background:var(--line2)}
+.progress-dots{display:flex;gap:7px;margin:0.35rem 0 0.3rem}
+.progress-dots .dot{width:6px;height:6px;padding:0;border-radius:50%;background:var(--line2);border:none;
+  cursor:pointer}
+.progress-dots .dot:disabled{cursor:not-allowed}
 .progress-dots .dot.done{background:var(--gold)}
 .progress-dots .dot.current{background:var(--gold);box-shadow:0 0 0 3px rgba(205,168,86,0.22)}
+
+/* ---- Question Navigator (onboarding/deep-dive/exam, >10 questions) ----
+   A native <details> disclosure, not custom JS open/close state — free
+   keyboard operability and no focus-trap code to get right ourselves. */
+.qnav{margin-top:0.35rem}
+.qnav summary{cursor:pointer;font-family:var(--mono);font-size:11px;letter-spacing:0.06em;
+  text-transform:uppercase;color:var(--muted);list-style:none}
+.qnav summary::-webkit-details-marker{display:none}
+.qnav summary::after{content:' ▾';color:var(--gold)}
+.qnav[open] summary::after{content:' ▴'}
+.qnav-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(32px,1fr));gap:0.4rem;
+  margin-top:0.65rem;max-width:460px}
+.qnav-chip{position:relative;width:32px;height:32px;padding:0;border-radius:4px;border:0.5px solid var(--line2);
+  background:var(--bg3);color:var(--muted);font-family:var(--mono);font-size:11px;cursor:pointer;
+  display:flex;align-items:center;justify-content:center}
+.qnav-chip:disabled{opacity:0.4;cursor:not-allowed}
+.qnav-chip.answered{border-color:var(--gold);background:rgba(203,170,110,0.16);color:var(--gold)}
+.qnav-chip.current{border-width:1.5px;border-color:var(--ink);color:var(--ink)}
+.qnav-chip.marked::after{content:'';position:absolute;top:3px;right:3px;width:5px;height:5px;
+  border-radius:50%;background:var(--red)}
+
+/* ---- Persistent nav footer + Mark for review + unanswered gate ----
+   Replaces the old per-panel "Next" buttons that only existed inside the
+   post-answer feedback state — Previous/Next now live outside the
+   feedback panels so they're visible from the moment a question renders,
+   not just after it's answered. */
+.quiz-nav-footer{display:flex;align-items:center;justify-content:space-between;gap:0.75rem;
+  margin-top:1.75rem;padding-top:1.25rem;border-top:0.5px solid var(--line)}
+.quiz-nav-footer .btn{margin:0}
+.quiz-nav-center{display:flex;gap:0.6rem;flex:1;justify-content:center}
+#btn-mark-review.active{border-color:var(--gold);color:var(--gold)}
+.unanswered-gate{margin-top:1.75rem;padding-top:1.25rem;border-top:0.5px solid var(--line)}
+.unanswered-gate .btn-row{justify-content:flex-start}
+
+/* ---- Review & Submit (Annual Assessment) ---- */
+.submit-stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:1rem;margin-top:1.4rem}
+.submit-stat{background:var(--bg3);border:0.5px solid var(--line2);border-radius:var(--r);padding:0.9rem 1rem}
+.submit-stat-label{font-family:var(--mono);font-size:9.5px;letter-spacing:0.1em;text-transform:uppercase;color:var(--muted)}
+.submit-stat-val{font-family:var(--serif);font-size:1.6rem;color:var(--gold);margin-top:0.2rem}
 @media(min-width:1024px){
   .quiz-grid{grid-template-columns:1.85fr 1fr;align-items:start}
   .quiz-main{grid-column:1;grid-row:1}
@@ -545,6 +586,10 @@ h1[tabindex="-1"]:focus-visible,
         <div class="rail-block">
           <div class="r-label">Progress</div>
           <div class="progress-dots" id="progress-dots"></div>
+          <details class="qnav no-print" id="qnav" style="display:none">
+            <summary id="qnav-summary">1 / —</summary>
+            <div class="qnav-grid" id="qnav-grid"></div>
+          </details>
           <div class="r-val mono" id="q-count"></div>
         </div>
       </aside>
@@ -564,17 +609,44 @@ h1[tabindex="-1"]:focus-visible,
               <div class="avatar kai">K</div>
               <div><div class="voice-name kai">Kai</div><div class="voice-text" id="fb-kai"></div></div>
             </div>
-            <div class="btn-row">
-              <button class="btn btn-primary" id="btn-next">Next →</button>
-            </div>
           </div>
           <div class="feedback exam-plain" id="feedback-exam" role="status" aria-live="polite">
-            <p class="hint" style="margin:0 0 1rem">Answer recorded. Feedback is withheld until the assessment ends.</p>
+            <p class="hint" style="margin:0">Answer recorded. Feedback is withheld until the assessment ends.</p>
+          </div>
+
+          <div class="quiz-nav-footer no-print">
+            <button type="button" class="btn" id="btn-prev">← Previous</button>
+            <div class="quiz-nav-center">
+              <button type="button" class="btn" id="btn-mark-review" style="display:none">Mark for review</button>
+              <button type="button" class="btn" id="btn-review-submit" style="display:none">Review &amp; Submit →</button>
+            </div>
+            <button type="button" class="btn btn-primary" id="btn-next">Next →</button>
+          </div>
+          <div class="unanswered-gate no-print" id="unanswered-gate" style="display:none" role="status" aria-live="polite">
+            <p class="hint" id="unanswered-gate-text"></p>
             <div class="btn-row">
-              <button class="btn btn-primary" id="btn-next-exam">Next →</button>
+              <button type="button" class="btn" id="btn-review-unanswered">Review unanswered →</button>
+              <button type="button" class="btn btn-primary" id="btn-finish-anyway">Finish anyway →</button>
             </div>
           </div>
         </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SCREEN 2b — Annual Assessment: Review & Submit -->
+  <section id="screen-submit" style="display:none">
+    <button type="button" class="btn-back no-print" id="btn-back-submit">← Back to questions</button>
+    <div class="card">
+      <div class="eyebrow">Annual Assessment</div>
+      <h1 style="font-size:1.5rem" id="submit-title" tabindex="-1">Review &amp; Submit Assessment</h1>
+      <p class="lede">Review your answers below, or submit now — your attempt locks once submitted.</p>
+      <div class="submit-stats" id="submit-stats"></div>
+      <p class="hint" id="submit-warning" style="display:none">Unanswered questions will be scored as incorrect.</p>
+      <div class="qnav-grid" id="submit-qnav-grid" style="margin-top:1.25rem"></div>
+      <div class="btn-row no-print">
+        <button type="button" class="btn" id="btn-cancel-submit">Continue reviewing</button>
+        <button type="button" class="btn btn-primary" id="btn-confirm-submit">Submit Assessment →</button>
       </div>
     </div>
   </section>
@@ -720,6 +792,9 @@ const DOM = {
   qText: document.getElementById('q-text'),
   qOptions: document.getElementById('q-options'),
   progressDots: document.getElementById('progress-dots'),
+  qnav: document.getElementById('qnav'),
+  qnavSummary: document.getElementById('qnav-summary'),
+  qnavGrid: document.getElementById('qnav-grid'),
   railSession: document.getElementById('rail-session'),
   railScope: document.getElementById('rail-scope'),
   railArea: document.getElementById('rail-area'),
@@ -727,9 +802,24 @@ const DOM = {
   feedback: document.getElementById('feedback'),
   fbAlba: document.getElementById('fb-alba'),
   fbKai: document.getElementById('fb-kai'),
-  btnNext: document.getElementById('btn-next'),
   feedbackExam: document.getElementById('feedback-exam'),
-  btnNextExam: document.getElementById('btn-next-exam'),
+  quizNavFooter: document.querySelector('.quiz-nav-footer'),
+  btnPrev: document.getElementById('btn-prev'),
+  btnNext: document.getElementById('btn-next'),
+  btnMarkReview: document.getElementById('btn-mark-review'),
+  btnReviewSubmit: document.getElementById('btn-review-submit'),
+  unansweredGate: document.getElementById('unanswered-gate'),
+  unansweredGateText: document.getElementById('unanswered-gate-text'),
+  btnReviewUnanswered: document.getElementById('btn-review-unanswered'),
+  btnFinishAnyway: document.getElementById('btn-finish-anyway'),
+  screenSubmit: document.getElementById('screen-submit'),
+  btnBackSubmit: document.getElementById('btn-back-submit'),
+  submitTitle: document.getElementById('submit-title'),
+  submitStats: document.getElementById('submit-stats'),
+  submitWarning: document.getElementById('submit-warning'),
+  submitQnavGrid: document.getElementById('submit-qnav-grid'),
+  btnCancelSubmit: document.getElementById('btn-cancel-submit'),
+  btnConfirmSubmit: document.getElementById('btn-confirm-submit'),
   resultScore: document.getElementById('result-score'),
   resultPct: document.getElementById('result-pct'),
   snapLabel: document.getElementById('snap-label'),
@@ -762,6 +852,31 @@ const MODE_META = {
 };
 const SCOPE_LABELS = { all:'General', manager:'Manager', compliance:'Compliance & Legal', technical:'Technical', sector:'Sector' };
 
+// ---- Navigation rules by mode — an assessment-design decision, not just
+// UX: how freely someone can move through a session, and whether an
+// answer can change once given, has to match what the session is FOR.
+//   canSkip        — Next allowed before the current question is answered
+//   lockOnAnswer   — once answered (and feedback shown), the choice is
+//                    permanent; revisiting only re-displays it read-only
+//   markForReview  — the "flag this, come back later" affordance
+//   requiresSubmit — completion is an explicit, reviewable action (Review
+//                    & Submit), not just falling off the last question
+// Pulse/Sector stay strictly linear (short, immediate-feedback learning
+// moments — reconsidering after seeing the answer defeats the point).
+// Onboarding/Deep Dive allow skipping and revisiting, but still lock an
+// answer the moment feedback is shown, for the same reason. Only the
+// Annual Assessment is a real exam: feedback is withheld throughout, so
+// there is nothing "seen" to make reconsidering unfair — full navigation,
+// changeable answers, and an explicit Submit are how a real assessment
+// works.
+const NAV_MODEL = {
+  pulse:      { canSkip:false, lockOnAnswer:true,  markForReview:false, requiresSubmit:false },
+  sector:     { canSkip:false, lockOnAnswer:true,  markForReview:false, requiresSubmit:false },
+  onboarding: { canSkip:true,  lockOnAnswer:true,  markForReview:false, requiresSubmit:false },
+  deepdive:   { canSkip:true,  lockOnAnswer:true,  markForReview:false, requiresSubmit:false },
+  exam:       { canSkip:true,  lockOnAnswer:false, markForReview:true,  requiresSubmit:true  }
+};
+
 // Which card is lit on the launch screen, and which scope chip is picked.
 let launchCard = null;      // 'pulse' | 'onboarding' | 'deepdive' | 'exam'
 let scopePick  = 'all';     // 'all' | 'manager' | 'compliance' | 'technical' | 'sector'
@@ -770,16 +885,19 @@ let scopePick  = 'all';     // 'all' | 'manager' | 'compliance' | 'technical' | 
 function showWelcomeScreen(){
   DOM.screenWelcome.style.display = 'block';
   DOM.screenQuiz.style.display = 'none';
+  DOM.screenSubmit.style.display = 'none';
   DOM.screenResult.style.display = 'none';
   const h = document.getElementById('welcome-title');
   if (h) h.focus();
 }
 function showQuizScreen(){
   DOM.screenWelcome.style.display = 'none';
+  DOM.screenSubmit.style.display = 'none';
   DOM.screenQuiz.style.display = 'block';
 }
 function showResultScreen(){
   DOM.screenQuiz.style.display = 'none';
+  DOM.screenSubmit.style.display = 'none';
   DOM.screenResult.style.display = 'block';
   if (DOM.resultTitle) DOM.resultTitle.focus();
 }
@@ -884,12 +1002,29 @@ function init(){
   updateWelcomeUI();
 
   DOM.btnStart.addEventListener('click', startSession);
-  DOM.btnNext.addEventListener('click', handleNext);
-  DOM.btnNextExam.addEventListener('click', handleNext);
+  DOM.btnPrev.addEventListener('click', goPrev);
+  DOM.btnNext.addEventListener('click', goNext);
+  DOM.btnMarkReview.addEventListener('click', toggleMarkForReview);
+  DOM.btnReviewSubmit.addEventListener('click', showReviewSubmitScreen);
+  DOM.btnReviewUnanswered.addEventListener('click', function(){
+    hideUnansweredGate();
+    const missing = unansweredQuestionIds();
+    if (missing.length){
+      idx = sessionQuestions.findIndex(q => q.id === missing[0]);
+      renderQuestion();
+    }
+  });
+  DOM.btnFinishAnyway.addEventListener('click', function(){
+    hideUnansweredGate();
+    showResult();
+  });
+  DOM.btnBackSubmit.addEventListener('click', function(){ showQuizScreen(); renderQuestion(); });
+  DOM.btnCancelSubmit.addEventListener('click', function(){ showQuizScreen(); renderQuestion(); });
+  DOM.btnConfirmSubmit.addEventListener('click', showResult);
   DOM.btnBackQuiz.addEventListener('click', function(){
-    const hasProgress = answers.length > 0;
+    const hasProgress = Object.keys(answerState).length > 0;
     if (hasProgress && !confirm('Leave this session? Your progress on this attempt will be lost unless you use "Save progress →" first.')) return;
-    idx = 0; score = 0; answers = [];
+    idx = 0; answerState = {}; markedForReview = new Set();
     showWelcomeScreen();
   });
   DOM.btnRestart.addEventListener('click', restartToWelcome);
@@ -6049,10 +6184,13 @@ let roleFilter = 'all';
 let sectorFilter = SECTORS[0].v;
 let sessionQuestions = [];
 let currentManifestId = null; // set for exam/deepdive/onboarding, null for pulse/sector
-let idx = 0;
-let score = 0;
-let answered = false;
-let answers = [];             // {id, correct} — kept in memory only, for the token
+let idx = 0;                  // index of the question currently on screen — can move both
+                               // directions and jump (navigator), not just increment
+let answerState = {};         // { [questionId]: { correct: bool } } — one entry per
+                               // ANSWERED question, keyed by ID so it survives Previous/
+                               // Next/jump navigation regardless of answer order. score is
+                               // never live-incremented; see finalAnswers()/currentScore().
+let markedForReview = new Set(); // question IDs (Annual Assessment only)
 let sessionStartedAt = null;      // Evidence Mode: local session-start clock value
 let attemptId = null;             // Lifecycle ID for THIS attempt, generated once at startSession()
                                    // and threaded into both the receipt and the evidence object, so
@@ -6165,7 +6303,7 @@ function startSession(){
     currentManifestId = null;
   }
 
-  idx = 0; score = 0; answers = [];
+  idx = 0; answerState = {}; markedForReview = new Set();
   showQuizScreen();
   DOM.examNote.style.display = (mode === 'exam') ? 'block' : 'none';
   DOM.examNote.textContent = 'Exam mode — fixed question set for this year, feedback withheld until the end. 80% is EACE\'s internal assessment benchmark, not a regulatory threshold.';
@@ -6184,13 +6322,18 @@ function startSession(){
 // page. The name is opt-in and omitted by default (see in-save-name); on
 // resume, a missing name is asked for again rather than silently defaulting,
 // same as at the start of a fresh session.
+//
+// v2: answers moved from a positional array (one entry per question in
+// answer order) to one entry per ANSWERED question keyed by its own ID,
+// with the picked option's index alongside the correctness flag — because
+// navigation is no longer strictly linear (Previous/Next/jump/skip), a
+// position in an array can no longer stand in for "which question this
+// answer belongs to." current_index is now saved exactly as the person
+// left it (the screen they were looking at), not adjusted for whether it
+// was mid-answer, since idx itself no longer means "next to render."
 function buildSessionSnapshot(){
   const includeName = !!(DOM.inSaveName && DOM.inSaveName.checked);
   const evidenceCheckbox = document.getElementById('in-evidence');
-  // If the visible question has already been answered but "Next" hasn't
-  // been clicked yet, save the position AFTER it — resuming must land on
-  // the next unanswered question, not re-offer one already in `answers`.
-  const nextIndex = idx + (answered ? 1 : 0);
   return {
     eace_session_file: true,
     schema_version: SESSION_FILE_VERSION,
@@ -6205,9 +6348,22 @@ function buildSessionSnapshot(){
     assessment_manifest_id: currentManifestId,
     evidence_opt_in: !!(evidenceCheckbox && evidenceCheckbox.checked),
     question_ids: sessionQuestions.map(q => q.id),
-    current_index: nextIndex,
-    answers: answers.slice(),
-    score: score,
+    current_index: idx,
+    // option_order: for each position in the shuffled/displayed order,
+    // which index into the question's own (unshuffled) options array it
+    // came from — lets resume reconstruct the exact same visual order, so
+    // a saved picked_index still points at the option actually picked.
+    answers: Object.keys(answerState).map(function(id){
+      const q = sessionQuestions.find(sq => sq.id === id);
+      const shownOpts = shuffledOptionsCache[id] || optionsForQuestion(q);
+      return {
+        id: id,
+        option_order: shownOpts.map(o => q.options.indexOf(o)),
+        picked_index: answerState[id].pickedIndex,
+        correct: answerState[id].correct
+      };
+    }),
+    marked_for_review: Array.from(markedForReview),
     name: includeName ? userName : null
   };
 }
@@ -6311,27 +6467,47 @@ async function resumeSessionFromFile(file){
     }
   }
 
-  if (typeof snap.current_index !== 'number' || !Number.isInteger(snap.current_index) || snap.current_index < 0 || snap.current_index > resolved.length){
+  if (typeof snap.current_index !== 'number' || !Number.isInteger(snap.current_index) || snap.current_index < 0 || snap.current_index >= resolved.length){
     alert('This saved session file has an invalid saved position. It cannot be resumed.');
     return;
   }
-  if (!Array.isArray(snap.answers) || snap.answers.length !== snap.current_index){
-    alert('This saved session file\'s recorded answers don\'t match its saved position. It cannot be safely resumed.');
+
+  // Each answer carries option_order — the exact shuffled display order
+  // for that question, as original-option-array indices — not just
+  // picked_index. Navigation is no longer linear, so option order is
+  // never re-derived from a live shuffle() on resume: without the saved
+  // order, a fresh reshuffle would make an old picked_index point at a
+  // DIFFERENT option than the one actually picked. correct is recomputed
+  // from option_order + picked_index against the live question data below
+  // — never trusted from the file directly, same principle as the
+  // v1 hardening pass, just applied one level deeper than a flat score.
+  if (!Array.isArray(snap.answers) || snap.answers.length > resolved.length){
+    alert('This saved session file\'s recorded answers don\'t match this session. It cannot be safely resumed.');
     return;
   }
-  // Each answer must be a well-formed {id, correct} pair AND correspond,
-  // in order, to the question at that position in the resolved set — not
-  // just "the right length." Prevents a file where question_ids and
-  // answers were edited independently and no longer describe one
-  // consistent attempt.
-  const answersWellFormed = snap.answers.every((a, i) =>
-    a && typeof a === 'object' && typeof a.id === 'string' &&
-    typeof a.correct === 'boolean' && a.id === resolved[i].id
-  );
+  const resolvedIds = new Set(resolved.map(q => q.id));
+  const seenAnswerIds = new Set();
+  const answersWellFormed = snap.answers.every(a => {
+    if (!a || typeof a !== 'object' || typeof a.id !== 'string') return false;
+    if (seenAnswerIds.has(a.id)) return false;
+    seenAnswerIds.add(a.id);
+    if (!resolvedIds.has(a.id)) return false;
+    const q = byId.get(a.id);
+    if (!Array.isArray(a.option_order) || a.option_order.length !== q.options.length) return false;
+    const seenPos = new Set();
+    for (const pos of a.option_order){
+      if (!Number.isInteger(pos) || pos < 0 || pos >= q.options.length || seenPos.has(pos)) return false;
+      seenPos.add(pos);
+    }
+    return Number.isInteger(a.picked_index) && a.picked_index >= 0 && a.picked_index < a.option_order.length;
+  });
   if (!answersWellFormed){
-    alert('This saved session file\'s recorded answers are malformed or don\'t match the saved question order. It cannot be safely resumed.');
+    alert('This saved session file\'s recorded answers are malformed or reference a question they don\'t belong to. It cannot be safely resumed.');
     return;
   }
+  const markedIds = Array.isArray(snap.marked_for_review)
+    ? snap.marked_for_review.filter(id => typeof id === 'string' && resolvedIds.has(id))
+    : [];
 
   mode = snap.mode;
   roleFilter = ROLES.some(r => r.v === snap.role_filter) ? snap.role_filter : 'all';
@@ -6341,12 +6517,20 @@ async function resumeSessionFromFile(file){
   sessionStartedAt = snap.session_started_at || new Date().toISOString();
   sessionQuestions = resolved;
   idx = snap.current_index;
-  answers = snap.answers.slice();
-  // Never trust an imported score field directly — recompute it from the
-  // per-question correctness flags just validated above, so editing
-  // "score" in the file (with or without touching "answers") cannot
-  // inflate a result beyond what the recorded answers actually support.
-  score = answers.filter(a => a.correct === true).length;
+  markedForReview = new Set(markedIds);
+
+  shuffledOptionsCache = {};
+  answerState = {};
+  snap.answers.forEach(a => {
+    const q = byId.get(a.id);
+    const reconstructed = a.option_order.map(origIdx => q.options[origIdx]);
+    shuffledOptionsCache[a.id] = reconstructed;
+    answerState[a.id] = {
+      correct: !!(reconstructed[a.picked_index] && reconstructed[a.picked_index].c),
+      pickedIndex: a.picked_index
+    };
+  });
+
   userName = (snap.name && String(snap.name).trim()) ||
     ((prompt('Your name (stays on this device only):', '') || '').trim()) || 'Anonymous';
 
@@ -6356,12 +6540,8 @@ async function resumeSessionFromFile(file){
   DOM.examNote.style.display = (mode === 'exam') ? 'block' : 'none';
   DOM.examNote.textContent = 'Exam mode — fixed question set for this year, feedback withheld until the end. 80% is EACE\'s internal assessment benchmark, not a regulatory threshold.';
 
-  if (idx >= sessionQuestions.length){
-    showResult(); // every saved question was already answered — nothing left to render
-  } else {
-    showQuizScreen();
-    renderQuestion();
-  }
+  showQuizScreen();
+  renderQuestion();
 }
 
 // ---- Legal-area mapping: legal_source_id -> short domain label ----
@@ -6406,13 +6586,42 @@ function difficultyOf(q){
   return q.role === 'all' ? 'Foundation' : 'Advanced layer';
 }
 
+// Each question's option order is shuffled once and cached, not
+// re-shuffled on every render — otherwise revisiting a question via
+// Previous/navigator would reshuffle the options under the person's feet
+// and the stored pickedIndex would point at the wrong option.
+let shuffledOptionsCache = {}; // { [questionId]: shuffledOptionsArray }
+function optionsForQuestion(q){
+  if (!shuffledOptionsCache[q.id]) shuffledOptionsCache[q.id] = shuffle(q.options);
+  return shuffledOptionsCache[q.id];
+}
+
+// ---- Derived answer state — score is NEVER live-incremented. It's
+// always recomputed from answerState at the moment it's needed, so
+// Previous/Next/jump navigation can't desync it from what's actually
+// recorded. Unanswered questions count as incorrect once a final tally is
+// taken (finalAnswers()) — never silently omitted. ----
+function finalAnswers(){
+  return sessionQuestions.map(q => {
+    const a = answerState[q.id];
+    return { id: q.id, correct: a ? !!a.correct : false };
+  });
+}
+function currentScore(){
+  return finalAnswers().filter(a => a.correct).length;
+}
+function unansweredQuestionIds(){
+  return sessionQuestions.filter(q => !answerState[q.id]).map(q => q.id);
+}
+
 function renderQuestion(){
-  answered = false;
   const q = sessionQuestions[idx];
+  const rules = NAV_MODEL[mode];
+  const existing = answerState[q.id];
+
   DOM.progressFill.style.width = ((idx) / sessionQuestions.length * 100) + '%';
   DOM.progressTrack.setAttribute('aria-valuenow', Math.round((idx) / sessionQuestions.length * 100));
   DOM.progressTrack.setAttribute('aria-valuetext', (idx + 1) + ' of ' + sessionQuestions.length);
-  DOM.qSource.textContent = q.source;
   DOM.qCount.textContent = (idx + 1) + ' / ' + sessionQuestions.length;
   DOM.qText.textContent = q.question;
   DOM.qText.focus();
@@ -6437,25 +6646,11 @@ function renderQuestion(){
   DOM.railDiff.textContent = diff || '';
   DOM.railDiff.classList.toggle('is-hidden', !diff);
 
-  // Dot-per-question only reads cleanly for small draws (pulse/sector);
-  // onboarding/deep-dive/exam run 18-30 questions, where individual dots
-  // would just be visual noise — the thin bar above the grid + "N / total"
-  // already cover progress at that scale.
-  DOM.progressDots.innerHTML = '';
-  if (sessionQuestions.length <= 10){
-    DOM.progressDots.style.display = '';
-    sessionQuestions.forEach((_, i) => {
-      const dot = document.createElement('span');
-      dot.className = 'dot' + (i < idx ? ' done' : '') + (i === idx ? ' current' : '');
-      DOM.progressDots.appendChild(dot);
-    });
-  } else {
-    DOM.progressDots.style.display = 'none';
-  }
+  renderProgressNav();
 
   DOM.qOptions.innerHTML = '';
-  const shuffledOpts = shuffle(q.options);
-  shuffledOpts.forEach((opt, i) => {
+  const opts = optionsForQuestion(q);
+  opts.forEach((opt, i) => {
     const btn = document.createElement('button');
     btn.className = 'opt';
     const mark = document.createElement('span');
@@ -6466,55 +6661,217 @@ function renderQuestion(){
     txt.textContent = opt.t;
     btn.appendChild(mark);
     btn.appendChild(txt);
-    btn.addEventListener('click', function(){ selectOption(btn, opt, shuffledOpts, DOM.qOptions); });
+
+    if (existing && rules.lockOnAnswer){
+      // Pulse/Sector/Onboarding/Deep-Dive: revisiting an answered question
+      // replays exactly the reveal it showed at answer time — read-only.
+      btn.disabled = true;
+      if (opt.c) btn.classList.add('correct');
+      else if (existing.pickedIndex === i) btn.classList.add('wrong');
+    } else if (existing && !rules.lockOnAnswer){
+      // Exam: still interactive — shows the current pick, never which is correct.
+      if (existing.pickedIndex === i) btn.classList.add('picked');
+    }
+    btn.addEventListener('click', function(){ selectOption(q, opt, i, opts, btn, DOM.qOptions); });
     DOM.qOptions.appendChild(btn);
   });
 
-  DOM.feedback.className = 'feedback';
-  DOM.feedbackExam.className = 'feedback exam-plain';
+  if (existing && rules.lockOnAnswer){
+    DOM.fbAlba.textContent = q.alba;
+    DOM.fbKai.textContent = q.kai;
+    DOM.feedback.className = 'feedback show';
+    DOM.feedbackExam.className = 'feedback exam-plain';
+  } else if (existing && !rules.lockOnAnswer){
+    DOM.feedback.className = 'feedback';
+    DOM.feedbackExam.className = 'feedback exam-plain show';
+  } else {
+    DOM.feedback.className = 'feedback';
+    DOM.feedbackExam.className = 'feedback exam-plain';
+  }
+
+  hideUnansweredGate();
+  updateNavFooter();
 }
 
-function selectOption(btn, opt, allOpts, optWrap){
-  if (answered) return;
-  answered = true;
-  const q = sessionQuestions[idx];
-  if (opt.c) score++;
-  answers.push({ id: q.id, correct: opt.c });
+// Dot-per-question only reads cleanly for small draws (pulse/sector);
+// onboarding/deep-dive/exam run 18-30 questions, where individual dots
+// would just be visual noise — the Question Navigator drawer covers that
+// scale instead. Both are clickable: jumping BACK is always allowed (it's
+// just a review), jumping FORWARD only when the mode allows skipping.
+function renderProgressNav(){
+  const rules = NAV_MODEL[mode];
+  DOM.progressDots.innerHTML = '';
+  if (sessionQuestions.length <= 10){
+    DOM.progressDots.style.display = '';
+    DOM.qnav.style.display = 'none';
+    sessionQuestions.forEach((q, i) => {
+      const dot = document.createElement('button');
+      dot.type = 'button';
+      dot.className = 'dot' + (answerState[q.id] ? ' done' : '') + (i === idx ? ' current' : '');
+      dot.setAttribute('aria-label', 'Question ' + (i + 1) + (answerState[q.id] ? ', answered' : ', unanswered'));
+      if (!(i <= idx || rules.canSkip)) dot.disabled = true;
+      dot.addEventListener('click', function(){ idx = i; renderQuestion(); });
+      DOM.progressDots.appendChild(dot);
+    });
+  } else {
+    DOM.progressDots.style.display = 'none';
+    DOM.qnav.style.display = '';
+    DOM.qnavSummary.textContent = (idx + 1) + ' / ' + sessionQuestions.length;
+    DOM.qnavGrid.innerHTML = '';
+    sessionQuestions.forEach((q, i) => {
+      const chip = document.createElement('button');
+      chip.type = 'button';
+      chip.className = 'qnav-chip';
+      chip.textContent = String(i + 1);
+      if (answerState[q.id]) chip.classList.add('answered');
+      if (i === idx) chip.classList.add('current');
+      if (markedForReview.has(q.id)) chip.classList.add('marked');
+      if (!(i <= idx || rules.canSkip)) chip.disabled = true;
+      chip.addEventListener('click', function(){ idx = i; renderQuestion(); DOM.qnav.open = false; });
+      DOM.qnavGrid.appendChild(chip);
+    });
+  }
+}
+
+function selectOption(q, opt, pickedIndex, opts, btn, optWrap){
+  const rules = NAV_MODEL[mode];
+  const existing = answerState[q.id];
+  if (existing && rules.lockOnAnswer) return; // locked; buttons are disabled anyway, this is a safety net
+
+  answerState[q.id] = { correct: !!opt.c, pickedIndex: pickedIndex };
 
   Array.from(optWrap.children).forEach((el, i) => {
-    el.disabled = true;
-    if (mode !== 'exam'){
-      // Pulse/Onboarding/Deep-Dive: reveal immediately, this is a learning moment.
-      if (allOpts[i].c) el.classList.add('correct');
-      else if (el === btn) el.classList.add('wrong');
-    } else {
-      // Exam mode: mark the selection so it's visible which one was picked,
-      // but never reveal which one was correct — that stays withheld until
-      // the certificate screen, matching the exam-note copy's own promise.
-      if (el === btn) el.classList.add('picked');
+    el.classList.remove('correct', 'wrong', 'picked');
+    if (rules.lockOnAnswer){
+      el.disabled = true;
+      if (opts[i].c) el.classList.add('correct');
+      else if (i === pickedIndex) el.classList.add('wrong');
+    } else if (i === pickedIndex){
+      // Exam: re-selecting overwrites the previous pick — stays interactive
+      // right up to Submit, so this never locks or disables siblings.
+      el.classList.add('picked');
     }
   });
 
-  if (mode !== 'exam'){
+  if (rules.lockOnAnswer){
     DOM.fbAlba.textContent = q.alba;
     DOM.fbKai.textContent = q.kai;
     DOM.feedback.className = 'feedback show';
     DOM.feedbackExam.className = 'feedback exam-plain';
   } else {
-    // Exam mode: a plain, separate footer — never the Alba/Kai avatars with
-    // empty text, which is what rendered here before this fix.
     DOM.feedback.className = 'feedback';
     DOM.feedbackExam.className = 'feedback exam-plain show';
   }
+
+  renderProgressNav();
+  updateNavFooter();
 }
 
-function handleNext(){
-  idx++;
-  if (idx >= sessionQuestions.length){
-    showResult();
+function updateNavFooter(){
+  const rules = NAV_MODEL[mode];
+  const q = sessionQuestions[idx];
+  const isLast = idx === sessionQuestions.length - 1;
+
+  DOM.btnPrev.disabled = (idx === 0);
+  DOM.btnNext.disabled = !rules.canSkip && !answerState[q.id];
+  DOM.btnNext.textContent = (isLast && !rules.requiresSubmit) ? 'Finish →' : 'Next →';
+
+  if (rules.markForReview){
+    DOM.btnMarkReview.style.display = '';
+    const marked = markedForReview.has(q.id);
+    DOM.btnMarkReview.classList.toggle('active', marked);
+    DOM.btnMarkReview.textContent = marked ? 'Marked for review ✓' : 'Mark for review';
   } else {
-    renderQuestion();
+    DOM.btnMarkReview.style.display = 'none';
   }
+  DOM.btnReviewSubmit.style.display = rules.requiresSubmit ? '' : 'none';
+}
+
+function toggleMarkForReview(){
+  const q = sessionQuestions[idx];
+  if (markedForReview.has(q.id)) markedForReview.delete(q.id);
+  else markedForReview.add(q.id);
+  renderProgressNav();
+  updateNavFooter();
+}
+
+function showUnansweredGate(missingIds){
+  DOM.unansweredGateText.textContent = missingIds.length + (missingIds.length === 1 ? ' question is' : ' questions are') +
+    ' still unanswered. Review them before completing this session.';
+  DOM.unansweredGate.style.display = 'block';
+  DOM.quizNavFooter.style.display = 'none';
+}
+function hideUnansweredGate(){
+  DOM.unansweredGate.style.display = 'none';
+  DOM.quizNavFooter.style.display = '';
+}
+
+function goPrev(){
+  if (idx === 0) return;
+  idx--;
+  renderQuestion();
+}
+function goNext(){
+  const rules = NAV_MODEL[mode];
+  const q = sessionQuestions[idx];
+  if (!rules.canSkip && !answerState[q.id]) return; // button is disabled anyway; safety net
+  if (idx < sessionQuestions.length - 1){
+    idx++;
+    renderQuestion();
+  } else {
+    attemptComplete();
+  }
+}
+function attemptComplete(){
+  const rules = NAV_MODEL[mode];
+  if (rules.requiresSubmit){
+    showReviewSubmitScreen();
+    return;
+  }
+  const missing = unansweredQuestionIds();
+  if (missing.length){
+    showUnansweredGate(missing);
+    return;
+  }
+  showResult();
+}
+
+// ---- Annual Assessment: Review & Submit ----
+function statTile(label, value){
+  return '<div class="submit-stat"><div class="submit-stat-label">' + esc(label) + '</div>' +
+    '<div class="submit-stat-val">' + esc(value) + '</div></div>';
+}
+function renderSubmitGrid(){
+  DOM.submitQnavGrid.innerHTML = '';
+  sessionQuestions.forEach((q, i) => {
+    const chip = document.createElement('button');
+    chip.type = 'button';
+    chip.className = 'qnav-chip';
+    chip.textContent = String(i + 1);
+    if (answerState[q.id]) chip.classList.add('answered');
+    if (markedForReview.has(q.id)) chip.classList.add('marked');
+    chip.addEventListener('click', function(){
+      idx = i;
+      showQuizScreen();
+      renderQuestion();
+    });
+    DOM.submitQnavGrid.appendChild(chip);
+  });
+}
+function showReviewSubmitScreen(){
+  DOM.screenQuiz.style.display = 'none';
+  DOM.screenSubmit.style.display = 'block';
+  const total = sessionQuestions.length;
+  const answeredCount = Object.keys(answerState).length;
+  const unansweredCount = total - answeredCount;
+  DOM.submitStats.innerHTML = [
+    statTile('Answered', answeredCount + ' / ' + total),
+    statTile('Unanswered', String(unansweredCount)),
+    statTile('Marked for review', String(markedForReview.size))
+  ].join('');
+  DOM.submitWarning.style.display = unansweredCount > 0 ? 'block' : 'none';
+  renderSubmitGrid();
+  if (DOM.submitTitle) DOM.submitTitle.focus();
 }
 
 /* ═══════════════════════════════════════════════════
@@ -6537,7 +6894,8 @@ function b64(str){
 const RECEIPT_VERSION = 3;             // bump when the payload shape below changes — v3 adds attempt_id
 const POOL_VERSION = '2026-08';        // shared across all questions in this pool — see question_version/pool_version per item
 const BUILD_VERSION = 'all-in-one-2026-08-24-r2'; // r2: hardening pass — Resume score/answer/manifest semantic validation
-const SESSION_FILE_VERSION = 1;        // Save Progress / Resume file schema — see buildSessionSnapshot()/resumeSessionFromFile()
+const SESSION_FILE_VERSION = 2;        // v2: per-question answerState map (keyed by ID) replaces the old
+                                        // positional answers array — see buildSessionSnapshot()/resumeSessionFromFile()
 
 // ---- Self-reported completion receipt: version, name, score, focus, date,
 // mode, pool version, the assessment manifest this session drew from (null
@@ -6603,7 +6961,7 @@ function qualitativeLabel(pct, n){
 // what was actually tested rather than one undifferentiated number.
 function domainBreakdown(){
   const map = new Map();
-  answers.forEach(a => {
+  finalAnswers().forEach(a => {
     const q = sessionQuestions.find(x => x.id === a.id);
     if (!q) return;
     const key = legalArea(q);
@@ -6660,15 +7018,20 @@ function renderSnapshot(){
 // other mode is a learning session with no threshold, so benchmark_type/
 // benchmark_threshold/benchmark_met are explicitly null there rather than
 // left for a verifier to infer (incorrectly) from score/total alone.
-// completion_status is always 'completed' here: dispatchEvidenceCompletion()
-// only ever fires from showResult(), i.e. after every question in the
-// session has been answered — there is no mid-session abandonment hook in
-// this build, so 'abandoned' is never produced (a real one would need a
-// beforeunload/visibilitychange hook this product does not currently have).
+// completion_status distinguishes a session where every question was
+// actually answered from one finished via "Finish anyway" / Submit with
+// unanswered questions still on the board (Onboarding/Deep Dive's
+// unanswered gate, or an Annual Assessment submitted with gaps) — the
+// evidence record says so plainly rather than presenting both the same
+// way. answers/score always come from finalAnswers(), never a live
+// counter, so a since-changed exam answer can't leave a stale value here.
 function dispatchEvidenceCompletion(){
   if (!document.getElementById('in-evidence') || !document.getElementById('in-evidence').checked) return;
-  const pct = sessionQuestions.length ? Math.round((score / sessionQuestions.length) * 100) : 0;
+  const final = finalAnswers();
+  const finalScore = final.filter(a => a.correct).length;
+  const pct = sessionQuestions.length ? Math.round((finalScore / sessionQuestions.length) * 100) : 0;
   const isExam = mode === 'exam';
+  const unansweredCount = sessionQuestions.length - Object.keys(answerState).length;
   window.dispatchEvent(new CustomEvent('eace:session-complete', { detail: {
     attemptId: attemptId,
     mode: mode,
@@ -6676,11 +7039,11 @@ function dispatchEvidenceCompletion(){
     poolVersion: POOL_VERSION,
     assessmentManifestId: currentManifestId || 'ad-hoc',
     questionIds: sessionQuestions.map(q => q.id),
-    answers: answers.slice(),
-    score: score,
+    answers: final,
+    score: finalScore,
     total: sessionQuestions.length,
     startedAt: sessionStartedAt || new Date().toISOString(),
-    completionStatus: 'completed',
+    completionStatus: unansweredCount > 0 ? 'completed_with_unanswered' : 'completed',
     benchmarkType: isExam ? 'EACE_INTERNAL' : null,
     benchmarkThreshold: isExam ? 80 : null,
     benchmarkMet: isExam ? (pct >= 80) : null,
@@ -6694,6 +7057,11 @@ function showResult(){
   DOM.progressTrack.setAttribute('aria-valuetext', 'Complete');
   showResultScreen();
 
+  // Computed once, here, from finalAnswers() — the single source of truth
+  // for a completed attempt regardless of how many times an exam answer
+  // was changed, or which questions were skipped-then-revisited, before
+  // this point.
+  const score = currentScore();
   const pct = Math.round((score / sessionQuestions.length) * 100);
   DOM.resultScore.textContent = score + ' / ' + sessionQuestions.length;
   DOM.resultPct.textContent = pct + '%';
@@ -6744,6 +7112,7 @@ function showResult(){
 // silently omitted.
 function buildRecordOfCompletion(pct){
   if (!DOM.rocGrid) return;
+  const score = currentScore();
   const isExam = mode === 'exam';
   const dateStr = new Date().toISOString().slice(0, 10);
   const scopeLabel = mode === 'sector'

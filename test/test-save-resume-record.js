@@ -62,10 +62,14 @@ async function main() {
     const snap1 = JSON.parse(fs.readFileSync(savePath1, 'utf8'));
 
     record('Save Progress: file has eace_session_file marker', snap1.eace_session_file === true);
-    record('Save Progress: schema_version is 1', snap1.schema_version === 1);
+    record('Save Progress: schema_version is 2', snap1.schema_version === 2);
     record('Save Progress: name omitted by default', snap1.name === null, JSON.stringify(snap1.name));
-    record('Save Progress: current_index reflects 2 answered questions', snap1.current_index === 2, 'got ' + snap1.current_index);
-    record('Save Progress: answers array length matches current_index', snap1.answers.length === snap1.current_index);
+    record('Save Progress: current_index is question 3 (2 already answered)', snap1.current_index === 2, 'got ' + snap1.current_index);
+    // Coincidental in this specific answer-then-next-every-time sequence, not
+    // a general invariant (v2 allows skip/back/jump, where answers.length and
+    // current_index can diverge freely) — still a fair sanity check here.
+    record('Save Progress: 2 answers recorded, one per answered question', snap1.answers.length === 2, 'got ' + snap1.answers.length);
+    record('Save Progress: each answer entry carries option_order + picked_index', snap1.answers.every(a => Array.isArray(a.option_order) && typeof a.picked_index === 'number'));
     record('Save Progress: attempt_id present', typeof snap1.attempt_id === 'string' && snap1.attempt_id.startsWith('EACE-ATT-'));
     record('Save Progress: evidence_opt_in true (checkbox was checked)', snap1.evidence_opt_in === true);
     record('Save Progress: question_ids length matches pulse size (5)', Array.isArray(snap1.question_ids) && snap1.question_ids.length === 5, 'got ' + (snap1.question_ids || []).length);
@@ -248,7 +252,10 @@ async function main() {
       if (!(await page7.isVisible('#screen-quiz'))) break;
       await page7.waitForSelector('#q-options .opt', { state: 'visible' });
       await page7.click('#q-options .opt >> nth=0');
-      await page7.click('#btn-next-exam');
+      await page7.click('#btn-next');
+    }
+    if (await page7.isVisible('#screen-submit')) {
+      await page7.click('#btn-confirm-submit');
     }
     await page7.waitForSelector('#screen-result', { state: 'visible' });
     const failed = await page7.isVisible('.locked');

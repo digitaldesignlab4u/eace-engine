@@ -7,6 +7,13 @@
  * attempting to resume it — proving the app's own validation catches the
  * tamper, not a hand-built fixture that might not match the real schema.
  *
+ * v2 note: the saved answers array is now { id, option_order, picked_index,
+ * correct } per answered question (not the old positional {id,correct}
+ * array) — option_order is the exact shuffled display order, needed so a
+ * resumed session's picked_index still points at the option actually
+ * picked. `correct` is never trusted on import; it's recomputed from
+ * option_order + picked_index against the live question data.
+ *
  * Usage: node test/test-resume-hardening.js
  */
 const path = require('path');
@@ -34,11 +41,10 @@ async function saveRealSnapshot(context, tmpDir, { queryParams = {}, questionsTo
   }
   await page.fill('#in-name', 'Hardening Test');
   await page.click('#btn-start');
-  const nextSel = queryParams.type === 'exam' ? '#btn-next-exam' : '#btn-next';
   for (let i = 0; i < questionsToAnswer; i++) {
     await page.waitForSelector('#q-options .opt', { state: 'visible' });
     await page.click('#q-options .opt >> nth=0');
-    await page.click(nextSel);
+    await page.click('#btn-next');
   }
   await page.waitForSelector('#q-options .opt', { state: 'visible' });
   if (includeName) await page.check('#in-save-name');
@@ -80,7 +86,7 @@ async function main() {
   const tmpDir = fs.mkdtempSync(path.join(os.tmpdir(), 'eace-hardening-'));
 
   try {
-    // ---- 1. Manipulated score must be recomputed, not trusted ----
+    // ---- 1. Manipulated top-level score must be recomputed, not trusted ----
     const snap1 = await saveRealSnapshot(context, tmpDir, { saveName: 'score-tamper', questionsToAnswer: 3 });
     const trueScore = snap1.answers.filter((a) => a.correct).length;
     const tampered1 = Object.assign({}, snap1, { score: 999 });
@@ -88,8 +94,6 @@ async function main() {
     let finalScore = null;
     if (r1.resumed) {
       const page = await context.newPage();
-      // Re-do the resume in a page we can inspect through completion, since
-      // attemptResume() already closed its page — resume again and finish.
       const filePath = path.join(tmpDir, 'score-tamper.json');
       await page.goto('file://' + FILE, { waitUntil: 'load' });
       await page.setInputFiles('#in-resume-file', filePath);
@@ -111,12 +115,12 @@ async function main() {
       finalScore !== null && finalScore < 999 && finalScore >= trueScore,
       `trueScore-so-far=${trueScore}, finalScore=${finalScore}`);
 
-    // ---- 2. answers[i].id mismatched against question_ids order -> rejected ----
+    // ---- 2. answers[i].id referencing a question outside this session -> rejected ----
     const snap2 = await saveRealSnapshot(context, tmpDir, { saveName: 'id-mismatch', questionsToAnswer: 2 });
     const tampered2 = JSON.parse(JSON.stringify(snap2));
     tampered2.answers[0].id = 'q_nonexistent_swap_target';
     const r2 = await attemptResume(context, tmpDir, tampered2, 'id-mismatch.json');
-    record('answers[i].id mismatch vs question order: resume rejected', !r2.resumed, r2.alerts.join(' | '));
+    record('answers[i].id referencing an unknown question: resume rejected', !r2.resumed, r2.alerts.join(' | '));
 
     // ---- 3. Duplicate question_ids -> rejected ----
     const snap3 = await saveRealSnapshot(context, tmpDir, { saveName: 'dup-ids', questionsToAnswer: 1 });
@@ -148,12 +152,44 @@ async function main() {
     const r5 = await attemptResume(context, tmpDir, tampered5, 'fake-exam.json');
     record('Pulse question set relabeled as "exam": resume rejected', !r5.resumed, r5.alerts.join(' | '));
 
-    // ---- 6. Malformed answer entry (non-boolean correct) -> rejected ----
-    const snap6 = await saveRealSnapshot(context, tmpDir, { saveName: 'bad-answer-shape', questionsToAnswer: 1 });
+    // ---- 6. Malformed option_order (not a valid permutation) -> rejected ----
+    const snap6 = await saveRealSnapshot(context, tmpDir, { saveName: 'bad-option-order', questionsToAnswer: 1 });
     const tampered6 = JSON.parse(JSON.stringify(snap6));
-    tampered6.answers[0].correct = 'yes';
-    const r6 = await attemptResume(context, tmpDir, tampered6, 'bad-answer-shape.json');
-    record('Non-boolean answers[i].correct: resume rejected', !r6.resumed, r6.alerts.join(' | '));
+    tampered6.answers[0].option_order = tampered6.answers[0].option_order.map(() => 0); // all zeros: not a permutation
+    const r6 = await attemptResume(context, tmpDir, tampered6, 'bad-option-order.json');
+    record('Malformed option_order (not a permutation): resume rejected', !r6.resumed, r6.alerts.join(' | '));
+
+    // ---- 6b. picked_index out of range -> rejected ----
+    const snap6b = await saveRealSnapshot(context, tmpDir, { saveName: 'bad-picked-index', questionsToAnswer: 1 });
+    const tampered6b = JSON.parse(JSON.stringify(snap6b));
+    tampered6b.answers[0].picked_index = 99;
+    const r6b = await attemptResume(context, tmpDir, tampered6b, 'bad-picked-index.json');
+    record('Out-of-range picked_index: resume rejected', !r6b.resumed, r6b.alerts.join(' | '));
+
+    // ---- 6c. Per-answer "correct" flag lied about (option_order/picked_index
+    // left truthful) -> ignored; correctness is recomputed from picked_index
+    // against the live question data, one level deeper than the top-level
+    // score check in test 1. The reveal on the resumed (locked) question
+    // must match the TRUE pick, not the lie: exactly one .wrong mark iff the
+    // true pick was actually incorrect, regardless of what the file claims. ----
+    const snap6c = await saveRealSnapshot(context, tmpDir, { saveName: 'flip-correct', questionsToAnswer: 1 });
+    const trueCorrect = snap6c.answers[0].correct;
+    const tampered6c = JSON.parse(JSON.stringify(snap6c));
+    tampered6c.answers[0].correct = !trueCorrect;
+    const filePath6c = path.join(tmpDir, 'flip-correct.json');
+    fs.writeFileSync(filePath6c, JSON.stringify(tampered6c));
+    const page6c = await context.newPage();
+    const errors6c = [];
+    page6c.on('pageerror', (e) => errors6c.push(String(e)));
+    await page6c.goto('file://' + FILE, { waitUntil: 'load' });
+    await page6c.setInputFiles('#in-resume-file', filePath6c);
+    await page6c.waitForSelector('#q-options .opt', { state: 'visible', timeout: 5000 });
+    const wrongMarkCount = await page6c.locator('#q-options .opt.wrong').count();
+    const expectedWrongMarks = trueCorrect ? 0 : 1;
+    record('Lied "correct" flag: reveal reflects the TRUE pick, not the lie',
+      wrongMarkCount === expectedWrongMarks && errors6c.length === 0,
+      `trueCorrect=${trueCorrect}, lied to=${!trueCorrect}, wrongMarks=${wrongMarkCount} (expected ${expectedWrongMarks})`);
+    await page6c.close();
 
     // ---- 7. A legitimate, untampered save must still resume normally (control case) ----
     // includeName:true so resume doesn't hit the (expected, harmless) native

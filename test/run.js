@@ -103,8 +103,6 @@ async function runOne(browser, run) {
     await page.fill('#in-name', TEST_NAME);
     await page.click('#btn-start');
 
-    const nextSelector = run.mode === 'exam' ? '#btn-next-exam' : '#btn-next';
-
     let guard = 0;
     while (guard++ < 500) {
       const quizVisible = await page.isVisible('#screen-quiz');
@@ -112,7 +110,14 @@ async function runOne(browser, run) {
 
       await page.waitForSelector('#q-options .opt', { state: 'visible' });
       await page.click('#q-options .opt >> nth=0');
-      await page.click(nextSelector);
+      await page.click('#btn-next');
+    }
+
+    // Exam mode routes through a Review & Submit screen instead of
+    // straight to the result screen — every question was just answered in
+    // order above, so there's nothing to review, just confirm.
+    if (run.mode === 'exam' && (await page.isVisible('#screen-submit'))) {
+      await page.click('#btn-confirm-submit');
     }
 
     const resultVisible = await page.isVisible('#screen-result');

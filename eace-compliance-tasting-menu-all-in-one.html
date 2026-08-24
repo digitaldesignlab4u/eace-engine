@@ -862,7 +862,13 @@ function init(){
   if (DOM.inResumeFile) DOM.inResumeFile.addEventListener('change', function(){
     const file = this.files && this.files[0];
     this.value = ''; // allow re-selecting the same filename later (e.g. after a failed attempt)
-    if (file) resumeSessionFromFile(file);
+    if (file) resumeSessionFromFile(file).catch(function(e){
+      // Defense in depth: every validation failure this function detects
+      // already returns after its own alert() — this only catches a truly
+      // unexpected exception, so it fails safely (a message, not a silent
+      // stuck screen) instead of surfacing nothing at all.
+      alert('This saved session file could not be resumed: ' + e.message);
+    });
   });
 }
 
@@ -6213,15 +6219,32 @@ async function resumeSessionFromFile(file){
     alert('This saved session is file schema v' + snap.schema_version + ', but this build expects v' + SESSION_FILE_VERSION + '. It cannot be safely resumed here.');
     return;
   }
+  // Set membership, not MODE_META[snap.mode] truthiness: a plain object's
+  // bracket access falls through to its prototype chain, so a crafted
+  // mode value like "__proto__" or "constructor" would otherwise read a
+  // real (inherited) object back as if it were a valid mode entry, then
+  // crash a few lines below when treated as one. VALID_MODES is built
+  // from MODE_META's own keys, so this list has nothing else to keep in
+  // sync by hand.
+  const VALID_MODES = new Set(Object.keys(MODE_META));
+  if (typeof snap.mode !== 'string' || !VALID_MODES.has(snap.mode)){
+    alert('This saved session file has an unrecognised mode ("' + snap.mode + '"). It cannot be resumed.');
+    return;
+  }
   if (snap.pool_version !== POOL_VERSION){
     const proceed = confirm('This session was saved against question pool ' + snap.pool_version + ', but this build is on pool ' + POOL_VERSION + '. The pool may have changed since it was saved, so resuming may not reproduce the exact original question set. Continue anyway?');
     if (!proceed) return;
   }
 
   const byId = new Map(QUESTIONS.concat(QUESTIONS_SECTOR).map(q => [q.id, q]));
+  const rawIds = Array.isArray(snap.question_ids) ? snap.question_ids : [];
   const resolved = [];
   const missing = [];
-  (Array.isArray(snap.question_ids) ? snap.question_ids : []).forEach(id => {
+  const seenIds = new Set();
+  const duplicateIds = new Set();
+  rawIds.forEach(id => {
+    if (seenIds.has(id)) { duplicateIds.add(id); return; }
+    seenIds.add(id);
     const q = byId.get(id);
     if (q) resolved.push(q); else missing.push(id);
   });
@@ -6229,7 +6252,29 @@ async function resumeSessionFromFile(file){
     alert('This saved session references question(s) no longer in this build\'s pool' + (missing.length ? ' (' + missing.join(', ') + ')' : '') + '. It cannot be safely resumed.');
     return;
   }
-  if (typeof snap.current_index !== 'number' || snap.current_index < 0 || snap.current_index > resolved.length){
+  if (duplicateIds.size){
+    alert('This saved session file lists the same question ID more than once (' + [...duplicateIds].join(', ') + '). It cannot be safely resumed.');
+    return;
+  }
+
+  // Manifest-backed modes (exam / deep-dive / onboarding) draw from a
+  // frozen, known question set. A resumed session claiming one of these
+  // modes must actually carry that exact set and manifest ID, not an
+  // arbitrary substitute — otherwise its eventual benchmark/receipt would
+  // misrepresent what was really asked. Ad-hoc modes (pulse/sector) have
+  // no fixed set to check against.
+  if (ASSESSMENT_MANIFESTS[snap.mode]){
+    const manifest = ASSESSMENT_MANIFESTS[snap.mode];
+    const expected = manifest.question_ids.slice().sort();
+    const actual = resolved.map(q => q.id).slice().sort();
+    const setMatches = expected.length === actual.length && expected.every((id, i) => id === actual[i]);
+    if (!setMatches || snap.assessment_manifest_id !== manifest.id){
+      alert('This saved session claims mode "' + snap.mode + '" but its question set does not match this build\'s known ' + manifest.id + ' manifest. It cannot be safely resumed.');
+      return;
+    }
+  }
+
+  if (typeof snap.current_index !== 'number' || !Number.isInteger(snap.current_index) || snap.current_index < 0 || snap.current_index > resolved.length){
     alert('This saved session file has an invalid saved position. It cannot be resumed.');
     return;
   }
@@ -6237,17 +6282,34 @@ async function resumeSessionFromFile(file){
     alert('This saved session file\'s recorded answers don\'t match its saved position. It cannot be safely resumed.');
     return;
   }
+  // Each answer must be a well-formed {id, correct} pair AND correspond,
+  // in order, to the question at that position in the resolved set — not
+  // just "the right length." Prevents a file where question_ids and
+  // answers were edited independently and no longer describe one
+  // consistent attempt.
+  const answersWellFormed = snap.answers.every((a, i) =>
+    a && typeof a === 'object' && typeof a.id === 'string' &&
+    typeof a.correct === 'boolean' && a.id === resolved[i].id
+  );
+  if (!answersWellFormed){
+    alert('This saved session file\'s recorded answers are malformed or don\'t match the saved question order. It cannot be safely resumed.');
+    return;
+  }
 
   mode = snap.mode;
-  roleFilter = snap.role_filter || 'all';
-  sectorFilter = snap.sector_filter || SECTORS[0].v;
+  roleFilter = ROLES.some(r => r.v === snap.role_filter) ? snap.role_filter : 'all';
+  sectorFilter = SECTORS.some(s => s.v === snap.sector_filter) ? snap.sector_filter : SECTORS[0].v;
   currentManifestId = snap.assessment_manifest_id || null;
-  attemptId = snap.attempt_id || ('EACE-ATT-' + crypto.randomUUID());
+  attemptId = (typeof snap.attempt_id === 'string' && snap.attempt_id) ? snap.attempt_id : ('EACE-ATT-' + crypto.randomUUID());
   sessionStartedAt = snap.session_started_at || new Date().toISOString();
   sessionQuestions = resolved;
   idx = snap.current_index;
-  score = typeof snap.score === 'number' ? snap.score : 0;
   answers = snap.answers.slice();
+  // Never trust an imported score field directly — recompute it from the
+  // per-question correctness flags just validated above, so editing
+  // "score" in the file (with or without touching "answers") cannot
+  // inflate a result beyond what the recorded answers actually support.
+  score = answers.filter(a => a.correct === true).length;
   userName = (snap.name && String(snap.name).trim()) ||
     ((prompt('Your name (stays on this device only):', '') || '').trim()) || 'Anonymous';
 
@@ -6416,7 +6478,7 @@ function b64(str){
 
 const RECEIPT_VERSION = 3;             // bump when the payload shape below changes — v3 adds attempt_id
 const POOL_VERSION = '2026-08';        // shared across all questions in this pool — see question_version/pool_version per item
-const BUILD_VERSION = 'all-in-one-2026-08-24';
+const BUILD_VERSION = 'all-in-one-2026-08-24-r2'; // r2: hardening pass — Resume score/answer/manifest semantic validation
 const SESSION_FILE_VERSION = 1;        // Save Progress / Resume file schema — see buildSessionSnapshot()/resumeSessionFromFile()
 
 // ---- Self-reported completion receipt: version, name, score, focus, date,

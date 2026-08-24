@@ -1,26 +1,25 @@
 #!/usr/bin/env node
 /**
  * Exercises the FULL Grade 2 (Attested Evidence) network flow end-to-end
- * against scripts/reference-org-signer.js running locally — the actual
- * evidence-mode.js code path (upgradeToAttested -> requestTrustedTimestamp
+ * against `scripts/evidence-cli.js serve` running locally — the actual
+ * evidence.js code path (upgradeToAttested -> requestTrustedTimestamp
  * + requestOrgAttestation via fetch), not a re-implementation of it.
  *
  * This proves the CONTRACT is internally consistent and that a real
  * organisation-run endpoint following it would work — it does not and
  * cannot prove anything about a production deployment's TLS,
  * authentication, or key custody, none of which this reference server
- * implements (see reference-org-signer.js's own header comment).
+ * implements (see evidence-cli.js's own header comment).
  *
  * Usage:
- *   node scripts/generate-org-keypair.js > /tmp/org-keypair.json
- *   node scripts/reference-org-signer.js --keyfile /tmp/org-keypair.json --port 8937 &
+ *   node scripts/evidence-cli.js keygen > /tmp/org-keypair.json
+ *   node scripts/evidence-cli.js serve --keyfile /tmp/org-keypair.json --port 8937 &
  *   node test/evidence-grade2.js http://localhost:8937
  */
 const path = require('path');
 
 global.window = global;
-require(path.join(__dirname, '..', 'eace-compliance-tasting-menu-evidence', 'evidence-core.js'));
-require(path.join(__dirname, '..', 'eace-compliance-tasting-menu-evidence', 'evidence-mode.js'));
+require(path.join(__dirname, '..', 'eace-compliance-tasting-menu-evidence', 'evidence.js'));
 
 const endpointBase = process.argv[2] || 'http://localhost:8937';
 

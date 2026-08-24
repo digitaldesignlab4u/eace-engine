@@ -1,7 +1,22 @@
 /* ═══════════════════════════════════════════════════
-   EACE.ai — Evidence Mode — evidence-mode.js (producer)
-   Builds a genuinely stronger evidence artifact alongside — never instead
-   of — the existing completion receipt. Depends on evidence-core.js.
+   EACE.ai — Evidence Mode — evidence.js
+   Everything the PRODUCT side needs to build an Evidence Mode record:
+   schema/hashing (was evidence-core.js) + attempt ID, device signing and
+   Grade 2 network adapters (was evidence-mode.js), merged into one file so
+   the demo only ever loads a single <script> for this. Two internal
+   sections below, each still exporting its own namespace
+   (EvidenceCore / EvidenceMode) so nothing that references either name
+   needs to change.
+
+   The standalone admin tool (evidence-admin.html — keygen + verifier) is
+   deliberately NOT built from this file: it inlines its own, smaller copy
+   of just the schema/hashing/verify logic (no signing, no network,
+   nothing that needs the Web Crypto sign() capability at all), so it stays
+   a single file a person can open with literally nothing else, and never
+   ships code that CAN make a network call. See that file's own header
+   comment, and README.md's "One tool, one library" section, for why that
+   duplication is a deliberate trade-off, not an oversight — and where to
+   look if the schema ever changes and both copies need updating together.
 
    TWO GRADES, never blurred into one "trusted" label:
 
@@ -29,13 +44,177 @@
      See README.md's "Grade 2 requires leaving local-first" section.
 
    Nothing in this file talks to any host unless upgradeToAttested() is
-   called with an explicit endpoint configuration — building or verifying
-   Grade 1 evidence never touches the network.
+   called with an explicit endpoint configuration — building Grade 1
+   evidence never touches the network.
 ═══════════════════════════════════════════════════ */
+
+/* ---- Section 1/2: schema, hashing, encode/decode (EvidenceCore) ---- */
 (function (global) {
   'use strict';
 
-  const Core = global.EvidenceCore || require('./evidence-core.js');
+  const EVIDENCE_VERSION = 1;
+  const TOKEN_PREFIX = 'EACE-EVID-';
+
+  // ---- SHA-256 helpers (Web Crypto API — no dependency) ----
+  async function sha256Hex(str) {
+    const bytes = new TextEncoder().encode(str);
+    const digest = await crypto.subtle.digest('SHA-256', bytes);
+    return [...new Uint8Array(digest)].map((b) => b.toString(16).padStart(2, '0')).join('');
+  }
+
+  // ---- Question-set hash ----
+  // Hashed over the SORTED, comma-joined question IDs — not presentation
+  // order — because the evidence claim is "these N questions were asked,"
+  // not "in this order." (Presentation order is still recorded separately
+  // in `question_ids` for information, just not what's hashed.) For
+  // manifest-backed modes (exam/deepdive/onboarding) a verifier who also
+  // holds ASSESSMENT_MANIFESTS can independently derive the expected hash
+  // from the manifest's own frozen question_ids, without trusting this
+  // evidence object's question_ids list at all — see
+  // verifyQuestionSetAgainstManifest() below. For ad-hoc modes
+  // (pulse/sector), the hash is tamper-evidence on the claimed list, not
+  // independent proof of the original random draw — that distinction is
+  // surfaced explicitly in the verifier's output, not glossed over.
+  async function questionSetHash(questionIds) {
+    const canonical = questionIds.slice().sort().join(',');
+    return 'sha256:' + (await sha256Hex(canonical));
+  }
+
+  // ---- The exact byte sequence the DEVICE signature covers ----
+  // Deliberately an explicit, fixed field list (in the same spirit as the
+  // existing product's pipe-joined receipt payload) rather than a generic
+  // JSON canonicalizer — easier to audit, and sidesteps key-ordering/
+  // number-formatting edge cases a recursive canonicalizer would need to
+  // handle correctly to be trustworthy.
+  //
+  // Deliberately EXCLUDES `grade`, `timestamp_trust`, `tsa` and
+  // `org_attestation` — all four can be added/changed by a later Grade 2
+  // upgrade (buildLocalEvidence() always starts at grade:'local',
+  // timestamp_trust:'local-unverified', tsa:null; upgradeToAttested() then
+  // changes the first two and populates the last two). If any of those
+  // were covered by this signature, upgrading a record to Grade 2 would
+  // invalidate its own Grade 1 device signature — the device signed a
+  // snapshot of THAT information which no longer matches after the
+  // in-place mutation. This bug shipped once already (caught by
+  // test/evidence-grade2.js's end-to-end run against a real second
+  // process, not by unit-testing signing and verifying in the same
+  // isolated call) — see orgSignablePayload() below for where those four
+  // fields actually do get covered, by the signature that is supposed to
+  // change when they do.
+  function signablePayload(evidence) {
+    const answerField = evidence.answers
+      .map((a) => a.id + ':' + (a.correct ? 1 : 0))
+      .sort()
+      .join(',');
+    return [
+      'EACE-EVIDENCE',
+      String(evidence.evidence_version),
+      evidence.attempt_id,
+      evidence.mode,
+      evidence.role_or_sector,
+      evidence.pool_version,
+      evidence.assessment_manifest_id,
+      evidence.question_ids.slice().sort().join(','),
+      evidence.question_set_hash,
+      answerField,
+      String(evidence.score),
+      String(evidence.total),
+      evidence.started_at,
+      evidence.completed_at,
+      evidence.device_key_id
+    ].join('|');
+  }
+
+  // The org co-signature (Grade 2 only) covers the device-signed base PLUS
+  // the device signature itself (so it can't be swapped for a different
+  // one) PLUS the FINAL grade/timestamp_trust/tsa values this record will
+  // carry once attested. Callers (see upgradeToAttested() below) MUST set
+  // evidence.grade/timestamp_trust/tsa to their final values BEFORE
+  // requesting the org signature, so the value the org endpoint signs is
+  // the same value a later verifier recomputes this payload from.
+  function orgSignablePayload(evidence) {
+    return [
+      signablePayload(evidence),
+      evidence.device_signature,
+      evidence.grade,
+      evidence.timestamp_trust,
+      evidence.tsa ? evidence.tsa.token : ''
+    ].join('|');
+  }
+
+  // ---- UTF-8-safe base64, matching the product's own b64() convention ----
+  function b64Encode(str) {
+    const bytes = new TextEncoder().encode(str);
+    let binary = '';
+    bytes.forEach((b) => { binary += String.fromCharCode(b); });
+    return btoa(binary);
+  }
+  function b64Decode(b64) {
+    const binary = atob(b64);
+    const bytes = new Uint8Array(binary.length);
+    for (let i = 0; i < binary.length; i++) bytes[i] = binary.charCodeAt(i);
+    return new TextDecoder().decode(bytes);
+  }
+
+  function encodeEvidenceToken(evidence) {
+    return TOKEN_PREFIX + b64Encode(JSON.stringify(evidence)).replace(/=+$/, '');
+  }
+  function decodeEvidenceToken(token) {
+    if (!token || !token.startsWith(TOKEN_PREFIX)) {
+      throw new Error('Not an EACE evidence token (missing ' + TOKEN_PREFIX + ' prefix)');
+    }
+    let b64 = token.slice(TOKEN_PREFIX.length).trim();
+    b64 += '='.repeat((4 - (b64.length % 4)) % 4);
+    const json = b64Decode(b64);
+    const evidence = JSON.parse(json);
+    if (evidence.evidence_version !== EVIDENCE_VERSION) {
+      throw new Error('Unsupported evidence_version: ' + evidence.evidence_version);
+    }
+    return evidence;
+  }
+
+  // ---- Cross-check against a known manifest (exam/deepdive/onboarding) ----
+  // Given the SAME ASSESSMENT_MANIFESTS constant the assessment engine
+  // uses, confirms the evidence's declared question_ids match the frozen
+  // manifest exactly (order-independent) — a strictly stronger check than
+  // just recomputing the hash from the evidence's own claimed list, since
+  // the manifest is a value the verifier holds independently.
+  function verifyQuestionSetAgainstManifest(evidence, assessmentManifests) {
+    if (evidence.assessment_manifest_id === 'ad-hoc') {
+      return { applicable: false, reason: 'Ad-hoc draw (pulse/sector) — no fixed manifest to check against.' };
+    }
+    const manifestKey = Object.keys(assessmentManifests || {}).find(
+      (k) => assessmentManifests[k].id === evidence.assessment_manifest_id
+    );
+    if (!manifestKey) {
+      return { applicable: true, pass: false, reason: 'Manifest ID not found in this verifier’s known manifests: ' + evidence.assessment_manifest_id };
+    }
+    const expected = assessmentManifests[manifestKey].question_ids.slice().sort();
+    const actual = evidence.question_ids.slice().sort();
+    const pass = expected.length === actual.length && expected.every((id, i) => id === actual[i]);
+    return { applicable: true, pass, expectedCount: expected.length, actualCount: actual.length };
+  }
+
+  global.EvidenceCore = {
+    EVIDENCE_VERSION,
+    TOKEN_PREFIX,
+    sha256Hex,
+    questionSetHash,
+    signablePayload,
+    orgSignablePayload,
+    b64Encode,
+    b64Decode,
+    encodeEvidenceToken,
+    decodeEvidenceToken,
+    verifyQuestionSetAgainstManifest
+  };
+})(typeof window !== 'undefined' ? window : globalThis);
+
+/* ---- Section 2/2: attempt ID, device signing, Grade 2 adapters (EvidenceMode) ---- */
+(function (global) {
+  'use strict';
+
+  const Core = global.EvidenceCore;
 
   const DEVICE_KEY_STORAGE_KEY = 'eace-evidence-device-key-v1';
 
@@ -184,7 +363,7 @@
   // Never called implicitly. The caller (the assessment UI) is responsible
   // for disclosing to the person taking the assessment, BEFORE calling
   // this, that a network request is about to happen and what it sends —
-  // see the disclosure copy in demo.html.
+  // see the disclosure copy in demo/index.html.
   async function upgradeToAttested(localEvidence, config) {
     config = config || {};
     const evidence = JSON.parse(JSON.stringify(localEvidence)); // deep clone, never mutate the Grade-1 object in place
@@ -192,11 +371,6 @@
     const tsaResult = await requestTrustedTimestamp(
       (await Core.sha256Hex(Core.signablePayload(evidence))), config.tsaEndpoint
     );
-    // Set every field orgSignablePayload() covers to its FINAL value before
-    // requesting the org signature — the org endpoint signs exactly this
-    // object's state (minus org_attestation itself, added after), so a
-    // later verifier recomputing the same payload from the finished record
-    // must see the same grade/timestamp_trust/tsa the org actually signed.
     evidence.timestamp_trust = 'tsa-attested';
     evidence.tsa = { authority: tsaResult.authority, token: tsaResult.token, timestamp: tsaResult.timestamp };
     evidence.grade = 'attested';
@@ -211,7 +385,7 @@
     return evidence;
   }
 
-  const EvidenceMode = {
+  global.EvidenceMode = {
     EvidenceNetworkNotConfiguredError,
     generateAttemptId,
     getOrCreateDeviceKeypair,
@@ -223,7 +397,8 @@
     requestOrgAttestation,
     upgradeToAttested
   };
-
-  if (typeof module !== 'undefined' && module.exports) module.exports = EvidenceMode;
-  global.EvidenceMode = EvidenceMode;
 })(typeof window !== 'undefined' ? window : globalThis);
+
+if (typeof module !== 'undefined' && module.exports) {
+  module.exports = { EvidenceCore: globalThis.EvidenceCore, EvidenceMode: globalThis.EvidenceMode };
+}

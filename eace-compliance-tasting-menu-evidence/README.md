@@ -101,25 +101,26 @@ through it honestly produces two tiers, not one:
   therefore requires sending the (already device-signed) record to
   something the employee's browser does not control, and getting a
   signature back — a network round-trip to an org-run endpoint. This is
-  implemented (see `evidence-mode.js`'s `requestOrgAttestation()` and
-  `scripts/reference-org-signer.js`), off by default, and never fires
+  implemented (see `evidence.js`'s `requestOrgAttestation()` and
+  `scripts/evidence-cli.js serve`), off by default, and never fires
   without an endpoint explicitly configured.
 
-`keygen.html` generates the org keypair in-browser, once, with the private
-key never leaving that page and never shipping in any product build —
-`scripts/generate-org-keypair.js` is a CLI equivalent for testing/automation.
+`evidence-admin.html`'s "Generate Organisation Key" tab generates the org
+keypair in-browser, once, with the private key never leaving that page and
+never shipping in any product build — `scripts/evidence-cli.js keygen` is a
+CLI equivalent for testing/automation.
 
 ### 6. Completion status, Evidence object
-Assembled by `evidence-mode.js`'s `buildLocalEvidence()`. Full schema in
-`evidence-core.js`'s header comment; encoded the same way the existing
-receipt is (`EACE-EVID-<base64>`), decodable by `evidence-verifier.html`.
+Assembled by `evidence.js`'s `buildLocalEvidence()`. Full schema in that
+file's header comment; encoded the same way the existing receipt is
+(`EACE-EVID-<base64>`), decodable by `evidence-admin.html`.
 
 ### 7. Verification
-`evidence-verifier.html` — standalone, works fully offline (open it via
-`file://`, no server needed) for Grade 1. Matches the existing product's own
-pattern of a receipt "decoded locally by EACE's admin tool." Runs, and
-displays as separate pass/fail/N-A rows with an explanatory note each,
-never just an overall thumbs-up:
+`evidence-admin.html`'s "Verify Evidence" tab — standalone, works fully
+offline (open it via `file://`, no server needed) for Grade 1. Matches the
+existing product's own pattern of a receipt "decoded locally by EACE's
+admin tool." Runs, and displays as separate pass/fail/N-A rows with an
+explanatory note each, never just an overall thumbs-up:
 1. Required fields present
 2. Question-set hash matches the claimed question list
 3. Question set matches a known fixed manifest (exam/deepdive/onboarding
@@ -142,16 +143,17 @@ device-held key with an official-sounding name. There's no third option
 that keeps this both local-first and genuinely attested.
 
 Concretely, turning Grade 2 on requires an organisation to:
-1. Generate a keypair (`keygen.html` or `generate-org-keypair.js`) and keep
-   the private key somewhere real (a secrets manager or HSM — this product
-   does not manage that for you, and has no rotation/revocation mechanism).
+1. Generate a keypair (`evidence-admin.html`'s keygen tab, or
+   `evidence-cli.js keygen`) and keep the private key somewhere real (a
+   secrets manager or HSM — this product does not manage that for you, and
+   has no rotation/revocation mechanism).
 2. Deploy something serving `POST /attest` and (for a genuinely independent
    timestamp) `POST /tsa`, reachable from employees' browsers.
-   `scripts/reference-org-signer.js` is a correct, tested example of the
+   `scripts/evidence-cli.js serve` is a correct, tested example of the
    contract — **not production code** (no TLS termination, no
    authentication, cleartext key file) — see its own header comment for
    exactly what a production deployment needs to add.
-3. Wire `evidence-mode.js`'s `upgradeToAttested(evidence, {tsaEndpoint,
+3. Wire `evidence.js`'s `upgradeToAttested(evidence, {tsaEndpoint,
    orgEndpoint})` up to those URLs, and — this part is a product/UX decision
    for whoever integrates this, not something the library does for you —
    disclose to the person taking the assessment, *before* the network call
@@ -164,7 +166,7 @@ opts into Evidence Mode gets Grade 1 only — which is the honest state to
 default to, not a workaround.
 
 **On RFC 3161 specifically:** `requestTrustedTimestamp()` and
-`scripts/reference-org-signer.js`'s `/tsa` endpoint speak a simplified
+`scripts/evidence-cli.js serve`'s `/tsa` endpoint speak a simplified
 JSON-over-HTTPS contract (`{hash, hash_alg} -> {authority, token,
 timestamp}`), not the actual binary RFC 3161 protocol against a
 certificate-audited timestamp authority. Implementing a real RFC 3161 client
@@ -224,25 +226,58 @@ session-state variables:
 
 Apply the same three insertions to the Portable Edition or the Web
 Edition's real `app.js` (not the demo copy) to wire Evidence Mode into an
-actual shipped build, then add `evidence-core.js`, `evidence-mode.js`, an
-opt-in checkbox, and a render target for the evidence panel — copy
-`evidence-integration.src.js` and `demo/index.html`'s two markup insertions
-as a working reference for both.
+actual shipped build, then add `evidence.js`, an opt-in checkbox, and a
+render target for the evidence panel — `demo/index.html`'s two markup
+insertions and `demo/evidence-integration.js` (both produced by
+`build-evidence-demo.js` — read its `EVIDENCE_INTEGRATION_JS` constant and
+its `assertReplace()` calls for the exact markup) are a working reference
+for both.
+
+## One tool, one library
+
+Two consolidations on top of the design above, made after building it, to
+cut the file count without losing anything a real deployment needs:
+
+- **`evidence.js`** is `evidence-core.js` (schema/hashing) and
+  `evidence-mode.js` (attempt ID/signing/Grade 2 adapters) concatenated
+  into one file the product loads with a single `<script>` tag. The two
+  original sections are still marked and still each export their own
+  namespace (`EvidenceCore`, `EvidenceMode`) internally — nothing about
+  the logic changed, only that it now ships as one file.
+- **`evidence-admin.html`** is the keypair generator and the verifier
+  merged into one page with a tab switcher ("Verify Evidence" /
+  "Generate Organisation Key"). This one is a genuine trade-off, not a
+  free merge: `evidence-admin.html` does **not** load `evidence.js` —
+  it inlines its own copy of just the hashing/schema/verify logic (no
+  signing, no `fetch()`, nothing that can reach the network at all,
+  which is deliberate for an admin tool that only ever reads and checks
+  records) directly in its own `<script>` block, the same way
+  `evidence-admin.html`'s predecessor (the old standalone
+  `evidence-verifier.html`) already did. That means the hashing/schema
+  logic exists in **two places** — `evidence.js` and
+  `evidence-admin.html` — and if the evidence schema ever changes
+  (a new field, a different signable-payload shape), **both need
+  updating together**, by hand; nothing generates one from the other. The
+  alternative — `evidence-admin.html` loading `evidence.js` as an
+  external script — was rejected on purpose: it would make the admin
+  tool depend on a sibling file to even open (no longer "one tool"), and
+  would ship Grade 2's `fetch()`-capable code into a page that should
+  never be able to make a network call in the first place.
+- **`scripts/evidence-cli.js`** replaces `generate-org-keypair.js` and
+  `reference-org-signer.js` with one script, two subcommands (`keygen`,
+  `serve`).
 
 ## Files in this directory
 
 | File | Role |
 |---|---|
-| `evidence-core.js` | Schema, SHA-256 hashing, signable-payload construction, encode/decode. Zero network, zero dependencies. Shared by producer and verifier. |
-| `evidence-mode.js` | Producer: attempt ID, device keypair lifecycle, `buildLocalEvidence()`, Grade 2 network adapters (`requestTrustedTimestamp`, `requestOrgAttestation`, `upgradeToAttested`) — all off unless explicitly configured. |
-| `evidence-verifier.html` | Standalone, offline verification tool. |
-| `keygen.html` | Browser-based organisation keypair generator (Grade 2). |
-| `evidence-integration.src.js` | Demo-specific UI glue (opt-in checkbox handling, evidence panel rendering) — copied into `demo/` by the build script; reference for a real integration. |
+| `evidence.js` | Everything the product side needs: schema, SHA-256 hashing, signable-payload construction, encode/decode, attempt ID, device keypair lifecycle, `buildLocalEvidence()`, and the Grade 2 network adapters (`requestTrustedTimestamp`, `requestOrgAttestation`, `upgradeToAttested`) — all off unless explicitly configured. |
+| `evidence-admin.html` | Standalone, offline, single-file admin tool — verify a record, or generate the organisation's Grade 2 keypair. See "One tool, one library" above for why its core logic is a deliberate, hand-synced copy rather than a shared import. |
 | `demo/` | Generated by `../scripts/build-evidence-demo.js` — a full, working copy of the Web Edition with Evidence Mode wired in, for actual end-to-end testing. Do not hand-edit; re-run the build script. |
 
 Related, in `../scripts/`: `build-evidence-demo.js` (builds `demo/`),
-`generate-org-keypair.js` (CLI keygen), `reference-org-signer.js`
-(reference Grade 2 server, test-only).
+`evidence-cli.js` (keypair generation and the reference Grade 2 server,
+via subcommands — test-only, not production code).
 
 ## Running the tests
 
@@ -257,12 +292,14 @@ attempt ID uniqueness, zero console errors / zero CSP violations during a
 Grade 1 session, the question-set hash + manifest cross-check (exam mode),
 the ad-hoc mode's correct N/A manifest result, tamper detection (editing
 one field post-signing flips the verifier's verdict to fail), and the full
-Grade 2 network flow against `scripts/reference-org-signer.js` — including
+Grade 2 network flow against `scripts/evidence-cli.js serve` — including
 confirming the org co-signature itself breaks under tampering. All nine
-checks currently pass.
+checks currently pass. It also exercises `evidence-admin.html` directly
+(both tabs, real key generation, a real verify pass) — see
+`test/evidence-admin-check.js` if you want to run just that part.
 
 `test/evidence-grade2.js` is the standalone Grade 2 test `evidence-suite.js`
-shells out to; run it directly against any running reference-signer
+shells out to; run it directly against any running `evidence-cli.js serve`
 instance if you're iterating on the network adapters specifically.
 
 One bug this end-to-end testing caught that isolated unit tests would not
@@ -274,4 +311,4 @@ correctness bug, only visible when a full upgrade → re-verify round trip
 was actually exercised against a second, independent process. Fixed by
 moving `grade`/`timestamp_trust`/`tsa` out of the device-signed payload and
 into the org-signed one instead, where they're supposed to change — see
-`evidence-core.js`'s comment on `signablePayload()` for the full reasoning.
+`evidence.js`'s comment on `signablePayload()` for the full reasoning.

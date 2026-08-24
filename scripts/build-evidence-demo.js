@@ -11,10 +11,10 @@
  * styles.css/questions.js/legal-sources.js/index.html verbatim, and adds
  * exactly THREE small, clearly-marked "EVIDENCE MODE HOOK" lines to a COPY
  * of app.js — everything else new lives in separate, additive files
- * (evidence-core.js, evidence-mode.js, evidence-integration.js). Those
- * three hook lines are the entire integration surface; see README.md for
- * the exact diff, so wiring Evidence Mode into either shipped edition for
- * real is a small, reviewable change.
+ * (evidence.js, and the demo-glue script generated below). Those three
+ * hook lines are the entire integration surface; see README.md for the
+ * exact diff, so wiring Evidence Mode into either shipped edition for real
+ * is a small, reviewable change.
  *
  * Usage: node scripts/build-evidence-demo.js
  */
@@ -31,6 +31,72 @@ function assertReplace(text, oldFrag, newFrag, label) {
   if (out === text) throw new Error('Hook replacement had no effect (' + label + ')');
   return out;
 }
+
+// Demo-only UI glue: listens for `eace:session-complete` (dispatched by the
+// three EVIDENCE MODE HOOK lines below) and, if the person opted in, builds
+// a Grade 1 record and renders it in its own panel, distinct from the
+// receipt above it. Generated here rather than kept as a separate
+// hand-edited source file — it's demo wiring, not something meant to be
+// reused outside this build.
+const EVIDENCE_INTEGRATION_JS = `/* ═══════════════════════════════════════════════════
+   EACE.ai — Evidence Mode — demo integration glue
+   Listens for the `+ "`eace:session-complete`" + ` event (dispatched by the three
+   EVIDENCE MODE HOOK lines in this demo's app.js — see ../README.md) and, if
+   the person opted in on the welcome screen, builds a Grade 1 (Local
+   Evidence) record and renders it in its own clearly-separated panel,
+   distinct from the completion receipt above it. This file is entirely
+   demo/UI glue — all the actual evidence logic lives in evidence.js, which
+   knows nothing about this page's DOM.
+═══════════════════════════════════════════════════ */
+(function () {
+  'use strict';
+
+  const panel = document.getElementById('evidence-panel');
+  const checkbox = document.getElementById('in-evidence');
+
+  function esc(s) { return String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;'); }
+
+  function renderEvidence(evidence, token) {
+    panel.className = 'card evidence-panel';
+    panel.innerHTML =
+      '<div class="evidence-eyebrow">Evidence Mode — Grade 1: Local Evidence</div>' +
+      '<p class="hint">This is a SEPARATE, stronger artifact from the completion receipt above — not a replacement for it, and not itself an unconditional audit record. It proves the record below has not been altered since this device signed it. ' +
+      '<strong>It does not prove your organisation attested to this session, and its timestamp is not independently verifiable</strong> — see what each field does and does not claim in evidence-admin.html.</p>' +
+      '<div class="evidence-meta">' +
+        '<div><span class="meta-label">Attempt ID</span>' + esc(evidence.attempt_id) + '</div>' +
+        '<div><span class="meta-label">Question-set hash</span>' + esc(evidence.question_set_hash.slice(0, 24)) + '…</div>' +
+        '<div><span class="meta-label">Device key ID</span>' + esc(evidence.device_key_id) + '</div>' +
+        '<div><span class="meta-label">Timestamp trust</span>' + esc(evidence.timestamp_trust) + ' (local device clock — not independently verifiable)</div>' +
+      '</div>' +
+      '<label class="label-mt-sm">Evidence token</label>' +
+      '<div class="token-box" id="evidence-token-out"></div>' +
+      '<p class="hint">Paste this into evidence-admin.html\\'s Verify Evidence tab to check the question-set hash, the score-vs-answers consistency, and the device signature.</p>' +
+      '<div class="evidence-upgrade">' +
+        '<div class="evidence-eyebrow evidence-eyebrow-dim">Grade 2 — Attested Evidence (not available in this demo)</div>' +
+        '<p class="hint">Adding an organisation co-signature and a trusted timestamp genuinely requires a network call to something this browser does not control — that is a real change to this product\\'s local-first architecture, not a missing feature of this demo. See README.md\\'s "Grade 2 requires leaving local-first" section for the exact trade-off and what deploying it would involve.</p>' +
+      '</div>';
+    document.getElementById('evidence-token-out').textContent = token;
+  }
+
+  document.addEventListener('eace:session-complete', function (evt) {
+    if (!checkbox || !checkbox.checked) return; // opted out — no evidence object, no localStorage device key ever created
+    if (typeof EvidenceMode === 'undefined') {
+      console.error('Evidence Mode scripts did not load — evidence.js missing?');
+      return;
+    }
+    EvidenceMode.buildLocalEvidence(Object.assign({ build: 'evidence-demo' }, evt.detail))
+      .then(function (evidence) {
+        const token = EvidenceCore.encodeEvidenceToken(evidence);
+        renderEvidence(evidence, token);
+      })
+      .catch(function (e) {
+        console.error('Evidence Mode: failed to build local evidence record:', e);
+        panel.className = 'card evidence-panel';
+        panel.innerHTML = '<div class="evidence-eyebrow">Evidence Mode</div><p class="hint">Could not build an evidence record: ' + esc(e.message) + '</p>';
+      });
+  });
+})();
+`;
 
 function main() {
   fs.mkdirSync(OUT_DIR, { recursive: true });
@@ -115,13 +181,15 @@ function main() {
   fs.writeFileSync(path.join(OUT_DIR, 'app.js'), appJs);
   console.log('Wrote app.js (Web Edition + 3 EVIDENCE MODE HOOK insertions)');
 
-  // ---- 3. Evidence Mode files, verbatim from this directory ----
-  for (const f of ['evidence-core.js', 'evidence-mode.js']) {
-    fs.copyFileSync(path.join(EVIDENCE_DIR, f), path.join(OUT_DIR, f));
-  }
-  console.log('Copied evidence-core.js, evidence-mode.js');
+  // ---- 3. evidence.js, verbatim from this directory ----
+  fs.copyFileSync(path.join(EVIDENCE_DIR, 'evidence.js'), path.join(OUT_DIR, 'evidence.js'));
+  console.log('Copied evidence.js');
 
-  // ---- 4. index.html: add the opt-in checkbox + evidence panel + script tags ----
+  // ---- 4. evidence-integration.js, generated above ----
+  fs.writeFileSync(path.join(OUT_DIR, 'evidence-integration.js'), EVIDENCE_INTEGRATION_JS);
+  console.log('Wrote evidence-integration.js');
+
+  // ---- 5. index.html: add the opt-in checkbox + evidence panel + script tags ----
   let indexHtml = fs.readFileSync(path.join(WEB_DIR, 'index.html'), 'utf8');
 
   indexHtml = assertReplace(
@@ -152,24 +220,18 @@ function main() {
     'evidence panel container'
   );
 
-  // Script tags, after app.js.
+  // Script tags, after app.js — one file (evidence.js) instead of two.
   indexHtml = assertReplace(
     indexHtml,
     '<script src="app.js"></script>',
     '<script src="app.js"></script>\n' +
-    '<script src="evidence-core.js"></script>\n' +
-    '<script src="evidence-mode.js"></script>\n' +
+    '<script src="evidence.js"></script>\n' +
     '<script src="evidence-integration.js"></script>',
     'evidence script tags'
   );
 
   fs.writeFileSync(path.join(OUT_DIR, 'index.html'), indexHtml);
   console.log('Wrote index.html (Web Edition + evidence opt-in + evidence panel + script tags)');
-
-  // ---- 5. evidence-integration.js is hand-authored, not templated here —
-  // copy it verbatim from this directory so it's easy to read/diff on its own.
-  fs.copyFileSync(path.join(EVIDENCE_DIR, 'evidence-integration.src.js'), path.join(OUT_DIR, 'evidence-integration.js'));
-  console.log('Copied evidence-integration.js');
 }
 
 main();

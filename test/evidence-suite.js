@@ -7,8 +7,8 @@
  *   2. Question-set hash reproducibility + manifest cross-check
  *   3. Zero console errors / zero CSP violations in the demo, Grade 1 flow
  *   4. Tamper detection: flip one field post-hoc, verifier must flag FAIL
- *   5. Full demo -> evidence-verifier.html round trip (Grade 1)
- *   6. Full Grade 2 network flow against scripts/reference-org-signer.js
+ *   5. Full demo -> evidence-admin.html round trip (Grade 1)
+ *   6. Full Grade 2 network flow against scripts/evidence-cli.js serve
  *      (its own process, real HTTP, not an in-process fake)
  *
  * Usage: node test/evidence-suite.js
@@ -20,7 +20,7 @@ const { startServer } = require('./serve-dir');
 
 const CHROMIUM_PATH = process.env.PW_CHROMIUM_PATH || '/opt/pw-browsers/chromium-1194/chrome-linux/chrome';
 const DEMO_DIR = path.join(__dirname, '..', 'eace-compliance-tasting-menu-evidence', 'demo');
-const VERIFIER_PATH = path.join(__dirname, '..', 'eace-compliance-tasting-menu-evidence', 'evidence-verifier.html');
+const VERIFIER_PATH = path.join(__dirname, '..', 'eace-compliance-tasting-menu-evidence', 'evidence-admin.html');
 const DEMO_PORT = 8936;
 const SIGNER_PORT = 8937;
 
@@ -82,7 +82,7 @@ async function runVerifier(browser, token, orgPublicKeyJwk) {
 function spawnSigner() {
   return new Promise((resolve, reject) => {
     const child = spawn(process.execPath, [
-      path.join(__dirname, '..', 'scripts', 'reference-org-signer.js'),
+      path.join(__dirname, '..', 'scripts', 'evidence-cli.js'), 'serve',
       '--keyfile', '/tmp/org-keypair.json',
       '--port', String(SIGNER_PORT)
     ]);
@@ -94,7 +94,7 @@ function spawnSigner() {
     });
     child.stderr.on('data', (d) => process.stderr.write(d));
     child.on('error', reject);
-    setTimeout(() => reject(new Error('reference-org-signer.js did not start within 5s')), 5000);
+    setTimeout(() => reject(new Error('evidence-cli.js serve did not start within 5s')), 5000);
   });
 }
 
@@ -102,7 +102,7 @@ async function main() {
   // Generate a fresh org keypair for this run (fs required here only).
   const fs = require('fs');
   const { execFileSync } = require('child_process');
-  const keypairJson = execFileSync(process.execPath, [path.join(__dirname, '..', 'scripts', 'generate-org-keypair.js')], { encoding: 'utf8' });
+  const keypairJson = execFileSync(process.execPath, [path.join(__dirname, '..', 'scripts', 'evidence-cli.js'), 'keygen'], { encoding: 'utf8' });
   fs.writeFileSync('/tmp/org-keypair.json', keypairJson);
   const orgPublicKeyJwk = JSON.parse(keypairJson).publicKey;
 

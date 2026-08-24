@@ -303,6 +303,34 @@ That build is currently **one schema version ahead** of this directory:
   completion summary" action; a separate "Print evidence record" button
   toggles a `body.printing-evidence-only` class for its own dedicated
   print pass, cleaned up on the `afterprint` event.
+- **Save Progress / Resume Session** — a "Save progress →" button during
+  the quiz downloads a JSON snapshot (schema-versioned separately, via
+  `SESSION_FILE_VERSION`) of the in-progress attempt: pool/manifest/
+  attempt ID, mode/role/sector, the resolved question ID order, answers so
+  far, current position, and whether Evidence Mode was opted in — the
+  person's name only if they explicitly check "Include my name in the
+  saved file" (unchecked by default). Never localStorage/sessionStorage/a
+  cookie — the file is the only place this state lives outside memory,
+  and only because the person chose to download it. "Resume a saved
+  session…" on the welcome screen reads that file back, re-resolves the
+  question IDs against this build's live pools (refusing to resume if the
+  pool or schema version doesn't match, or if positions/answers are
+  internally inconsistent — never guessing), and continues the session
+  from exactly where it left off, including the evidence opt-in and
+  attempt ID, so a resumed session still produces a receipt and evidence
+  record that correlate correctly.
+- **Record of Completion** — a `Print Record of Completion →` action,
+  separate from both the plain completion summary and the evidence
+  print pass, renders a more formal document (name, assessment, score,
+  date, pool version, legal baseline, manifest ID, attempt ID, EACE's
+  internal benchmark for exam mode, and a plain-text verifier reference
+  to the Evidence record if one exists — no QR code, since a correct
+  offline QR encoder is real, non-trivial code this build doesn't have,
+  and this file's `connect-src 'none'` CSP rules out pulling one in from
+  a CDN). Deliberately not called a "Certificate": the AI Act gives EACE
+  no authority to certify a person in a regulatory sense, and the
+  document says so explicitly in its own disclaimer text. Hidden on the
+  same exam-fail path that already withholds the receipt.
 
 If the schema changes again, update **three** copies by hand, not two:
 `evidence.js` and `evidence-admin.html` here, and the corresponding
@@ -364,6 +392,7 @@ end-to-end checks, run directly against it rather than through
 cd test
 node run.js ../eace-compliance-tasting-menu-all-in-one.html   # full mode × track × sector regression
 node test-fix5-fields.js                                       # completion_status/benchmark_* fields, real exam + pulse sessions
+node test-save-resume-record.js                                 # Save Progress, Resume Session, Record of Completion
 ```
 
 `run.js` decodes whichever receipt shape it's actually handed

@@ -278,6 +278,7 @@ nav.scrolled{background:rgba(12,12,10,0.97);backdrop-filter:blur(10px);-webkit-b
 
 .modules{display:grid;grid-template-columns:1fr 1fr;gap:12px}
 @media(max-width:600px){.modules{grid-template-columns:1fr}}
+.mod-featured{grid-column:1/-1}
 .mod{background:var(--bg2);border:0.5px solid var(--line);border-radius:var(--r);padding:1.5rem 1.55rem;transition:border-color 0.2s,box-shadow 0.2s,transform 0.2s}
 .mod:hover{border-color:rgba(201,168,76,0.4);box-shadow:0 0 22px rgba(201,168,76,0.07);transform:translateY(-2px)}
 .mod-num{font-family:var(--mono);font-size:10px;letter-spacing:0.12em;text-transform:uppercase;color:var(--faint);margin-bottom:0.65rem}

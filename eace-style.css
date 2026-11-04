@@ -741,3 +741,11 @@ footer{border-top:0.5px solid var(--line);padding:3rem 0 2rem}
   .tasting-card{right:12px;left:12px;bottom:calc(96px + var(--cookie-clearance,0px));width:auto;max-width:none;padding:16px 16px 14px;
     max-height:calc(100vh - 96px - var(--cookie-clearance,0px) - 12px)}
 }
+
+/* TABLET NAV (601–960px): with five product links the inline nav would wrap into a second row,
+   so tablets use the same hamburger menu as phones; the Contact button stays visible. */
+@media(min-width:601px) and (max-width:960px){
+  .nav-links{display:none !important}
+  .nav-inner{flex-wrap:nowrap !important}
+  .hamburger{display:flex}
+}
